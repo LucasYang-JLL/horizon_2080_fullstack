@@ -27,12 +27,12 @@ Testing: Cypress
    -> pip3 install pymysql ( in /project/**init**.py add:
    import pymysql
    pymysql.install_as_MySQLdb() )
-   -> pip3 install djangorestframework
-   -> pip3 install coverage
+   pip3 install djangorestframework
+   pip3 install coverage
 7. run app:
-   -> python3 manage.py runserver
+        python3 manage.py runserver
 8. to migrate database:
-   -> python3 manage.py migrate
+        python3 manage.py migrate
 
 ### Dev Setup
 
@@ -43,30 +43,30 @@ Testing: Cypress
    -> gulp
 2. pip3 install django-livereload-server
    Add 'livereload' to the INSTALLED_APPS before 'django.contrib.staticfiles':
-   INSTALLED_APPS = (
-   ...
-   'livereload',
-   ...
-   )
-   MIDDLEWARE = [
-   ...
-   'livereload.middleware.LiveReloadScript',
-   ]
+        INSTALLED_APPS = (
+        ...
+        'livereload',
+        ...
+        )
+        MIDDLEWARE = [
+        ...
+        'livereload.middleware.LiveReloadScript',
+        ]
 
     -> python3 manage.py livereload
     -> python3 manage.py runserver
 
 ### scripts
 
-npm run dev (dev bundle)
-npm run build (production bundle)
-npm run e2e (testing)
+npm run dev (dev bundle)<br>
+npm run build (production bundle)<br>
+npm run e2e (testing)<br>
 
 ### Frequently appeared problems
 
-1. django.db.utils.OperationalError: (1045, "Access denied for user 'root'@'localhost' (using password: NO)")
-   solution 1: check settings.py database configuration
-   solution 2 execute this in database:
-   ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'newpassword';  
-   FLUSH PRIVILEGES;
-   then use newpassword in settings.py
+1. django.db.utils.OperationalError: (1045, "Access denied for user 'root'@'localhost' (using password: NO)")<br>
+   solution 1: check settings.py database configuration<br>
+   solution 2 execute this in database:<br>
+   ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'newpassword';  <br>
+   FLUSH PRIVILEGES;<br>
+   then use newpassword in settings.py<br>

@@ -15,9 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls import url
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('leads.urls')),
+    path('admin', admin.site.urls),
+    # path('', include('leads.urls')),
     path('', include('frontend.urls')),
+    url(r'^(?:.*)/?$', include('frontend.urls'))
 ]

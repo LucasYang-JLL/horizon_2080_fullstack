@@ -4,10 +4,10 @@ Using Python's Django Framework
 
 ### About this App
 
-tech stack used:
-Front-End: React, Material-UI
-Back-End: Python3.4, Django2.0.9, MySql8
-Testing: Cypress
+<b>tech stack used</b>:<br>
+Front-End: React, Material-UI<br>
+Back-End: Python3.4, Django2.0.9, MySql8<br>
+Testing: Cypress<br>
 
 ### Configuration
 
@@ -19,7 +19,7 @@ Testing: Cypress
 4. create a virtualenv:<br>
    `virtualenv venv --python=python3.4`
 5. start venv:<br>
-   `source venv/bin/activate`
+   `source venv/bin/activate`<br>
    quit venv:<br>
    `deactivate`
 6. <b>After activating the virtual environment</b> install the following packages:<br>
@@ -29,7 +29,7 @@ Testing: Cypress
     import pymysql
     pymysql.install_as_MySQLdb()
     ```
-    )
+    )<br>
     `pip3 install djangorestframework`<br>
     `pip3 install coverage`
 7. run app:<br>
@@ -76,6 +76,8 @@ npm run e2e // testing
 1. django.db.utils.OperationalError: (1045, "Access denied for user 'root'@'localhost' (using password: NO)")<br>
    solution 1: check settings.py database configuration<br>
    solution 2 execute this in database:<br>
-   ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'newpassword'; <br>
-   FLUSH PRIVILEGES;<br>
-   then use newpassword in settings.py<br>
+    ```
+    ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'newpassword';
+    FLUSH PRIVILEGES;
+    ```
+    then use newpassword in settings.py

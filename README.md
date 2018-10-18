@@ -16,12 +16,12 @@ Testing: Cypress
 3. install virtualenv:
    -> pip3 install virtualenv (if there's network error, add <151.101.1.63 files.pythonhosted.org> to host file)
    https://stackoverflow.com/questions/52551595/cant-get-virtualenv-working-due-to-ssl-error
-4. create a virtualenv:
-   -> virtualenv venv --python=python3.4
-5. start venv:
-   -> source venv/bin/activate
-   quit venv:
-   -> deactivate
+4. create a virtualenv:<br>
+   `virtualenv venv --python=python3.4`
+5. start venv:<br>
+   `source venv/bin/activate`
+   quit venv:<br>
+   `deactivate`
 6. <b>After activating the virtual environment</b> install the following packages:<br>
    `pip3 install django==2.0.9` (python3.4 only supports up to 2.0.9)<br>
    `pip3 install pymysql` ( in /project/**init**.py add:<br>
@@ -40,12 +40,13 @@ Testing: Cypress
 ### Dev Setup
 
 1.  install gulp (for workflow automation)
+    ```
     npm install --global gulp-cli
     npm install --save-dev gulp@next
-    run gulp by:
-    -> gulp
-2.  `pip3 install django-livereload-server`
-    Add 'livereload' to the INSTALLED_APPS before 'django.contrib.staticfiles':
+    ```
+    run gulp by:<br>
+    `gulp`
+2.  `pip3 install django-livereload-server` Add 'livereload' to the INSTALLED_APPS before 'django.contrib.staticfiles':
 
     ```
     INSTALLED_APPS = (

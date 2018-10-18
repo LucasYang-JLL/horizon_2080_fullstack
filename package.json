@@ -1,0 +1,31 @@
+{
+  "name": "horizon_2080_web_api",
+  "version": "1.0.0",
+  "description": "Using Python's Django Framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack --mode development ./horizon_2080/frontend/src/index.js --output ./horizon_2080/frontend/static/frontend/main.js",
+    "build": "webpack --mode production ./horizon_2080/frontend/src/index.js --output ./horizon_2080/frontend/static/frontend/main.js",
+    "flush": "python3 ./horizon_2080/manage.py flush --no-input",
+    "e2e": "cypress open --project ./horizon_2080/frontend/"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.4",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "cypress": "^3.1.0",
+    "gulp": "^4.0.0",
+    "prop-types": "^15.6.2",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
+    "weak-key": "^1.0.1",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2"
+  }
+}

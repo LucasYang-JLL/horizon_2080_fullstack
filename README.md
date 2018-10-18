@@ -39,13 +39,18 @@ Testing: Cypress<br>
 
 ### Dev Setup
 
-1.  install gulp (for workflow automation)
+1.  install npm modules
     ```
-    npm install --global gulp-cli
-    npm install --save-dev gulp@next
+    npm install --global gulp-cli (gulp cli for workflow automation)
+    npm install // rest of the packages
     ```
-    run gulp by:<br>
-    `gulp`
+    run scripts:<br>
+    ```
+    npm run dev // dev bundle
+    npm run build // production bundle
+    npm run e2e // testing
+    gulp // start gulpfile.js
+    ```
 2.  `pip3 install django-livereload-server` Add 'livereload' to the INSTALLED_APPS before 'django.contrib.staticfiles':
 
     ```
@@ -62,14 +67,6 @@ Testing: Cypress<br>
      python3 manage.py livereload
      python3 manage.py runserver
     ```
-
-### Scripts
-
-```
-npm run dev // dev bundle
-npm run build // production bundle
-npm run e2e // testing
-```
 
 ### Frequently appeared problems
 

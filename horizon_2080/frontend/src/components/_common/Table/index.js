@@ -11,6 +11,7 @@ import EnhancedTableHead from "./TableHeader";
 import EnhancedTableToolbar from "./TableToolbar";
 import Slide from "@material-ui/core/Slide";
 import Checkbox from "@material-ui/core/Checkbox";
+import axios from "axios";
 
 const styles = (theme) => ({
     content: {
@@ -22,7 +23,7 @@ const styles = (theme) => ({
     root: {
         width: "100%",
         marginTop: theme.spacing.unit * 3,
-        marginBottom: theme.spacing.unit * 3,
+        marginBottom: theme.spacing.unit * 3
     },
     table: {
         minWidth: 1020
@@ -90,6 +91,22 @@ class EnhancedTable extends React.Component {
         rowsPerPage: 5
     };
 
+    componentDidMount() {
+        axios
+            .get(this.props.endpoint)
+            .then(function(response) {
+                // handle success
+                console.log(response);
+            })
+            .catch(function(error) {
+                // handle error
+                console.log(error);
+            })
+            .then(function() {
+                // always executed
+            });
+    }
+
     handleRequestSort = (event, property) => {
         const orderBy = property;
         let order = "desc";
@@ -143,7 +160,7 @@ class EnhancedTable extends React.Component {
         const { slideState } = this.props.reduxState;
         const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
-
+        // console.log(this.props);
         return (
             <Slide direction={slideState} in mountOnEnter unmountOnExit>
                 <Paper className={classes.root}>
@@ -157,6 +174,7 @@ class EnhancedTable extends React.Component {
                                 onSelectAllClick={this.handleSelectAllClick}
                                 onRequestSort={this.handleRequestSort}
                                 rowCount={data.length}
+                                title="target"
                             />
                             <TableBody>
                                 {stableSort(data, getSorting(order, orderBy))

@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { FormattedMessage } from "react-intl";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
@@ -28,6 +29,14 @@ class EnhancedTableHead extends React.Component {
                     {/* <TableCell padding="checkbox">
                         <Checkbox indeterminate={numSelected > 0 && numSelected < rowCount} checked={numSelected === rowCount} onChange={onSelectAllClick} />
                     </TableCell> */}
+                    <FormattedMessage id={`${this.props.title}.table.label`}>
+                        {(title) => {
+                            let titleArr = title.split(",");
+                            return titleArr.map((element, index) => {
+                                return <span key={index} style={{ fontWeight: "bold", fontSize: "24px" }}>{element}</span>;
+                            });
+                        }}
+                    </FormattedMessage>
                     {rows.map((row) => {
                         return (
                             <TableCell key={row.id} numeric={row.numeric} sortDirection={orderBy === row.id ? order : false}>

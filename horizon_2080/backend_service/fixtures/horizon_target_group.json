@@ -1,0 +1,122 @@
+[
+    {
+        "model": "backend_service.horizon_target_group",
+        "pk": 1,
+        "fields": {
+            "name": "TEST PROJECT 1",
+            "description": "This is test project #1. Lorem Ipsum",
+            "critical_flag": "true",
+            "countable_flag": "false",
+            "completed_flag": "true",
+            "start_date": "2018-02-14 00:00:00",
+            "expire_date": "2018-02-14 00:00:00",
+            "status": "Active",
+            "created_by_id": "123456"
+        }
+    },
+    {
+        "model": "backend_service.horizon_target_group",
+        "pk": 2,
+        "fields": {
+            "name": "TEST PROJECT 2",
+            "description": "This is test project #2. Lorem Ipsum",
+            "critical_flag": "true",
+            "countable_flag": "false",
+            "completed_flag": "true",
+            "start_date": "2018-02-14 00:00:00",
+            "expire_date": "2018-02-14 00:00:00",
+            "status": "Active",
+            "created_by_id": "123456"
+        }
+    },
+    {
+        "model": "backend_service.horizon_target_group",
+        "pk": 3,
+        "fields": {
+            "name": "TEST PROJECT 3",
+            "description": "This is test project #3. Lorem Ipsum",
+            "critical_flag": "true",
+            "countable_flag": "false",
+            "completed_flag": "true",
+            "start_date": "2018-02-14 00:00:00",
+            "expire_date": "2018-02-14 00:00:00",
+            "status": "Active",
+            "created_by_id": "123456"
+        }
+    },
+    {
+        "model": "backend_service.horizon_target_group",
+        "pk": 4,
+        "fields": {
+            "name": "TEST PROJECT 4",
+            "description": "This is test project #4. Lorem Ipsum",
+            "critical_flag": "true",
+            "countable_flag": "false",
+            "completed_flag": "true",
+            "start_date": "2018-02-14 00:00:00",
+            "expire_date": "2018-02-14 00:00:00",
+            "status": "Active",
+            "created_by_id": "123456"
+        }
+    },
+    {
+        "model": "backend_service.horizon_target_group",
+        "pk": 5,
+        "fields": {
+            "name": "TEST PROJECT 5",
+            "description": "This is test project #5. Lorem Ipsum",
+            "critical_flag": "true",
+            "countable_flag": "false",
+            "completed_flag": "true",
+            "start_date": "2018-02-14 00:00:00",
+            "expire_date": "2018-02-14 00:00:00",
+            "status": "Active",
+            "created_by_id": "123456"
+        }
+    },
+    {
+        "model": "backend_service.horizon_target_group",
+        "pk": 6,
+        "fields": {
+            "name": "TEST PROJECT 6",
+            "description": "This is test project #6. Lorem Ipsum",
+            "critical_flag": "true",
+            "countable_flag": "false",
+            "completed_flag": "true",
+            "start_date": "2018-02-14 00:00:00",
+            "expire_date": "2018-02-14 00:00:00",
+            "status": "Active",
+            "created_by_id": "123456"
+        }
+    },
+    {
+        "model": "backend_service.horizon_target_group",
+        "pk": 7,
+        "fields": {
+            "name": "TEST PROJECT 7",
+            "description": "This is test project #7. Lorem Ipsum",
+            "critical_flag": "true",
+            "countable_flag": "false",
+            "completed_flag": "true",
+            "start_date": "2018-02-14 00:00:00",
+            "expire_date": "2018-02-14 00:00:00",
+            "status": "Active",
+            "created_by_id": "123456"
+        }
+    },
+    {
+        "model": "backend_service.horizon_target_group",
+        "pk": 8,
+        "fields": {
+            "name": "TEST PROJECT 8",
+            "description": "This is test project #8. Lorem Ipsum",
+            "critical_flag": "true",
+            "countable_flag": "false",
+            "completed_flag": "true",
+            "start_date": "2018-02-14 00:00:00",
+            "expire_date": "2018-02-14 00:00:00",
+            "status": "Active",
+            "created_by_id": "123456"
+        }
+    }
+]

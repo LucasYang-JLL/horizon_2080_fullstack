@@ -5,7 +5,12 @@ from backend_service.models import *
 #         model = Lead
 #         fields = ('id', 'name', 'email', 'message')
 
-class LeadSerializer(serializers.ModelSerializer):
+class TargetGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = horizon_target_group
+        fields = '__all__'
+
+class TargetIndividualSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = horizon_target_individual
         fields = '__all__'

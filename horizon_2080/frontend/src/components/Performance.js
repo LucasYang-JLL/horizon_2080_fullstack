@@ -37,7 +37,7 @@ const styles = (theme) => ({
         minWidth: 1020
     },
     tableCell: {
-        width: "150px"
+        width: "160px"
     },
     tableWrapper: {
         overflowX: "auto"
@@ -72,7 +72,7 @@ class Performance extends Component {
                     <div className={contentLayout}>
                         <div className={classes.toolbar} />
                         <Navigation buttonType={buttonIcon} depth={depth} history={history} slideFunc={this.props.slideDirection} buttonMethod={buttonMethod} component="performance" />
-                        {depth <= 1 ? <EnhancedTable endpoint="api/horizon_target_group/" {...this.props} /> : <Route path="/performance/:id" render={(props) => <DetailsContainer {...props} />} />}
+                        {depth <= 1 ? <EnhancedTable endpoint="api/horizon_target_individual/" {...this.props} /> : <Route path="/performance/:id" render={(props) => <DetailsContainer {...props} />} />}
                     </div>
                 </Fragment>
             </Slide>

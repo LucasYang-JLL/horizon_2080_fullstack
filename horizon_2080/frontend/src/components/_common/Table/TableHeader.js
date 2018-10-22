@@ -1,4 +1,5 @@
 import React from "react";
+import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";
 import TableCell from "@material-ui/core/TableCell";
@@ -8,12 +9,19 @@ import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Tooltip from "@material-ui/core/Tooltip";
 
 const rows = [
-    { id: "name", numeric: false, disablePadding: true, label: "Dessert (100g serving)" },
-    { id: "calories", numeric: true, disablePadding: false, label: "Calories" },
-    { id: "fat", numeric: true, disablePadding: false, label: "Fat (g)" },
-    { id: "carbs", numeric: true, disablePadding: false, label: "Carbs (g)" },
-    { id: "protein", numeric: true, disablePadding: false, label: "Protein (g)" }
+    { id: "name", numeric: false, disablePadding: true, label: "Target Name" },
+    { id: "description", numeric: false, disablePadding: true, label: "Target Description" },
+    { id: "critical_flag", numeric: false, disablePadding: true, label: "20%" },
+    { id: "event_count", numeric: false, disablePadding: true, label: "Event(Completed/Total)" },
+    { id: "completion_status", numeric: false, disablePadding: true, label: "Completion Status" },
+    { id: "countable", numeric: false, disablePadding: true, label: "Countable" },
+    { id: "expire_date", numeric: false, disablePadding: true, label: "Expire Date" },
+    { id: "created_by", numeric: false, disablePadding: true, label: "Created By" }
 ];
+
+const styles = {
+    head: { padding: "0 24px" }
+};
 
 class EnhancedTableHead extends React.Component {
     createSortHandler = (property) => (event) => {
@@ -21,7 +29,7 @@ class EnhancedTableHead extends React.Component {
     };
 
     render() {
-        const { onSelectAllClick, order, orderBy, numSelected, rowCount } = this.props;
+        const { onSelectAllClick, order, orderBy, numSelected, rowCount, classes } = this.props;
 
         return (
             <TableHead>
@@ -32,12 +40,20 @@ class EnhancedTableHead extends React.Component {
                     <FormattedMessage id={`${this.props.title}.table.label`}>
                         {(title) => {
                             let titleArr = title.split(",");
-                            return titleArr.map((element, index) => {
-                                return <span key={index} style={{ fontWeight: "bold", fontSize: "24px" }}>{element}</span>;
+                            return titleArr.map((title, index) => {
+                                return (
+                                    <TableCell classes={{ head: classes.head }} key={rows[index].id} numeric={rows[index].numeric} sortDirection={orderBy === rows[index].id ? order : false}>
+                                        <Tooltip title="Sort" placement={rows[index].numeric ? "bottom-end" : "bottom-start"} enterDelay={300}>
+                                            <TableSortLabel active={orderBy === rows[index].id} direction={order} onClick={this.createSortHandler(rows[index].id)}>
+                                                {title}
+                                            </TableSortLabel>
+                                        </Tooltip>
+                                    </TableCell>
+                                );
                             });
                         }}
                     </FormattedMessage>
-                    {rows.map((row) => {
+                    {/* {rows.map((row) => {
                         return (
                             <TableCell key={row.id} numeric={row.numeric} sortDirection={orderBy === row.id ? order : false}>
                                 <Tooltip title="Sort" placement={row.numeric ? "bottom-end" : "bottom-start"} enterDelay={300}>
@@ -47,7 +63,7 @@ class EnhancedTableHead extends React.Component {
                                 </Tooltip>
                             </TableCell>
                         );
-                    }, this)}
+                    }, this)} */}
                 </TableRow>
             </TableHead>
         );
@@ -62,4 +78,4 @@ EnhancedTableHead.propTypes = {
     orderBy: PropTypes.string.isRequired,
     rowCount: PropTypes.number.isRequired
 };
-export default EnhancedTableHead;
+export default withStyles(styles)(EnhancedTableHead);

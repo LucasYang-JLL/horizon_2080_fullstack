@@ -7,18 +7,29 @@ import classNames from "classnames";
 
 const styles = (theme) => ({
     detailsFieldRoot: {
-        padding: theme.spacing.unit * 2
+        display: "flex",
+        padding: theme.spacing.unit * 2,
+        flex: 1,
+        maxWidth: "350px",
+        flexDirection: "column"
     },
-    fieldRoot: {
-        maxWidth: "350px"
-    },
+    // fieldRoot: {
+
+    //     flex: 1
+    // },
     fieldInput: {
-        width: "130px",
+        // width: "130px",
         margin: `4px 8px`
     },
     disabledInput: {
         color: "#212121",
         opacity: 1
+    },
+    spacer: {
+        flex: 1
+    },
+    marginTop: {
+        marginTop: "auto"
     }
 });
 
@@ -26,54 +37,50 @@ const inputFields = [
     {
         type: "input",
         label: "details.field.target_name",
-        name: "target_name"
+        name: "name"
     },
     {
-        type: "textarea",
+        type: "input",
         label: "details.field.target_description",
-        name: "Description",
+        name: "description",
         props: {
             multiline: true,
-            rows: 4
+            rows: 4,
+            rowsMax: "4"
         }
     },
     {
-        type: "input",
+        type: "date",
         label: "details.field.start_date",
-        name: "Start_Date"
+        name: "start_date",
+        props: {}
     },
     {
-        type: "input",
+        type: "date",
         label: "details.field.expire_date",
-        name: "Expire_Date"
+        name: "expire_date"
     },
     {
         type: "input",
         label: "details.field.created_by",
-        name: "Created_By"
+        name: "created_by_id"
     }
 ];
 
 class DetailsField extends Component {
-    state = {
-        fields: {
-            target_name: "213213",
-            Description: "This is a hello world project for horizon 2080",
-            Created_By: "Lucas Yang",
-            Start_Date: "09/03/2018",
-            Expire_Date: "09/19/2018"
-        }
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            fields: props.data
+        };
+    }
 
-    handleChange = (name) => (event) => {
-        this.setState({
-            ...this.state,
-            fields: {
-                ...this.state.fields,
-                [name]: event.target.value
-            }
-        });
-    };
+    static getDerivedStateFromProps(nextProps, prevState) {
+        console.log("hi");
+        if (nextProps.data !== prevState.fields) {
+            return { fields: nextProps.data };
+        } else return null;
+    }
 
     Fields = () => {
         const { classes, editContent } = this.props;
@@ -81,12 +88,13 @@ class DetailsField extends Component {
             <FormattedMessage id={label} key={name}>
                 {(msg) => (
                     <TextField
-                        className={classes.fieldInput}
+                        type={type}
+                        className={classNames(classes.fieldInput, name === "start_date" ? classes.marginTop : null)}
                         id="standard-read-only-input"
                         label={msg}
                         disabled={!editContent}
                         value={this.state.fields[name] || ""}
-                        onChange={this.handleChange(name)}
+                        onChange={(e) => this.props.handleChange(name, e.target.value)}
                         InputProps={{
                             ...props,
                             disableUnderline: !editContent,
@@ -94,6 +102,9 @@ class DetailsField extends Component {
                                 disabled: classes.disabledInput
                             }
                         }}
+                        InputLabelProps={{
+                            shrink: true,
+                          }}
                     />
                 )}
             </FormattedMessage>
@@ -104,11 +115,11 @@ class DetailsField extends Component {
         const { classes } = this.props;
         // const { slideState } = this.props.reduxState;
         // const { path } = this.props.match;
+        console.log(this.props);
+        console.log(this.state);
         return (
             <div className={classes.detailsFieldRoot}>
-                <div className={classes.fieldRoot}>
-                    <this.Fields />
-                </div>
+                <this.Fields />
             </div>
         );
     }

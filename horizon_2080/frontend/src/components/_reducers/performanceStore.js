@@ -7,4 +7,18 @@ const editContent = (state = false, action) => {
     }
 };
 
-export { editContent };
+const target_details_data = (state={}, action) => {
+    switch (action.type) {
+        case "TARGET_DETAILS_DATA":
+            return action.data;
+        case "CHANGE_TARGET_DETAILS":
+            return {
+                ...state,
+                [action.name]: action.value
+            };
+        default:
+            return state;
+    }
+}
+
+export { editContent, target_details_data };

@@ -7,6 +7,9 @@ import EnhancedTable from "./_common/Table";
 import { Route } from "react-router-dom";
 import classNames from "classnames";
 import DetailsContainer from "./_containers/DetailsContainer";
+import axios from "axios";
+axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+axios.defaults.xsrfCookieName = "csrftoken";
 
 const styles = (theme) => ({
     content: {
@@ -51,8 +54,21 @@ class Performance extends Component {
         console.log("add performance");
     };
     editPerformance = () => {
-        let { editContent } = this.props.reduxState;
+        let { editContent, target_details_data } = this.props.reduxState;
         this.props.toggleEditButton(!editContent);
+        let endpoint = `/api/update_horizon_target_individual/${target_details_data.id}/`;
+        if (editContent) {
+            axios
+                .put(endpoint, target_details_data)
+                .then((response) => {
+                    // handle success
+                    console.log(response);
+                })
+                .catch((error) => {
+                    // handle error
+                    console.log(error);
+                });
+        }
         console.log("edit performance");
     };
 
@@ -72,7 +88,11 @@ class Performance extends Component {
                     <div className={contentLayout}>
                         <div className={classes.toolbar} />
                         <Navigation buttonType={buttonIcon} depth={depth} history={history} slideFunc={this.props.slideDirection} buttonMethod={buttonMethod} component="performance" />
-                        {depth <= 1 ? <EnhancedTable endpoint="api/horizon_target_individual/" {...this.props} /> : <Route path="/performance/:id" render={(props) => <DetailsContainer {...props} />} />}
+                        {depth <= 1 ? (
+                            <EnhancedTable endpoint="api/horizon_target_individual/" {...this.props} />
+                        ) : (
+                            <Route path="/performance/:id" render={(props) => <DetailsContainer {...props} />} />
+                        )}
                     </div>
                 </Fragment>
             </Slide>

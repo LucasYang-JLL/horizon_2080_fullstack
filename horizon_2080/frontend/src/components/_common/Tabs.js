@@ -10,9 +10,8 @@ import color from "../../MuiTheme/color";
 
 const styles = (theme) => ({
     root: {
-        flexGrow: 1,
         backgroundColor: color.Concrete25,
-        color: color.Black75
+        color: color.Black75,  
     },
     tabRoot: {
         minWidth: "100px"

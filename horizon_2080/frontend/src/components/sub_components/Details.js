@@ -7,6 +7,7 @@ import classNames from "classnames";
 import CommentsContainer from "../_containers/CommentsContainer";
 import Tabs from "../_common/Tabs";
 import DetailsField from "./DetailsField";
+import axios from "axios";
 
 const styles = (theme) => ({
     content: {
@@ -23,7 +24,9 @@ const styles = (theme) => ({
         height: "70%",
         minHeight: "350px",
         marginRight: "auto",
-        overflowX: "hidden"
+        overflowX: "hidden",
+        display: "flex",
+        flexDirection: "column"
     },
     // rootMd: {
     //     [theme.breakpoints.down("md")]: {
@@ -52,22 +55,59 @@ const styles = (theme) => ({
 
 class Details extends Component {
     state = {
-        activeTab: 0
+        activeTab: 0,
+        data: {
+            name: null,
+            description: null,
+            created_by_id: null,
+            start_date: null,
+            expire_date: null
+        }
     };
+
+    componentDidMount() {
+        axios
+            .get(`${this.props.endpoint}${this.props.match.params.id}/`)
+            .then((response) => {
+                // handle success
+                console.log(response);
+                this.props.storeData(response.data[0]);
+            })
+            .catch((error) => {
+                // handle error
+                console.log(error);
+            })
+            .then(() => {
+                // always executed
+            });
+    }
+
     handleTabChange = (event, value) => {
         this.setState({ activeTab: value }, () => {});
     };
 
+    handleChange = (name) => (event) => {
+        console.log(name, event.target.value);
+        this.setState({
+            ...this.state,
+            data: {
+                ...this.state.data,
+                [name]: event.target.value
+            }
+        });
+    };
+
     render() {
         const { classes, history } = this.props;
-        const { slideState, editContent } = this.props.reduxState;
+        const { slideState, editContent, target_details_data } = this.props.reduxState;
         const { path } = this.props.match;
+        console.log(this.state);
         return (
             <Fragment>
                 <Slide direction={slideState} in mountOnEnter unmountOnExit>
                     <Paper className={classNames(classes.root, classes.rootMd, classes.rootSm)}>
                         <Tabs activeTab={this.state.activeTab} handleTabChange={this.handleTabChange} msgID="tab.details.title" fullWidth={false} />
-                        {this.state.activeTab === 0 && <DetailsField editContent={editContent} />}
+                        {this.state.activeTab === 0 && <DetailsField data={target_details_data} editContent={editContent} handleChange={this.props.handleDataChange} />}
                     </Paper>
                 </Slide>
                 <CommentsContainer location={this.props.location} docked={true} />
@@ -77,7 +117,13 @@ class Details extends Component {
 }
 
 Details.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
+    endpoint: PropTypes.string.isRequired
+};
+
+Details.defaultProps = {
+    classes: {},
+    endpoint: "/api/horizon_target_individual/"
 };
 
 export default withStyles(styles)(Details);

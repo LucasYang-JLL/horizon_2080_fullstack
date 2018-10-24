@@ -136,3 +136,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL = "/Media/"
 MEDIA_PATH = "Media"
+CSRF_COOKIE_NAME = "csrftoken"

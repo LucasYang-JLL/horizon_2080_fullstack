@@ -8,8 +8,8 @@
             "critical_flag": "true",
             "countable_flag": "false",
             "completed_flag": "true",
-            "start_date": "2018-02-14 00:00:00",
-            "expire_date": "2018-02-14 00:00:00",
+            "start_date": "2018-02-14",
+            "expire_date": "2018-02-14",
             "status": "Active",
             "created_by_id": "123456"
         }
@@ -23,8 +23,8 @@
             "critical_flag": "true",
             "countable_flag": "false",
             "completed_flag": "true",
-            "start_date": "2018-02-14 00:00:00",
-            "expire_date": "2018-02-14 00:00:00",
+            "start_date": "2018-02-14",
+            "expire_date": "2018-02-14",
             "status": "Active",
             "created_by_id": "123456"
         }
@@ -38,8 +38,8 @@
             "critical_flag": "true",
             "countable_flag": "false",
             "completed_flag": "true",
-            "start_date": "2018-02-14 00:00:00",
-            "expire_date": "2018-02-14 00:00:00",
+            "start_date": "2018-02-14",
+            "expire_date": "2018-02-14",
             "status": "Active",
             "created_by_id": "123456"
         }
@@ -53,8 +53,8 @@
             "critical_flag": "true",
             "countable_flag": "false",
             "completed_flag": "true",
-            "start_date": "2018-02-14 00:00:00",
-            "expire_date": "2018-02-14 00:00:00",
+            "start_date": "2018-02-14",
+            "expire_date": "2018-02-14",
             "status": "Active",
             "created_by_id": "123456"
         }
@@ -68,8 +68,8 @@
             "critical_flag": "true",
             "countable_flag": "false",
             "completed_flag": "true",
-            "start_date": "2018-02-14 00:00:00",
-            "expire_date": "2018-02-14 00:00:00",
+            "start_date": "2018-02-14",
+            "expire_date": "2018-02-14",
             "status": "Active",
             "created_by_id": "123456"
         }
@@ -83,8 +83,8 @@
             "critical_flag": "true",
             "countable_flag": "false",
             "completed_flag": "true",
-            "start_date": "2018-02-14 00:00:00",
-            "expire_date": "2018-02-14 00:00:00",
+            "start_date": "2018-02-14",
+            "expire_date": "2018-02-14",
             "status": "Active",
             "created_by_id": "123456"
         }
@@ -98,8 +98,8 @@
             "critical_flag": "true",
             "countable_flag": "false",
             "completed_flag": "true",
-            "start_date": "2018-02-14 00:00:00",
-            "expire_date": "2018-02-14 00:00:00",
+            "start_date": "2018-02-14",
+            "expire_date": "2018-02-14",
             "status": "Active",
             "created_by_id": "123456"
         }
@@ -113,8 +113,8 @@
             "critical_flag": "true",
             "countable_flag": "false",
             "completed_flag": "true",
-            "start_date": "2018-02-14 00:00:00",
-            "expire_date": "2018-02-14 00:00:00",
+            "start_date": "2018-02-14",
+            "expire_date": "2018-02-14",
             "status": "Active",
             "created_by_id": "123456"
         }

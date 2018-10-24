@@ -222,7 +222,12 @@ class EnhancedTable extends React.Component {
 }
 
 EnhancedTable.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
+    endpoint: PropTypes.string.isRequired,
+};
+EnhancedTable.defaultProps = {
+    classes: {},
+    endpoint: "/api/horizon_target_individual/",
 };
 
 EnhancedTable = withStyles(styles)(EnhancedTable);

@@ -77,29 +77,35 @@ class EnhancedTable extends React.Component {
         order: "asc",
         orderBy: "target_name",
         selected: [],
-        data: [],
+        data: this.props.data,
         page: 0,
         rowsPerPage: 5
     };
 
-    componentDidMount() {
-        axios
-            .get(this.props.endpoint)
-            .then((response) => {
-                // handle success
-                console.log(response);
-                this.setState({
-                    data: response.data
-                });
-            })
-            .catch((error) => {
-                // handle error
-                console.log(error);
-            })
-            .then(() => {
-                // always executed
-            });
+    static getDerivedStateFromProps(prop, state) {
+        if (prop.data !== state.data) {
+            return { data: prop.data };
+        } else return null;
     }
+
+    // componentDidMount() {
+    //     axios
+    //         .get(this.props.endpoint)
+    //         .then((response) => {
+    //             // handle success
+    //             console.log(response);
+    //             this.setState({
+    //                 data: response.data
+    //             });
+    //         })
+    //         .catch((error) => {
+    //             // handle error
+    //             console.log(error);
+    //         })
+    //         .then(() => {
+    //             // always executed
+    //         });
+    // }
 
     handleRequestSort = (event, property) => {
         const orderBy = property;
@@ -180,12 +186,14 @@ class EnhancedTable extends React.Component {
                                                 {/* <TableCell padding="checkbox">
                                                 <Checkbox checked={isSelected} />
                                             </TableCell> */}
-                                                <TableCell className={classes.tableCellLarge} component="th" scope="row">{n.name}</TableCell>
+                                                <TableCell className={classes.tableCellLarge} component="th" scope="row">
+                                                    {n.name}
+                                                </TableCell>
                                                 <TableCell className={classes.tableCellLarge}>{n.description}</TableCell>
-                                                <TableCell className={classes.tableCell}>{n.critical_flag}</TableCell>
+                                                <TableCell className={classes.tableCell}>{n.critical_flag.toString()}</TableCell>
                                                 <TableCell className={classes.tableCell}>20/40</TableCell>
                                                 <TableCell className={classes.tableCell}>50%</TableCell>
-                                                <TableCell className={classes.tableCell}>{n.countable_flag}</TableCell>
+                                                <TableCell className={classes.tableCell}>{n.countable_flag.toString()}</TableCell>
                                                 <TableCell className={classes.tableCell}>{n.expire_date}</TableCell>
                                                 <TableCell className={classes.tableCell}>Lucas Yang</TableCell>
                                             </TableRow>
@@ -223,11 +231,11 @@ class EnhancedTable extends React.Component {
 
 EnhancedTable.propTypes = {
     classes: PropTypes.object.isRequired,
-    endpoint: PropTypes.string.isRequired,
+    endpoint: PropTypes.string.isRequired
 };
 EnhancedTable.defaultProps = {
     classes: {},
-    endpoint: "/api/horizon_target_individual/",
+    endpoint: "/api/horizon_target_individual/"
 };
 
 EnhancedTable = withStyles(styles)(EnhancedTable);

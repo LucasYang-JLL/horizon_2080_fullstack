@@ -7,6 +7,8 @@ import EnhancedTable from "./_common/Table";
 import { Route } from "react-router-dom";
 import classNames from "classnames";
 import DetailsContainer from "./_containers/DetailsContainer";
+import Form from "./_common/Form";
+import axios from "axios";
 
 const styles = (theme) => ({
     content: {
@@ -45,9 +47,85 @@ const styles = (theme) => ({
     toolbar: theme.mixins.toolbar
 });
 
+const inputFields = [
+    {
+        type: "input",
+        label: "details.field.target_name",
+        name: "name",
+        required: true
+    },
+    {
+        type: "input",
+        label: "details.field.target_description",
+        name: "description",
+        required: true,
+        props: {
+            multiline: true,
+            // rows: 4,
+            rowsMax: "4"
+        }
+    },
+    {
+        type: "date",
+        label: "details.field.start_date",
+        name: "start_date",
+        required: true,
+        props: {}
+    },
+    {
+        type: "date",
+        label: "details.field.expire_date",
+        required: true,
+        name: "expire_date"
+    },
+    {
+        type: "checkbox",
+        label: "details.field.importance",
+        required: true,
+        name: "critical_flag"
+    }
+];
+
 class Performance extends Component {
-    state = {};
+    state = {
+        openForm: false,
+        tableData: []
+    };
+
+    componentDidMount() {
+        this.fetchIndividualTargets();
+    }
+
+    fetchIndividualTargets() {
+        axios
+            .get("api/horizon_target_individual/")
+            .then((response) => {
+                // handle success
+                console.log(response);
+                this.setState({
+                    tableData: response.data
+                });
+            })
+            .catch((error) => {
+                // handle error
+                console.log(error);
+            })
+            .then(() => {
+                // always executed
+            });
+    }
+
     addPerformance = () => {
+        this.setState((prevState) => {
+            console.log(prevState);
+            if (prevState.openForm === true) {
+                console.log('hi');
+                this.fetchIndividualTargets();
+            }
+            return {
+                openForm: !prevState.openForm
+            };
+        });
         console.log("add performance");
     };
     editPerformance = () => {
@@ -73,7 +151,16 @@ class Performance extends Component {
                         <div className={classes.toolbar} />
                         <Navigation buttonType={buttonIcon} depth={depth} history={history} slideFunc={this.props.slideDirection} buttonMethod={buttonMethod} component="performance" />
                         {depth <= 1 ? (
-                            <EnhancedTable endpoint="api/horizon_target_individual/" {...this.props} />
+                            <Fragment>
+                                <EnhancedTable data={this.state.tableData} {...this.props} />
+                                <Form
+                                    toggleSnackbar={this.props.toggleSnackbar}
+                                    open={this.state.openForm}
+                                    addPerformance={this.addPerformance}
+                                    inputFields={inputFields}
+                                    endpoint={"api/create_horizon_target_individual/0/"}
+                                />
+                            </Fragment>
                         ) : (
                             <Route path="/performance/:id" render={(props) => <DetailsContainer {...props} />} />
                         )}

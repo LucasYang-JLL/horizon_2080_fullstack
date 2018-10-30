@@ -31,3 +31,16 @@ class UpdateTargetIndividualDetails(generics.UpdateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         return Response(serializer.data)
+
+class CreateTargetIndividualDetails(generics.CreateAPIView):
+    queryset = horizon_target_individual.objects.all()
+    serializer_class = TargetIndividualSerializer
+    lookup_field = "target_group_id"
+
+    def create(self, request, *args, **kwargs):
+        # parse the model to be put into database
+        # don't put the instance in here!! that causes the model to be ran on an existing row!!
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(serializer.data)

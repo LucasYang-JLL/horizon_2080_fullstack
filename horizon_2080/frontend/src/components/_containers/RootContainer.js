@@ -40,6 +40,7 @@ const translationConfig = {
             "details.field.start_date": "Start Date",
             "details.field.expire_date": "Expire Date",
             "details.field.created_by": "Created By",
+            "details.field.importance": "20%",
             "target.table.label": `Name, Description, 20%, Events, Completion Status, Countable, Expire Date, Created By`
         },
         zh: {
@@ -53,6 +54,7 @@ const translationConfig = {
             "details.field.start_date": "开始日期",
             "details.field.expire_date": "结束日期",
             "details.field.created_by": "创建者",
+            "details.field.importance": "20%",
             "target.table.label": `目标名称, 目标详情, 20%, 活动, 进展, 可数, 结束日期, 创建者`
         }
     }

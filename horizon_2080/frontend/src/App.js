@@ -11,6 +11,7 @@ import EventsContainer from "./components/_containers/EventsContainer";
 import CommentsContainer from "./components/_containers/CommentsContainer";
 import ActionsContainer from "./components/_containers/ActionsContainer";
 import SettingsContainer from "./components/_containers/SettingsContainer";
+import Snackbar from "./components/_common/Snackbar";
 
 const styles = (theme) => ({
     root: {
@@ -27,14 +28,14 @@ const styles = (theme) => ({
         padding: theme.spacing.unit * 3,
         minWidth: 0 // So the Typography noWrap works
     },
-    toolbar: theme.mixins.toolbar,
+    toolbar: theme.mixins.toolbar
 });
 
 const history = createBrowserHistory();
 
 class App extends Component {
     render() {
-        const { classes } = this.props;
+        const { classes, toggleSnackbar, snackbarProp } = this.props;
         return (
             <Router history={history}>
                 <MuiThemeProvider theme={MuiTheme}>
@@ -46,6 +47,7 @@ class App extends Component {
                         <Route path="/comments" component={CommentsContainer} />
                         <Route path="/actions" component={ActionsContainer} />
                         <Route path="/settings" component={SettingsContainer} />
+                        <Snackbar toggleSnackbar={toggleSnackbar} snackbarProp={snackbarProp} />
                     </div>
                 </MuiThemeProvider>
             </Router>

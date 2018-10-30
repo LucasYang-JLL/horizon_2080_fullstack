@@ -98,16 +98,22 @@ class Details extends Component {
     };
 
     render() {
-        const { classes, history } = this.props;
+        const { classes } = this.props;
         const { slideState, editContent, target_details_data } = this.props.reduxState;
-        const { path } = this.props.match;
-        console.log(this.state);
         return (
             <Fragment>
                 <Slide direction={slideState} in mountOnEnter unmountOnExit>
                     <Paper className={classNames(classes.root, classes.rootMd, classes.rootSm)}>
                         <Tabs activeTab={this.state.activeTab} handleTabChange={this.handleTabChange} msgID="tab.details.title" fullWidth={false} />
-                        {this.state.activeTab === 0 && <DetailsField data={target_details_data} editContent={editContent} handleChange={this.props.handleDataChange} />}
+                        {this.state.activeTab === 0 && (
+                            <DetailsField
+                                toggleSnackbar={this.props.toggleSnackbar}
+                                toggleEditButton={this.props.toggleEditButton}
+                                data={target_details_data}
+                                editContent={editContent}
+                                handleChange={this.props.handleDataChange}
+                            />
+                        )}
                     </Paper>
                 </Slide>
                 <CommentsContainer location={this.props.location} docked={true} />

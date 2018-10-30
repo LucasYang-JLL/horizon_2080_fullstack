@@ -7,7 +7,7 @@ const editContent = (state = false, action) => {
     }
 };
 
-const target_details_data = (state={}, action) => {
+const target_details_data = (state = {}, action) => {
     switch (action.type) {
         case "TARGET_DETAILS_DATA":
             return action.data;
@@ -19,6 +19,20 @@ const target_details_data = (state={}, action) => {
         default:
             return state;
     }
-}
+};
 
-export { editContent, target_details_data };
+const snackbarProp = (state = { snackbarOpen: false, variant: "info", message: "Input message here" }, action) => {
+    switch (action.type) {
+        case "TOGGLE_SNACKBAR":
+            state = {
+                snackbarOpen: action.snackbarOpen,
+                variant: action.variant,
+                message: action.message
+            };
+            return state;
+        default:
+            return state;
+    }
+};
+
+export { editContent, target_details_data, snackbarProp };

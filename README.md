@@ -68,6 +68,13 @@ Testing: Cypress<br>
      python3 manage.py runserver
     ```
 
+### Server Setup
+1. URL: https://horizon2080.chinacloudsites.cn
+2. https://JLL_TDIM@horizon2080.scm.chinacloudsites.cn:443/Horizon2080.git / zaq1@WSX
+3. 
+
+
+
 ### Frequently appeared problems
 
 1. django.db.utils.OperationalError: (1045, "Access denied for user 'root'@'localhost' (using password: NO)")<br>

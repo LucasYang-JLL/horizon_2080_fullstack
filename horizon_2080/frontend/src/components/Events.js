@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Slide from "@material-ui/core/Slide";
+import Snackbar from "./_common/Snackbar";
 
 const styles = (theme) => ({
     content: {

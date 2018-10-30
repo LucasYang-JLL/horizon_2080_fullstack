@@ -8,10 +8,19 @@ import en from "react-intl/locale-data/en";
 import fr from "react-intl/locale-data/fr";
 import es from "react-intl/locale-data/es";
 import zh from "react-intl/locale-data/zh";
+import { toggleSnackbar } from "../_actions/common";
 
 const mapStateToProps = (state) => {
     return {
         reduxState: state
+    };
+};
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        toggleSnackbar: (snackbarOpen, variant = "info", message = "Input message here") => {
+            dispatch(toggleSnackbar(snackbarOpen, variant, message));
+        }
     };
 };
 
@@ -31,7 +40,7 @@ const translationConfig = {
             "details.field.start_date": "Start Date",
             "details.field.expire_date": "Expire Date",
             "details.field.created_by": "Created By",
-            "target.table.label": `Name, Description, 20%, Events, Completion Status, Countable, Expire Date, Created By`,
+            "target.table.label": `Name, Description, 20%, Events, Completion Status, Countable, Expire Date, Created By`
         },
         zh: {
             "header.drawers": "性能, 活动, 留言 / 回复, 笔记, 设置",
@@ -44,22 +53,26 @@ const translationConfig = {
             "details.field.start_date": "开始日期",
             "details.field.expire_date": "结束日期",
             "details.field.created_by": "创建者",
-            "target.table.label": `目标名称, 目标详情, 20%, 活动, 进展, 可数, 结束日期, 创建者`,
+            "target.table.label": `目标名称, 目标详情, 20%, 活动, 进展, 可数, 结束日期, 创建者`
         }
     }
 };
 
 class RootContainer extends Component {
     render() {
-        let { language } = this.props.reduxState;
+        let { language, snackbarProp } = this.props.reduxState;
+        let { toggleSnackbar } = this.props;
         return (
             <IntlProvider locale={translationConfig.locale} messages={translationConfig.messages[language]}>
                 <Fragment>
                     <CssBaseline />
-                    <App />
+                    <App toggleSnackbar={toggleSnackbar} snackbarProp={snackbarProp} />
                 </Fragment>
             </IntlProvider>
         );
     }
 }
-export default connect(mapStateToProps)(RootContainer);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(RootContainer);

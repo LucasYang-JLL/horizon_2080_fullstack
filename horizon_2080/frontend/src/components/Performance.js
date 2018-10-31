@@ -96,9 +96,16 @@ class Performance extends Component {
         this.fetchIndividualTargets();
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.reduxState.targetUpdate !== prevProps.reduxState.targetUpdate) {
+            this.fetchIndividualTargets();
+            // this.props.updateTarget(!this.props.reduxState.targetUpdate);
+        }
+    }
+
     fetchIndividualTargets() {
         axios
-            .get("api/horizon_target_individual/")
+            .get("/api/horizon_target_individual/")
             .then((response) => {
                 // handle success
                 console.log(response);
@@ -119,7 +126,7 @@ class Performance extends Component {
         this.setState((prevState) => {
             console.log(prevState);
             if (prevState.openForm === true) {
-                console.log('hi');
+                console.log("hi");
                 this.fetchIndividualTargets();
             }
             return {
@@ -154,9 +161,10 @@ class Performance extends Component {
                             <Fragment>
                                 <EnhancedTable data={this.state.tableData} {...this.props} />
                                 <Form
+                                    title="Add New Target"
                                     toggleSnackbar={this.props.toggleSnackbar}
                                     open={this.state.openForm}
-                                    addPerformance={this.addPerformance}
+                                    toggle={this.addPerformance}
                                     inputFields={inputFields}
                                     endpoint={"api/create_horizon_target_individual/0/"}
                                 />

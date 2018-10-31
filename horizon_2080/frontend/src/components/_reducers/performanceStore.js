@@ -35,4 +35,14 @@ const snackbarProp = (state = { snackbarOpen: false, variant: "info", message: "
     }
 };
 
-export { editContent, target_details_data, snackbarProp };
+const targetUpdate = (state=false, action) => {
+    switch (action.type) {
+        case "UPDATE_TARGET":
+            state= action.value;
+            return state;
+        default: 
+            return state;
+    }
+};
+
+export { editContent, target_details_data, snackbarProp, targetUpdate };

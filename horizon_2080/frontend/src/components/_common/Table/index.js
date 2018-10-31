@@ -59,6 +59,7 @@ function desc(a, b, orderBy) {
 }
 
 function stableSort(array, cmp) {
+    console.log(array);
     const stabilizedThis = array.map((el, index) => [el, index]);
     stabilizedThis.sort((a, b) => {
         const order = cmp(a[0], b[0]);
@@ -177,28 +178,38 @@ class EnhancedTable extends React.Component {
                                 title="target"
                             />
                             <TableBody>
-                                {stableSort(data, getSorting(order, orderBy))
-                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                    .map((n) => {
-                                        const isSelected = this.isSelected(n.id);
-                                        return (
-                                            <TableRow hover onClick={(event) => this.handleClick(event, n.id)} role="checkbox" aria-checked={isSelected} tabIndex={-1} key={n.id} selected={isSelected}>
-                                                {/* <TableCell padding="checkbox">
+                                {data.length > 0
+                                    ? stableSort(data, getSorting(order, orderBy))
+                                          .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                          .map((n) => {
+                                              const isSelected = this.isSelected(n.id);
+                                              return (
+                                                  <TableRow
+                                                      hover
+                                                      onClick={(event) => this.handleClick(event, n.id)}
+                                                      role="checkbox"
+                                                      aria-checked={isSelected}
+                                                      tabIndex={-1}
+                                                      key={n.id}
+                                                      selected={isSelected}
+                                                  >
+                                                      {/* <TableCell padding="checkbox">
                                                 <Checkbox checked={isSelected} />
                                             </TableCell> */}
-                                                <TableCell className={classes.tableCellLarge} component="th" scope="row">
-                                                    {n.name}
-                                                </TableCell>
-                                                <TableCell className={classes.tableCellLarge}>{n.description}</TableCell>
-                                                <TableCell className={classes.tableCell}>{n.critical_flag.toString()}</TableCell>
-                                                <TableCell className={classes.tableCell}>20/40</TableCell>
-                                                <TableCell className={classes.tableCell}>50%</TableCell>
-                                                <TableCell className={classes.tableCell}>{n.countable_flag.toString()}</TableCell>
-                                                <TableCell className={classes.tableCell}>{n.expire_date}</TableCell>
-                                                <TableCell className={classes.tableCell}>Lucas Yang</TableCell>
-                                            </TableRow>
-                                        );
-                                    })}
+                                                      <TableCell className={classes.tableCellLarge} component="th" scope="row">
+                                                          {n.name}
+                                                      </TableCell>
+                                                      <TableCell className={classes.tableCellLarge}>{n.description}</TableCell>
+                                                      <TableCell className={classes.tableCell}>{n.critical_flag.toString()}</TableCell>
+                                                      <TableCell className={classes.tableCell}>20/40</TableCell>
+                                                      <TableCell className={classes.tableCell}>50%</TableCell>
+                                                      <TableCell className={classes.tableCell}>{n.countable_flag.toString()}</TableCell>
+                                                      <TableCell className={classes.tableCell}>{n.expire_date}</TableCell>
+                                                      <TableCell className={classes.tableCell}>Lucas Yang</TableCell>
+                                                  </TableRow>
+                                              );
+                                          })
+                                    : null}
                                 {emptyRows > 0 && (
                                     <TableRow style={{ height: 49 * emptyRows }}>
                                         <TableCell colSpan={8} />

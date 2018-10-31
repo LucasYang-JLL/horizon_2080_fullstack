@@ -17,9 +17,10 @@ axios.defaults.xsrfCookieName = "csrftoken";
 /**
  * @param {Array} inputFields ({type, label, name, required, props})
  * @param {Boolean} open - open/close form
- * @param {function} addPerformance - toggle open/close state
+ * @param {function} toggle - toggle open/close state
  * @param {String} endpoint - api link to post data
  */
+
 const styles = (theme) => ({
     form: {
         display: "flex",
@@ -64,7 +65,7 @@ class Form extends React.Component {
                 // handle success
                 console.log(response);
                 toggleSnackbar(true, "success", "Submitted!");
-                this.props.addPerformance();
+                this.props.toggle();
             })
             .catch((error) => {
                 // handle error
@@ -73,10 +74,10 @@ class Form extends React.Component {
     };
 
     render() {
-        let { inputFields, open, addPerformance, classes } = this.props;
+        let { inputFields, open, toggle, classes, title } = this.props;
         return (
-            <Dialog disableBackdropClick open={open} onClose={addPerformance} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Add New Target</DialogTitle>
+            <Dialog disableBackdropClick open={open} onClose={toggle} aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-title">{title}</DialogTitle>
                 <form
                     onSubmit={(e) => {
                         e.preventDefault();
@@ -119,7 +120,7 @@ class Form extends React.Component {
                         ))}
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={addPerformance} color="primary">
+                        <Button onClick={toggle} color="primary">
                             Cancel
                         </Button>
                         <Button type="submit" color="primary">

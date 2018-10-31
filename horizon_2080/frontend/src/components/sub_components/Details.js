@@ -7,6 +7,7 @@ import classNames from "classnames";
 import CommentsContainer from "../_containers/CommentsContainer";
 import Tabs from "../_common/Tabs";
 import DetailsField from "./DetailsField";
+import SubtargetField from "./SubtargetField";
 import axios from "axios";
 
 const styles = (theme) => ({
@@ -33,6 +34,10 @@ const styles = (theme) => ({
     //         width: "50%",
     //     }
     // },
+    detailsWrapper: {
+        display: "flex",
+        flex: "1 1 100%"
+    },
     rootSm: {
         [theme.breakpoints.down("sm")]: {
             width: "100%"
@@ -99,20 +104,25 @@ class Details extends Component {
 
     render() {
         const { classes } = this.props;
-        const { slideState, editContent, target_details_data } = this.props.reduxState;
+        const { slideState, editContent, target_details_data, targetUpdate } = this.props.reduxState;
         return (
             <Fragment>
                 <Slide direction={slideState} in mountOnEnter unmountOnExit>
                     <Paper className={classNames(classes.root, classes.rootMd, classes.rootSm)}>
                         <Tabs activeTab={this.state.activeTab} handleTabChange={this.handleTabChange} msgID="tab.details.title" fullWidth={false} />
                         {this.state.activeTab === 0 && (
-                            <DetailsField
-                                toggleSnackbar={this.props.toggleSnackbar}
-                                toggleEditButton={this.props.toggleEditButton}
-                                data={target_details_data}
-                                editContent={editContent}
-                                handleChange={this.props.handleDataChange}
-                            />
+                            <div className={classes.detailsWrapper}>
+                                <DetailsField
+                                    toggleSnackbar={this.props.toggleSnackbar}
+                                    toggleEditButton={this.props.toggleEditButton}
+                                    data={target_details_data}
+                                    editContent={editContent}
+                                    updateTarget={this.props.updateTarget}
+                                    targetUpdate={targetUpdate}
+                                    handleChange={this.props.handleDataChange}
+                                />
+                                <SubtargetField />
+                            </div>
                         )}
                     </Paper>
                 </Slide>

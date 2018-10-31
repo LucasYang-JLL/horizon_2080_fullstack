@@ -15,4 +15,9 @@ const handleDataChange = (name, value) => ({
     value: value
 });
 
-export { toggleEditButton, storeData, handleDataChange };
+const updateTarget = (value) => ({
+    type: "UPDATE_TARGET",
+    value: value
+});
+
+export { toggleEditButton, storeData, handleDataChange, updateTarget };

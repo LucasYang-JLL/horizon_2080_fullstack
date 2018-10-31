@@ -14,8 +14,8 @@ const styles = (theme) => ({
     detailsFieldRoot: {
         display: "flex",
         padding: theme.spacing.unit * 2,
-        flex: 1,
-        maxWidth: "350px",
+        flex: "1 1 100%",
+        maxWidth: "300px",
         flexDirection: "column"
     },
     // fieldRoot: {
@@ -86,7 +86,8 @@ const inputFields = [
         type: "input",
         label: "details.field.created_by",
         required: true,
-        name: "created_by_id"
+        name: "created_by_id",
+        disabled: true
     }
 ];
 
@@ -114,6 +115,7 @@ class DetailsField extends Component {
                 // handle success
                 console.log(response);
                 toggleSnackbar(true, "success", "Saved!");
+                this.props.updateTarget(!this.props.targetUpdate);
             })
             .catch((error) => {
                 // handle error
@@ -123,7 +125,7 @@ class DetailsField extends Component {
 
     Fields = () => {
         const { classes, editContent } = this.props;
-        return inputFields.map(({ type, label, name, required, props }) => (
+        return inputFields.map(({ type, label, name, required, props, disabled }) => (
             <FormattedMessage id={label} key={name}>
                 {(msg) => (
                     <TextField
@@ -132,7 +134,7 @@ class DetailsField extends Component {
                         className={classNames(classes.fieldInput, name === "start_date" ? classes.marginTop : null)}
                         id="standard-read-only-input"
                         label={msg}
-                        disabled={!editContent}
+                        disabled={disabled || !editContent}
                         value={this.state.fields[name] || ""}
                         onChange={(e) => this.props.handleChange(name, e.target.value)}
                         InputProps={{

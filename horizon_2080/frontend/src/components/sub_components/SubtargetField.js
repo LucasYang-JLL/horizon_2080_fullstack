@@ -1,14 +1,18 @@
 import React, { Component, Fragment } from "react";
-import TextField from "@material-ui/core/TextField";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import { FormattedMessage } from "react-intl";
 import classNames from "classnames";
 import SaveIcon from "@material-ui/icons/Save";
+import IconButton from "@material-ui/core/IconButton";
 import AddIcon from "@material-ui/icons/Add";
+import CloseIcon from "@material-ui/icons/Close";
 import Button from "@material-ui/core/Button";
 import Form from "../_common/Form";
 import Progress from "../_common/Progress";
+import Checklist from "../_common/Checklist";
+import TextField from "@material-ui/core/TextField";
+import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import axios from "axios";
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
@@ -19,15 +23,22 @@ const styles = (theme) => ({
         flex: "1 1 100%",
         borderLeft: "1px solid rgba(0, 0, 0, 0.12)",
         flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center"
+        // justifyContent: "center",
+        alignItems: "center",
+        padding: theme.spacing.unit * 2
     },
     marginTop: {
         marginTop: "auto"
     },
     button: {
         margin: theme.spacing.unit,
-        width: "100px"
+        width: "100%",
+        height: "63px",
+        textAlign: "left"
+    },
+    buttonSmall: {
+        width: "50px",
+        height: "35px",
     },
     leftIcon: {
         marginRight: theme.spacing.unit
@@ -38,12 +49,29 @@ const styles = (theme) => ({
     iconSmall: {
         fontSize: 20
     },
+    offsetIcon: {
+        height: "12px"
+    },
+    iconButton: {
+        width: "36px",
+        height: "36px"
+    },
     initialMsg: {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
         width: "50%"
+    },
+    SubtargetContent: {
+        // display: "flex",
+        width: "100%"
+    },
+    messageInputRoot: {
+        display: "flex",
+        flexDirection: "row",
+        flex: "1 1 100%",
+        flexWrap: "wrap"
     }
 });
 
@@ -91,8 +119,10 @@ class SubtargetField extends Component {
         super(props);
         this.state = {
             fields: props.data,
-            data: [1],
-            openForm: false
+            data: [{ checked: false, content: 0 }, { checked: false, content: 1 }, { checked: false, content: 2 }, { checked: false, content: 3 }],
+            openForm: false,
+            checked: [0],
+            textMessage: ""
         };
     }
 
@@ -104,15 +134,58 @@ class SubtargetField extends Component {
 
     toggleForm = () => {
         this.setState((prevState) => {
-            console.log(prevState);
-            if (prevState.openForm === true) {
-                console.log("hi");
-                // this.fetchIndividualTargets();
-            }
             return {
                 openForm: !prevState.openForm
             };
         });
+    };
+
+    toggleChecklist = (value) => () => {
+        const { data } = this.state;
+        const currentIndex = value;
+        const newChecked = [...data];
+        // toggle true/false
+        newChecked[currentIndex].checked = !data[currentIndex].checked;
+        this.setState({
+            data: newChecked
+        });
+    };
+
+    handleInput = (name) => (event) => {
+        this.setState({
+            [name]: event.target.value
+        });
+    };
+
+    handleKeypress = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            const { data } = this.state;
+            let newData = [...data];
+            if (this.state.textMessage) {
+                console.log("add task");
+                newData.push({ checked: false, content: this.state.textMessage });
+                this.setState({
+                    ...this.state,
+                    data: newData,
+                    textMessage: ""
+                });
+            }
+        }
+    };
+
+    addTask = () => {
+        const { data } = this.state;
+        let newData = [...data];
+        if (this.state.textMessage) {
+            console.log("add task");
+            newData.push({ checked: false, content: this.state.textMessage });
+            this.setState({
+                ...this.state,
+                data: newData,
+                textMessage: ""
+            });
+        }
     };
 
     render() {
@@ -120,13 +193,38 @@ class SubtargetField extends Component {
         return (
             <div className={classes.SubtargetRoot}>
                 {this.state.data.length > 0 ? (
-                    <div>
-                        <Progress />
-                        Progress: 0%
-                        <Button variant="contained" size="small" className={classes.button} onClick={this.toggleForm}>
-                            <AddIcon className={classNames(classes.leftIcon, classes.iconSmall)} />
-                            Add
-                        </Button>
+                    <div className={classes.SubtargetContent}>
+                        <Progress progress={this.state.data} />
+                        {/* Progress: 0% */}
+                        <Checklist checked={this.state.checked} arr={this.state.data} toggleChecklist={this.toggleChecklist} />
+                        {!this.state.openForm ? (
+                            <Button className={classes.button} fullWidth onClick={this.toggleForm} disableRipple>
+                                Add a task...
+                            </Button>
+                        ) : (
+                            <ClickAwayListener onClickAway={this.toggleForm}>
+                                <div className={classes.messageInputRoot}>
+                                    <TextField
+                                        multiline
+                                        type="text-field"
+                                        autoFocus
+                                        fullWidth
+                                        variant="outlined"
+                                        className={classes.textField}
+                                        value={this.state.textMessage}
+                                        onChange={this.handleInput("textMessage")}
+                                        onKeyPress={this.handleKeypress}
+                                        margin="normal"
+                                    />
+                                    <Button variant="contained" size="small" className={classes.buttonSmall} onClick={this.addTask}>
+                                        Add
+                                    </Button>
+                                    <IconButton classes={{ label: classes.offsetIcon }} className={classNames(classes.iconButton, classes.rightIcon)} onClick={this.toggleForm}>
+                                        <CloseIcon />
+                                    </IconButton>
+                                </div>
+                            </ClickAwayListener>
+                        )}
                     </div>
                 ) : (
                     <div className={classes.initialMsg}>
@@ -138,14 +236,14 @@ class SubtargetField extends Component {
                     </div>
                 )}
 
-                <Form
+                {/* <Form
                     title="Add Task"
                     toggleSnackbar={this.props.toggleSnackbar}
                     open={this.state.openForm}
                     toggle={this.toggleForm}
                     inputFields={inputFields}
                     endpoint={"api/create_horizon_target_individual/0/"}
-                />
+                /> */}
             </div>
         );
     }

@@ -147,9 +147,9 @@ class Performance extends Component {
         const { pathname } = this.props.location;
         let depth = pathname.split("/").filter((value) => value !== "").length;
         // add alt style when in details view
-        const contentLayout = depth === 2 ? classNames(classes.content, classes.contentAlt) : classes.content;
-        const buttonMethod = depth > 1 ? this.editPerformance : this.addPerformance;
-        const buttonIcon = depth > 1 ? "edit" : "add";
+        const contentLayout = depth === 3 ? classNames(classes.content, classes.contentAlt) : classes.content;
+        const buttonMethod = depth > 2 ? this.editPerformance : this.addPerformance;
+        const buttonIcon = depth > 2 ? "edit" : "add";
         return (
             <Slide direction={slideState} in mountOnEnter unmountOnExit>
                 <Fragment>
@@ -157,7 +157,7 @@ class Performance extends Component {
                     <div className={contentLayout}>
                         <div className={classes.toolbar} />
                         <Navigation buttonType={buttonIcon} depth={depth} history={history} slideFunc={this.props.slideDirection} buttonMethod={buttonMethod} component="performance" />
-                        {depth <= 1 ? (
+                        {depth <= 2 ? (
                             <Fragment>
                                 <EnhancedTable data={this.state.tableData} {...this.props} />
                                 <Form
@@ -170,7 +170,7 @@ class Performance extends Component {
                                 />
                             </Fragment>
                         ) : (
-                            <Route path="/performance/:id" render={(props) => <DetailsContainer {...props} />} />
+                            <Route path="/performance/project/:id" render={(props) => <DetailsContainer {...props} />} />
                         )}
                     </div>
                 </Fragment>

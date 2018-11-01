@@ -46,7 +46,7 @@ class Navigation extends Component {
 
     render() {
         let { classes, depth, component, buttonType, buttonMethod } = this.props;
-        const showNavButton = depth > 1 ? true : false;
+        const showNavButton = depth > 2 ? true : false;
         return (
             <div className={classes.navigationRoot}>
                 {showNavButton ? (
@@ -57,7 +57,7 @@ class Navigation extends Component {
                 <FormattedMessage id={`navigation.${component}.title`}>
                     {(title) => {
                         let titleArr = title.split(",");
-                        depth = depth <= 1 ? 0 : depth;
+                        depth = depth <= 2 ? 0 : depth;
                         if (depth >= titleArr.length) {
                             depth = titleArr.length - 1;
                         }

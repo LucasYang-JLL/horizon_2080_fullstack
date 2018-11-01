@@ -133,7 +133,7 @@ class EnhancedTable extends React.Component {
         let newSelected = [];
         console.log(this.props, id);
         this.props.slideDirection("left");
-        this.props.history.push(`${this.props.match.path}/${id}`);
+        this.props.history.push(`/performance/project/${id}`);
         // if (selectedIndex === -1) {
         //     newSelected = newSelected.concat(selected, id);
         // } else if (selectedIndex === 0) {

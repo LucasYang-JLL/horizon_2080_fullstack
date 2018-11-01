@@ -6,6 +6,7 @@ import { createBrowserHistory } from "history";
 import { MuiThemeProvider } from "@material-ui/core/styles";
 import MuiTheme from "./MuiTheme";
 import HeaderContainer from "./components/_containers/HeaderContainer";
+import FolderContainer from "./components/_containers/FolderContainer";
 import PerformanceContainer from "./components/_containers/PerformanceContainer";
 import EventsContainer from "./components/_containers/EventsContainer";
 import CommentsContainer from "./components/_containers/CommentsContainer";
@@ -42,7 +43,8 @@ class App extends Component {
                     <div className={classes.root}>
                         <HeaderContainer history={history} />
                         <Route exact path="/" render={() => <Redirect push from="/" to="/performance" />} />
-                        <Route path="/performance" component={PerformanceContainer} />
+                        <Route exact path="/performance" component={FolderContainer} />
+                        <Route path="/performance/:id" component={PerformanceContainer} />
                         <Route path="/events" component={EventsContainer} />
                         <Route path="/comments" component={CommentsContainer} />
                         <Route path="/actions" component={ActionsContainer} />

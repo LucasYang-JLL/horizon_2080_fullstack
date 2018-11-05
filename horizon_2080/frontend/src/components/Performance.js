@@ -99,16 +99,16 @@ class Performance extends Component {
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.reduxState.targetUpdate !== prevProps.reduxState.targetUpdate) {
             this.fetchIndividualTargets();
-            // this.props.updateTarget(!this.props.reduxState.targetUpdate);
         }
     }
 
-    fetchIndividualTargets() {
+    fetchIndividualTargets = () => {
+        console.log(this.props.match);
         axios
-            .get("/api/horizon_target_individual/")
+            .get(`/api/horizon_target_individual/${this.props.match.params.id}/`)
             .then((response) => {
                 // handle success
-                console.log(response);
+                console.log("HI", response);
                 this.setState({
                     tableData: response.data
                 });
@@ -120,7 +120,7 @@ class Performance extends Component {
             .then(() => {
                 // always executed
             });
-    }
+    };
 
     addPerformance = () => {
         this.setState((prevState) => {
@@ -135,11 +135,6 @@ class Performance extends Component {
         });
         console.log("add performance");
     };
-    editPerformance = () => {
-        let { editContent } = this.props.reduxState;
-        this.props.toggleEditButton(!editContent);
-        console.log("edit performance");
-    };
 
     render() {
         const { classes, history } = this.props;
@@ -148,30 +143,25 @@ class Performance extends Component {
         let depth = pathname.split("/").filter((value) => value !== "").length;
         // add alt style when in details view
         const contentLayout = depth === 3 ? classNames(classes.content, classes.contentAlt) : classes.content;
-        const buttonMethod = depth > 2 ? this.editPerformance : this.addPerformance;
-        const buttonIcon = depth > 2 ? "edit" : "add";
         return (
             <Slide direction={slideState} in mountOnEnter unmountOnExit>
                 <Fragment>
                     <div className={classes.toolbar} />
                     <div className={contentLayout}>
                         <div className={classes.toolbar} />
-                        <Navigation buttonType={buttonIcon} depth={depth} history={history} slideFunc={this.props.slideDirection} buttonMethod={buttonMethod} component="performance" />
-                        {depth <= 2 ? (
-                            <Fragment>
-                                <EnhancedTable data={this.state.tableData} {...this.props} />
-                                <Form
-                                    title="Add New Target"
-                                    toggleSnackbar={this.props.toggleSnackbar}
-                                    open={this.state.openForm}
-                                    toggle={this.addPerformance}
-                                    inputFields={inputFields}
-                                    endpoint={"api/create_horizon_target_individual/0/"}
-                                />
-                            </Fragment>
-                        ) : (
-                            <Route path="/performance/project/:id" render={(props) => <DetailsContainer {...props} />} />
-                        )}
+                        <Navigation buttonType={"add"} depth={depth} history={history} slideFunc={this.props.slideDirection} buttonMethod={this.addPerformance} component="performance" />
+                        <Fragment>
+                            <EnhancedTable data={this.state.tableData} {...this.props} />
+                            <Form
+                                title="Add New Target"
+                                toggleSnackbar={this.props.toggleSnackbar}
+                                open={this.state.openForm}
+                                toggle={this.addPerformance}
+                                inputFields={inputFields}
+                                endpoint={`/api/create_horizon_target_individual/${this.props.match.params.id}/`}
+                                folder_id={this.props.match.params.id}
+                            />
+                        </Fragment>
                     </div>
                 </Fragment>
             </Slide>

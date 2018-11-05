@@ -134,16 +134,6 @@ class EnhancedTable extends React.Component {
         console.log(this.props, id);
         this.props.slideDirection("left");
         this.props.history.push(`/performance/project/${id}`);
-        // if (selectedIndex === -1) {
-        //     newSelected = newSelected.concat(selected, id);
-        // } else if (selectedIndex === 0) {
-        //     newSelected = newSelected.concat(selected.slice(1));
-        // } else if (selectedIndex === selected.length - 1) {
-        //     newSelected = newSelected.concat(selected.slice(0, -1));
-        // } else if (selectedIndex > 0) {
-        //     newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
-        // }
-        // this.setState({ selected: newSelected });
     };
 
     handleChangePage = (event, page) => {
@@ -186,7 +176,7 @@ class EnhancedTable extends React.Component {
                                               return (
                                                   <TableRow
                                                       hover
-                                                      onClick={(event) => this.handleClick(event, n.id)}
+                                                      onClick={(event) => this.handleClick(event, n.folder_id)}
                                                       role="checkbox"
                                                       aria-checked={isSelected}
                                                       tabIndex={-1}

@@ -5,6 +5,7 @@ import { withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import classNames from "classnames";
 import CommentsContainer from "../_containers/CommentsContainer";
+import Navigation from "../_common/Navigation";
 import Tabs from "../_common/Tabs";
 import DetailsField from "./DetailsField";
 import SubtargetField from "./SubtargetField";
@@ -12,15 +13,18 @@ import axios from "axios";
 
 const styles = (theme) => ({
     content: {
-        // flexGrow: 1,
-        // backgroundColor: theme.palette.background.default,
+        width: "100%",
+        display: "flex",
         padding: theme.spacing.unit * 3,
+        paddingTop: 0,
         minWidth: 0, // So the Typography noWrap works
-        overflowX: "hidden"
+        overflowX: "hidden",
+        flexGrow: 1,
+        flexDirection: "column"
     },
     root: {
         alignSelf: "flex-start",
-        width: "67%",
+        width: "100%",
         marginTop: theme.spacing.unit * 3,
         height: "70%",
         minHeight: "350px",
@@ -102,29 +106,41 @@ class Details extends Component {
         });
     };
 
+    editPerformance = () => {
+        let { editContent } = this.props.reduxState;
+        this.props.toggleEditButton(!editContent);
+        console.log("edit performance");
+    };
+
     render() {
-        const { classes } = this.props;
+        const { classes, history } = this.props;
         const { slideState, editContent, target_details_data, targetUpdate } = this.props.reduxState;
+        const { pathname } = this.props.location;
+        let depth = pathname.split("/").filter((value) => value !== "").length;
         return (
             <Fragment>
                 <Slide direction={slideState} in mountOnEnter unmountOnExit>
-                    <Paper className={classNames(classes.root, classes.rootMd, classes.rootSm)}>
-                        <Tabs activeTab={this.state.activeTab} handleTabChange={this.handleTabChange} msgID="tab.details.title" fullWidth={false} />
-                        {this.state.activeTab === 0 && (
-                            <div className={classes.detailsWrapper}>
-                                <DetailsField
-                                    toggleSnackbar={this.props.toggleSnackbar}
-                                    toggleEditButton={this.props.toggleEditButton}
-                                    data={target_details_data}
-                                    editContent={editContent}
-                                    updateTarget={this.props.updateTarget}
-                                    targetUpdate={targetUpdate}
-                                    handleChange={this.props.handleDataChange}
-                                />
-                                <SubtargetField />
-                            </div>
-                        )}
-                    </Paper>
+                    <div className={classes.content}>
+                        <div className={classes.toolbar} />
+                        <Navigation buttonType={"edit"} depth={depth} history={history} slideFunc={this.props.slideDirection} buttonMethod={this.editPerformance} component="performance" />
+                        <Paper className={classNames(classes.root, classes.rootMd, classes.rootSm)}>
+                            <Tabs activeTab={this.state.activeTab} handleTabChange={this.handleTabChange} msgID="tab.details.title" fullWidth={false} />
+                            {this.state.activeTab === 0 && (
+                                <div className={classes.detailsWrapper}>
+                                    <DetailsField
+                                        toggleSnackbar={this.props.toggleSnackbar}
+                                        toggleEditButton={this.props.toggleEditButton}
+                                        data={target_details_data}
+                                        editContent={editContent}
+                                        updateTarget={this.props.updateTarget}
+                                        targetUpdate={targetUpdate}
+                                        handleChange={this.props.handleDataChange}
+                                    />
+                                    <SubtargetField />
+                                </div>
+                            )}
+                        </Paper>
+                    </div>
                 </Slide>
                 <CommentsContainer location={this.props.location} docked={true} />
             </Fragment>

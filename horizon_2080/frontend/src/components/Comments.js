@@ -31,7 +31,7 @@ const styles = (theme) => ({
         height: "100%",
         alignSelf: "flex-end",
         overflowX: "hidden",
-        marginLeft: theme.spacing.unit * 3
+        // marginLeft: theme.spacing.unit * 3
     },
     dockedRootMd: {
         [theme.breakpoints.down("sm")]: {

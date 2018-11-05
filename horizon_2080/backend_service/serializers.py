@@ -4,6 +4,10 @@ from backend_service.models import *
 #     class Meta:
 #         model = Lead
 #         fields = ('id', 'name', 'email', 'message')
+class FolderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = folder
+        fields = '__all__'
 
 class TargetGroupSerializer(serializers.ModelSerializer):
     class Meta:

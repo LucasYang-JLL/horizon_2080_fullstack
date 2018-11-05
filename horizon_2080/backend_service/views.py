@@ -5,6 +5,22 @@ from backend_service.models import *
 from backend_service.serializers import *
 
 # Create your views here.
+class FolderQuery(generics.ListCreateAPIView):
+    queryset = folder.objects.all()
+    serializer_class = FolderSerializer
+
+class FolderCreate(generics.CreateAPIView):
+    queryset = folder.objects.all()
+    serializer_class = FolderSerializer
+
+    def create(self, request, *args, **kwargs):
+        # parse the model to be put into database
+        # don't put the instance in here!! that causes the model to be ran on an existing row!!
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(serializer.data)
+
 class TargetGroupCreate(generics.ListCreateAPIView):
     queryset = horizon_target_group.objects.all()
     serializer_class = TargetGroupSerializer
@@ -17,7 +33,7 @@ class TargetIndividualDetailsCreate(generics.ListCreateAPIView):
     serializer_class = TargetIndividualSerializer
     # queryset = horizon_target_individual.objects.all()
     def get_queryset(self):
-        return horizon_target_individual.objects.filter(id=self.kwargs['id'])
+        return horizon_target_individual.objects.filter(folder_id=self.kwargs['folder_id'])
 
 class UpdateTargetIndividualDetails(generics.UpdateAPIView):
     queryset = horizon_target_individual.objects.all()
@@ -35,7 +51,7 @@ class UpdateTargetIndividualDetails(generics.UpdateAPIView):
 class CreateTargetIndividualDetails(generics.CreateAPIView):
     queryset = horizon_target_individual.objects.all()
     serializer_class = TargetIndividualSerializer
-    lookup_field = "target_group_id"
+    lookup_field = "folder_id"
 
     def create(self, request, *args, **kwargs):
         # parse the model to be put into database

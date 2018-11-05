@@ -28,7 +28,6 @@ class SimpleTabs extends React.Component {
 
     render() {
         const { classes, msgID, fullWidth, handleTabChange, activeTab, flexEnd } = this.props;
-        console.log(this.props);
         return (
             <div className={classes.root}>
                 {/* <AppBar position="static"> */}

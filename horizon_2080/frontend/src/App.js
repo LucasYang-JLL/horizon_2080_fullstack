@@ -8,6 +8,7 @@ import MuiTheme from "./MuiTheme";
 import HeaderContainer from "./components/_containers/HeaderContainer";
 import FolderContainer from "./components/_containers/FolderContainer";
 import PerformanceContainer from "./components/_containers/PerformanceContainer";
+import DetailsContainer from "./components/_containers/DetailsContainer";
 import EventsContainer from "./components/_containers/EventsContainer";
 import CommentsContainer from "./components/_containers/CommentsContainer";
 import ActionsContainer from "./components/_containers/ActionsContainer";
@@ -44,7 +45,8 @@ class App extends Component {
                         <HeaderContainer history={history} />
                         <Route exact path="/" render={() => <Redirect push from="/" to="/performance" />} />
                         <Route exact path="/performance" component={FolderContainer} />
-                        <Route path="/performance/:id" component={PerformanceContainer} />
+                        <Route exact path="/performance/:id" component={PerformanceContainer} />
+                        <Route exact path="/performance/project/:id" component={DetailsContainer} />
                         <Route path="/events" component={EventsContainer} />
                         <Route path="/comments" component={CommentsContainer} />
                         <Route path="/actions" component={ActionsContainer} />

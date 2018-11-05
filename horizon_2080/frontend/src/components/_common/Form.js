@@ -58,13 +58,22 @@ class Form extends React.Component {
     };
 
     submitForm = () => {
-        let { toggleSnackbar, endpoint } = this.props;
+        let { toggleSnackbar, endpoint, dest, folder_id } = this.props;
+        let fields = Object.assign(this.state.fields);
+        if (folder_id) {
+            fields.folder_id = folder_id;
+        }
         axios
-            .post(endpoint, this.state.fields)
+            .post(endpoint, fields)
             .then((response) => {
                 // handle success
                 console.log(response);
-                toggleSnackbar(true, "success", "Submitted!");
+                if (dest) {
+                    this.props.history.push(`${dest}${response.data.id}`);
+                }
+                if (toggleSnackbar) {
+                    toggleSnackbar(true, "success", "Submitted!");
+                }
                 this.props.toggle();
             })
             .catch((error) => {
@@ -86,7 +95,7 @@ class Form extends React.Component {
                     }}
                 >
                     <DialogContent className={classes.form}>
-                        {inputFields.map(({ type, label, name, required, props }) => (
+                        {inputFields.map(({ type, label, name, required, props, noLabel }) => (
                             <FormattedMessage id={label} key={name}>
                                 {(msg) => {
                                     switch (type) {
@@ -103,7 +112,7 @@ class Form extends React.Component {
                                                     className={classes.formRow}
                                                     type={type}
                                                     required={required}
-                                                    label={msg}
+                                                    label={noLabel ? "" : msg}
                                                     value={this.state.fields[name] || ""}
                                                     onChange={(e) => this.handleChange(name, e.target.value)}
                                                     InputProps={{

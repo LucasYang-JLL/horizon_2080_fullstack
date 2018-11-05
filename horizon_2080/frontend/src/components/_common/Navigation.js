@@ -46,7 +46,7 @@ class Navigation extends Component {
 
     render() {
         let { classes, depth, component, buttonType, buttonMethod } = this.props;
-        const showNavButton = depth > 2 ? true : false;
+        const showNavButton = depth > 1 ? true : false;
         return (
             <div className={classes.navigationRoot}>
                 {showNavButton ? (

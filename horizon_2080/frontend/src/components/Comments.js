@@ -44,7 +44,11 @@ const styles = (theme) => ({
             display: "none"
         }
     },
-    dockedBottomRoot: {},
+    dockedBottomRoot: {
+        position: 'absolute',
+        bottom: theme.spacing.unit * 3,
+        right: theme.spacing.unit * 3,
+    },
     toolbar: theme.mixins.toolbar,
     toolbarMd: {
         [theme.breakpoints.down("sm")]: {
@@ -127,7 +131,7 @@ class DockedBottom extends Component {
     render() {
         const { classes, handleTabChange, activeTab } = this.props;
         return (
-            <div>
+            <div className={classes.dockedBottomRoot}>
                 <IconButton className={classes.button} aria-label="Delete" onClick={this.toggleComment}>
                     <ForumIcon />
                 </IconButton>

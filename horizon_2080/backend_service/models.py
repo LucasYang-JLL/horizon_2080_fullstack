@@ -43,3 +43,10 @@ class horizon_target_individual(models.Model):
     created_by_id = models.PositiveIntegerField(default=123456)
     def __str__(self):
         return self.name
+
+class sub_target_individual(models.Model):
+    name = models.CharField(max_length=100)
+    create_date = models.DateTimeField(default=datetime.datetime.now)
+    completed_flag = models.BooleanField(default=False)
+    target_id_individual = models.PositiveIntegerField(default=0)
+    created_by_id = models.PositiveIntegerField(default=123456)

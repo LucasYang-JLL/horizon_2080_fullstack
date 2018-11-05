@@ -11,6 +11,7 @@ const styles = (theme) => ({
     root: {
         width: "100%",
         maxHeight: "300px",
+        marginTop: theme.spacing.unit,
         overflowY: "auto",
         backgroundColor: theme.palette.background.paper
     },
@@ -24,14 +25,15 @@ const styles = (theme) => ({
 
 class Checklist extends React.Component {
     render() {
-        const { classes, arr, checked, toggleChecklist } = this.props;
+        const { classes, arr, toggleChecklist } = this.props;
+        console.log(arr);
         return (
             <div className={classes.root}>
                 <List>
-                    {arr.map(({ checked, content }, index) => (
-                        <ListItem className={classes.dense} key={content} role={undefined} dense button onClick={toggleChecklist(index)}>
-                            <Checkbox className={classes.iconDense} checked={checked} tabIndex={-1} disableRipple />
-                            <ListItemText primary={`${content}`} />
+                    {arr.map(({ completed_flag, name }, index) => (
+                        <ListItem className={classes.dense} key={index} role={undefined} dense button>
+                            <Checkbox onClick={toggleChecklist(index)} className={classes.iconDense} checked={completed_flag} tabIndex={-1} disableRipple />
+                            <ListItemText primary={`${name}`} />
                         </ListItem>
                     ))}
                 </List>

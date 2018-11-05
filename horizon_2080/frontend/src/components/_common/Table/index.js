@@ -42,12 +42,6 @@ const styles = (theme) => ({
     toolbar: theme.mixins.toolbar
 });
 
-let counter = 0;
-function createData(target_name, target_description, priority, event_count, completion_status) {
-    counter += 1;
-    return { id: counter, target_name, target_description, priority, event_count, completion_status };
-}
-
 function desc(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
         return -1;
@@ -176,7 +170,7 @@ class EnhancedTable extends React.Component {
                                               return (
                                                   <TableRow
                                                       hover
-                                                      onClick={(event) => this.handleClick(event, n.folder_id)}
+                                                      onClick={(event) => this.handleClick(event, n.id)}
                                                       role="checkbox"
                                                       aria-checked={isSelected}
                                                       tabIndex={-1}

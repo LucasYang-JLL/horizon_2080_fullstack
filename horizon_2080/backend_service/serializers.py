@@ -18,3 +18,8 @@ class TargetIndividualSerializer(serializers.ModelSerializer):
     class Meta:
         model = horizon_target_individual
         fields = '__all__'
+
+class SubTargetIndividualSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = sub_target_individual
+        fields = '__all__'

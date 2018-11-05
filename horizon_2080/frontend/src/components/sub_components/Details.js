@@ -75,6 +75,7 @@ class Details extends Component {
     };
 
     componentDidMount() {
+        console.log(this.props.endpoint, this.props.match.params.id)
         axios
             .get(`${this.props.endpoint}${this.props.match.params.id}/`)
             .then((response) => {
@@ -136,7 +137,7 @@ class Details extends Component {
                                         targetUpdate={targetUpdate}
                                         handleChange={this.props.handleDataChange}
                                     />
-                                    <SubtargetField />
+                                    <SubtargetField target_id={this.props.match.params.id} />
                                 </div>
                             )}
                         </Paper>

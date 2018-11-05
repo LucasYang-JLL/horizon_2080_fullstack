@@ -33,6 +33,12 @@ class TargetIndividualDetailsCreate(generics.ListCreateAPIView):
     serializer_class = TargetIndividualSerializer
     # queryset = horizon_target_individual.objects.all()
     def get_queryset(self):
+        return horizon_target_individual.objects.filter(id=self.kwargs['id'])
+
+class TargetIndividualDetailsQueryByFolder(generics.ListCreateAPIView):
+    serializer_class = TargetIndividualSerializer
+    # queryset = horizon_target_individual.objects.all()
+    def get_queryset(self):
         return horizon_target_individual.objects.filter(folder_id=self.kwargs['folder_id'])
 
 class UpdateTargetIndividualDetails(generics.UpdateAPIView):
@@ -59,4 +65,35 @@ class CreateTargetIndividualDetails(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
+        return Response(serializer.data)
+
+class CreateSubTargetIndividual(generics.CreateAPIView):
+    queryset = sub_target_individual.objects.all()
+    serializer_class = SubTargetIndividualSerializer
+
+    def create(self, request, *args, **kwargs):
+        # parse the model to be put into database
+        # don't put the instance in here!! that causes the model to be ran on an existing row!!
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(serializer.data)
+
+class QuerySubTargetIndividual(generics.ListCreateAPIView):
+    serializer_class = SubTargetIndividualSerializer
+    # queryset = horizon_target_individual.objects.all()
+    def get_queryset(self):
+        return sub_target_individual.objects.filter(target_id_individual=self.kwargs['target_id_individual'])
+
+class UpdateSubTargetIndividual(generics.UpdateAPIView):
+    queryset = sub_target_individual.objects.all()
+    serializer_class = SubTargetIndividualSerializer
+    
+    def update(self, request, *args, **kwargs):
+        # creates an instance of the model object from the requested id
+        instance = self.get_object()
+        # parse the model to be put into database
+        serializer = self.get_serializer(instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
         return Response(serializer.data)

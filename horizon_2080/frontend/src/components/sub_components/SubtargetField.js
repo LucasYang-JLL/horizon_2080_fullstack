@@ -38,7 +38,7 @@ const styles = (theme) => ({
     },
     buttonSmall: {
         width: "50px",
-        height: "35px",
+        height: "35px"
     },
     leftIcon: {
         marginRight: theme.spacing.unit
@@ -70,67 +70,66 @@ const styles = (theme) => ({
     messageInputRoot: {
         display: "flex",
         flexDirection: "row",
-        flex: "1 1 100%",
+        // flex: "1 1 100%",
         flexWrap: "wrap"
     }
 });
-
-const inputFields = [
-    {
-        type: "input",
-        label: "details.field.target_name",
-        name: "name",
-        required: true
-    },
-    {
-        type: "input",
-        label: "details.field.target_description",
-        name: "description",
-        required: true,
-        props: {
-            multiline: true,
-            // rows: 4,
-            rowsMax: "4"
-        }
-    },
-    {
-        type: "date",
-        label: "details.field.start_date",
-        name: "start_date",
-        required: true,
-        props: {}
-    },
-    {
-        type: "date",
-        label: "details.field.expire_date",
-        required: true,
-        name: "expire_date"
-    },
-    {
-        type: "checkbox",
-        label: "details.field.importance",
-        required: true,
-        name: "critical_flag"
-    }
-];
 
 class SubtargetField extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            fields: props.data,
-            data: [{ checked: false, content: 0 }, { checked: false, content: 1 }, { checked: false, content: 2 }, { checked: false, content: 3 }],
+            // fields: props.data,
+            data: [],
             openForm: false,
             checked: [0],
             textMessage: ""
         };
     }
 
-    static getDerivedStateFromProps(nextProps, prevState) {
-        if (nextProps.data !== prevState.fields) {
-            return { fields: nextProps.data };
-        } else return null;
+    componentDidMount() {
+        this.fetchSubTarget();
     }
+    // static getDerivedStateFromProps(nextProps, prevState) {
+    //     if (nextProps.data !== prevState.fields) {
+    //         return { fields: nextProps.data };
+    //     } else return null;
+    // }
+
+    fetchSubTarget = () => {
+        axios
+            .get(`/api/query_sub_target_individual/${this.props.target_id}/`)
+            .then((response) => {
+                // handle success
+                console.log("HI", response);
+                this.setState({
+                    data: response.data
+                });
+            })
+            .catch((error) => {
+                // handle error
+                console.log(error);
+            })
+            .then(() => {
+                // always executed
+            });
+    };
+
+    updateSubTarget = (id, obj) => {
+        axios
+            .put(`/api/update_sub_target_individual/${id}/`, obj)
+            .then((response) => {
+                // handle success
+                console.log("HI", response);
+            })
+            .catch((error) => {
+                // handle error
+                console.log(error);
+            })
+            .then(() => {
+                // always executed
+            });
+    };
 
     toggleForm = () => {
         this.setState((prevState) => {
@@ -145,10 +144,15 @@ class SubtargetField extends Component {
         const currentIndex = value;
         const newChecked = [...data];
         // toggle true/false
-        newChecked[currentIndex].checked = !data[currentIndex].checked;
-        this.setState({
-            data: newChecked
-        });
+        newChecked[currentIndex].completed_flag = !data[currentIndex].completed_flag;
+        this.setState(
+            {
+                data: newChecked
+            },
+            () => {
+                this.updateSubTarget(this.state.data[currentIndex].id, this.state.data[currentIndex]);
+            }
+        );
     };
 
     handleInput = (name) => (event) => {
@@ -157,17 +161,41 @@ class SubtargetField extends Component {
         });
     };
 
+    sendForm = () => {
+        let endpoint = `/api/create_sub_target_individual/${this.props.target_id}/`;
+        const form = {
+            completed_flag: false,
+            name: this.state.textMessage,
+            target_id_individual: this.props.target_id
+        };
+        axios
+            .post(endpoint, form)
+            .then((response) => {
+                // handle success
+                console.log(response);
+                this.setState((prevState) => {
+                    console.log(prevState);
+                    return {
+                        ...this.state,
+                        data: prevState.data.concat([response.data])
+                    };
+                });
+            })
+            .catch((error) => {
+                // handle error
+                console.log(error);
+            });
+    };
+
     handleKeypress = (e) => {
         if (e.key === "Enter") {
             e.preventDefault();
             const { data } = this.state;
-            let newData = [...data];
             if (this.state.textMessage) {
                 console.log("add task");
-                newData.push({ checked: false, content: this.state.textMessage });
+                this.sendForm();
+                // reset text input
                 this.setState({
-                    ...this.state,
-                    data: newData,
                     textMessage: ""
                 });
             }
@@ -176,13 +204,11 @@ class SubtargetField extends Component {
 
     addTask = () => {
         const { data } = this.state;
-        let newData = [...data];
         if (this.state.textMessage) {
             console.log("add task");
-            newData.push({ checked: false, content: this.state.textMessage });
+            this.sendForm();
+            // reset text input
             this.setState({
-                ...this.state,
-                data: newData,
                 textMessage: ""
             });
         }
@@ -196,7 +222,7 @@ class SubtargetField extends Component {
                     <div className={classes.SubtargetContent}>
                         <Progress progress={this.state.data} />
                         {/* Progress: 0% */}
-                        <Checklist checked={this.state.checked} arr={this.state.data} toggleChecklist={this.toggleChecklist} />
+                        <Checklist arr={this.state.data} toggleChecklist={this.toggleChecklist} />
                         {!this.state.openForm ? (
                             <Button className={classes.button} fullWidth onClick={this.toggleForm} disableRipple>
                                 Add a task...
@@ -226,7 +252,7 @@ class SubtargetField extends Component {
                             </ClickAwayListener>
                         )}
                     </div>
-                ) : (
+                ) : !this.state.openForm ? (
                     <div className={classes.initialMsg}>
                         You have not made any tasks for this target yet, click to create one
                         <Button variant="contained" size="small" className={classes.button} onClick={this.toggleForm}>
@@ -234,16 +260,30 @@ class SubtargetField extends Component {
                             Add
                         </Button>
                     </div>
+                ) : (
+                    <ClickAwayListener onClickAway={this.toggleForm}>
+                        <div className={classes.messageInputRoot}>
+                            <TextField
+                                multiline
+                                type="text-field"
+                                autoFocus
+                                fullWidth
+                                variant="outlined"
+                                className={classes.textField}
+                                value={this.state.textMessage}
+                                onChange={this.handleInput("textMessage")}
+                                onKeyPress={this.handleKeypress}
+                                margin="normal"
+                            />
+                            <Button variant="contained" size="small" className={classes.buttonSmall} onClick={this.addTask}>
+                                Add
+                            </Button>
+                            <IconButton classes={{ label: classes.offsetIcon }} className={classNames(classes.iconButton, classes.rightIcon)} onClick={this.toggleForm}>
+                                <CloseIcon />
+                            </IconButton>
+                        </div>
+                    </ClickAwayListener>
                 )}
-
-                {/* <Form
-                    title="Add Task"
-                    toggleSnackbar={this.props.toggleSnackbar}
-                    open={this.state.openForm}
-                    toggle={this.toggleForm}
-                    inputFields={inputFields}
-                    endpoint={"api/create_horizon_target_individual/0/"}
-                /> */}
             </div>
         );
     }

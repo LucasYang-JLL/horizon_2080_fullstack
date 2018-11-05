@@ -1,0 +1,42 @@
+[
+    {
+        "model": "backend_service.sub_target_individual",
+        "pk": 1,
+        "fields": {
+            "name": "Sub-Target 1",
+            "completed_flag": false,
+            "target_id_individual": 23,
+            "created_by_id": "123456"
+        }
+    },
+    {
+        "model": "backend_service.sub_target_individual",
+        "pk": 2,
+        "fields": {
+            "name": "Sub-Target 2",
+            "completed_flag": false,
+            "target_id_individual": 23,
+            "created_by_id": "123456"
+        }
+    },
+    {
+        "model": "backend_service.sub_target_individual",
+        "pk": 3,
+        "fields": {
+            "name": "Sub-Target 3",
+            "completed_flag": false,
+            "target_id_individual": 23,
+            "created_by_id": "123456"
+        }
+    },
+    {
+        "model": "backend_service.sub_target_individual",
+        "pk": 4,
+        "fields": {
+            "name": "Sub-Target 4",
+            "completed_flag": false,
+            "target_id_individual": 23,
+            "created_by_id": "123456"
+        }
+    }
+]

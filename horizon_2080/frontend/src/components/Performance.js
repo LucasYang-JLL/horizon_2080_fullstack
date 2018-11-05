@@ -105,7 +105,7 @@ class Performance extends Component {
     fetchIndividualTargets = () => {
         console.log(this.props.match);
         axios
-            .get(`/api/horizon_target_individual/${this.props.match.params.id}/`)
+            .get(`/api/fetch_horizon_target_individual_by_folder/${this.props.match.params.id}/`)
             .then((response) => {
                 // handle success
                 console.log("HI", response);

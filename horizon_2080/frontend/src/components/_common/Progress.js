@@ -41,7 +41,7 @@ class Progress extends React.Component {
 
     static getDerivedStateFromProps(nextProps, prevState) {
         if (nextProps.progress !== prevState.progress) {
-            let norm_arr = nextProps.progress.map(({ checked, content }) => checked);
+            let norm_arr = nextProps.progress.map(({ completed_flag }) => completed_flag);
             let percentage = Math.round((norm_arr.reduce((acc, curr) => acc + curr) / norm_arr.length) * 100);
             return {
                 completed: percentage // get the % completion, then round the number
@@ -55,7 +55,7 @@ class Progress extends React.Component {
     }
 
     progress = () => {
-        let norm_arr = this.props.progress.map(({ checked, content }) => checked);
+        let norm_arr = this.props.progress.map(({ completed_flag }) => completed_flag);
         let percentage = Math.round((norm_arr.reduce((acc, curr) => acc + curr) / norm_arr.length) * 100);
         this.setState({
             completed: percentage // get the % completion, then round the number

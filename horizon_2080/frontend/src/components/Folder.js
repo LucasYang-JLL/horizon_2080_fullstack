@@ -3,19 +3,9 @@ import Slide from "@material-ui/core/Slide";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
-import classNames from "classnames";
-import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
 import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
 import Form from "./_common/Form";
 import axios from "axios";
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
@@ -135,9 +125,9 @@ class Folder extends Component {
             });
     };
 
-    handleCardClick = () => {
+    handleCardClick = (id) => {
         // this.props.push()
-        this.props.history.push(`/performance/${this.state.hover}`);
+        this.props.history.push(`/performance/${id}`);
         this.props.slideDirection("left");
     };
 
@@ -184,7 +174,7 @@ function CardContainer(props) {
     return (
         <div className={classes.CardContainer}>
             {cards.map(({ id, name }) => (
-                <Card raised={id === hover ? true : false} key={id} className={classes.card} onClick={handleCardClick} onMouseEnter={() => setHover(id)} onMouseLeave={() => setHover(-1)}>
+                <Card raised={id === hover ? true : false} key={id} className={classes.card} onClick={() => handleCardClick(id)} onMouseEnter={() => setHover(id)} onMouseLeave={() => setHover(-1)}>
                     <CardContent>
                         <Typography variant="h5" component="h2">
                             {name}

@@ -12,4 +12,8 @@ urlpatterns = [
     path('api/create_sub_target_individual/<int:target_id_individual>/', views.CreateSubTargetIndividual.as_view() ),
     path('api/query_sub_target_individual/<int:target_id_individual>/', views.QuerySubTargetIndividual.as_view() ),
     path('api/update_sub_target_individual/<int:pk>/', views.UpdateSubTargetIndividual.as_view() ),
+    path('api/fetch_comment_by_target/<int:target_id_individual>/', views.QueryCommentByTarget.as_view() ),
+    path('api/fetch_event_by_sub_target/<int:sub_target_id>/', views.QueryEventBySubTarget.as_view() ),
+    path('api/create_event_by_sub_target/<int:sub_target_id>/', views.CreateEventBySubTarget.as_view() ),
+    path('api/update_event_by_sub_target/<int:pk>/', views.UpdateEventBySubTarget.as_view() ),
 ]

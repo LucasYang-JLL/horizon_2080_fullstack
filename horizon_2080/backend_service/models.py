@@ -47,6 +47,23 @@ class horizon_target_individual(models.Model):
 class sub_target_individual(models.Model):
     name = models.CharField(max_length=100)
     create_date = models.DateTimeField(default=datetime.datetime.now)
+    modify_date = models.DateTimeField(auto_now=True)
     completed_flag = models.BooleanField(default=False)
     target_id_individual = models.PositiveIntegerField(default=0)
+    created_by_id = models.PositiveIntegerField(default=123456)
+
+class comment(models.Model):
+    message = models.CharField(max_length=200)
+    target_id_individual = models.PositiveIntegerField(default=0)
+    reply_comment_id = models.PositiveIntegerField(default=0)
+    private = models.BooleanField(default=False)
+    create_date = models.DateTimeField(default=datetime.datetime.now)
+    modify_date = models.DateTimeField(default=datetime.datetime.now)
+    created_by_id = models.PositiveIntegerField(default=123456)
+
+class event(models.Model):
+    name = models.CharField(max_length=200)
+    sub_target_id = models.PositiveIntegerField(default=0)
+    create_date = models.DateTimeField(default=datetime.datetime.now)
+    modify_date = models.DateTimeField(auto_now=True)
     created_by_id = models.PositiveIntegerField(default=123456)

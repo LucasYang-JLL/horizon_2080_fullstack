@@ -1,18 +1,11 @@
 import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
-import { FormattedMessage } from "react-intl";
-import classNames from "classnames";
-import SaveIcon from "@material-ui/icons/Save";
-import IconButton from "@material-ui/core/IconButton";
-import AddIcon from "@material-ui/icons/Add";
-import CloseIcon from "@material-ui/icons/Close";
 import Button from "@material-ui/core/Button";
-import Form from "../_common/Form";
 import Progress from "../_common/Progress";
 import Checklist from "../_common/Checklist";
-import TextField from "@material-ui/core/TextField";
-import ClickAwayListener from "@material-ui/core/ClickAwayListener";
+import SingleInput from "../_common/SingleInput";
+import SubtargetEvent from "./SubtargetEvent";
 import axios from "axios";
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
@@ -34,7 +27,8 @@ const styles = (theme) => ({
         margin: theme.spacing.unit,
         width: "100%",
         height: "63px",
-        textAlign: "left"
+        textAlign: "left",
+        textTransform: "unset"
     },
     buttonSmall: {
         width: "50px",
@@ -83,7 +77,10 @@ class SubtargetField extends Component {
             data: [],
             openForm: false,
             checked: [0],
-            textMessage: ""
+            textMessage: "",
+            editIndex: null,
+            openEvent: false,
+            modalIndex: null
         };
     }
 
@@ -115,9 +112,10 @@ class SubtargetField extends Component {
             });
     };
 
-    updateSubTarget = (id, obj) => {
+    updateSubTarget = (obj) => {
+        console.log("update sub-target");
         axios
-            .put(`/api/update_sub_target_individual/${id}/`, obj)
+            .put(`/api/update_sub_target_individual/${obj.id}/`, obj)
             .then((response) => {
                 // handle success
                 console.log("HI", response);
@@ -129,36 +127,6 @@ class SubtargetField extends Component {
             .then(() => {
                 // always executed
             });
-    };
-
-    toggleForm = () => {
-        this.setState((prevState) => {
-            return {
-                openForm: !prevState.openForm
-            };
-        });
-    };
-
-    toggleChecklist = (value) => () => {
-        const { data } = this.state;
-        const currentIndex = value;
-        const newChecked = [...data];
-        // toggle true/false
-        newChecked[currentIndex].completed_flag = !data[currentIndex].completed_flag;
-        this.setState(
-            {
-                data: newChecked
-            },
-            () => {
-                this.updateSubTarget(this.state.data[currentIndex].id, this.state.data[currentIndex]);
-            }
-        );
-    };
-
-    handleInput = (name) => (event) => {
-        this.setState({
-            [name]: event.target.value
-        });
     };
 
     sendForm = () => {
@@ -185,6 +153,66 @@ class SubtargetField extends Component {
                 // handle error
                 console.log(error);
             });
+    };
+
+    toggleForm = () => {
+        this.setState((prevState) => {
+            return {
+                openForm: !prevState.openForm
+            };
+        });
+    };
+
+    // edit list item
+    toggleChecklist = (value) => () => {
+        const { data } = this.state;
+        const currentIndex = value;
+        const newChecked = [...data];
+        // toggle true/false
+        newChecked[currentIndex].completed_flag = !data[currentIndex].completed_flag;
+        this.setState(
+            {
+                data: newChecked
+            },
+            () => {
+                this.updateSubTarget(this.state.data[currentIndex]);
+            }
+        );
+    };
+
+    editSubTarget = (obj) => {
+        const { data, modalIndex } = this.state;
+        const currentIndex = modalIndex;
+        const newData = [...data];
+        newData[currentIndex] = obj;
+        if (obj.name !== data[currentIndex].name) {
+            this.setState(
+                {
+                    data: newData
+                },
+                () => {
+                    this.updateSubTarget(this.state.data[currentIndex]);
+                }
+            );
+        }
+    };
+
+    handleCheckListClick = (index) => () => {
+        console.log("Hi :)", index);
+        this.setState(
+            {
+                modalIndex: index
+            },
+            () => {
+                this.toggleEvent();
+            }
+        );
+    };
+
+    handleInput = (name) => (event) => {
+        this.setState({
+            [name]: event.target.value
+        });
     };
 
     handleKeypress = (e) => {
@@ -214,6 +242,12 @@ class SubtargetField extends Component {
         }
     };
 
+    toggleEvent = () => {
+        this.setState((prevState) => {
+            return { openEvent: !prevState.openEvent };
+        });
+    };
+
     render() {
         const { classes } = this.props;
         return (
@@ -222,68 +256,23 @@ class SubtargetField extends Component {
                     <div className={classes.SubtargetContent}>
                         <Progress progress={this.state.data} />
                         {/* Progress: 0% */}
-                        <Checklist arr={this.state.data} toggleChecklist={this.toggleChecklist} />
+                        <Checklist arr={this.state.data} toggleChecklist={this.toggleChecklist} editItem={this.handleCheckListClick} />
                         {!this.state.openForm ? (
                             <Button className={classes.button} fullWidth onClick={this.toggleForm} disableRipple>
                                 Add a task...
                             </Button>
                         ) : (
-                            <ClickAwayListener onClickAway={this.toggleForm}>
-                                <div className={classes.messageInputRoot}>
-                                    <TextField
-                                        multiline
-                                        type="text-field"
-                                        autoFocus
-                                        fullWidth
-                                        variant="outlined"
-                                        className={classes.textField}
-                                        value={this.state.textMessage}
-                                        onChange={this.handleInput("textMessage")}
-                                        onKeyPress={this.handleKeypress}
-                                        margin="normal"
-                                    />
-                                    <Button variant="contained" size="small" className={classes.buttonSmall} onClick={this.addTask}>
-                                        Add
-                                    </Button>
-                                    <IconButton classes={{ label: classes.offsetIcon }} className={classNames(classes.iconButton, classes.rightIcon)} onClick={this.toggleForm}>
-                                        <CloseIcon />
-                                    </IconButton>
-                                </div>
-                            </ClickAwayListener>
+                            <SingleInput handleInput={this.handleInput} handleKeypress={this.handleKeypress} inputValue={this.state.textMessage} toggleForm={this.toggleForm} submit={this.addTask} />
                         )}
                     </div>
                 ) : !this.state.openForm ? (
-                    <div className={classes.initialMsg}>
-                        You have not made any tasks for this target yet, click to create one
-                        <Button variant="contained" size="small" className={classes.button} onClick={this.toggleForm}>
-                            <AddIcon className={classNames(classes.leftIcon, classes.iconSmall)} />
-                            Add
-                        </Button>
-                    </div>
+                    <Button className={classes.button} fullWidth onClick={this.toggleForm} disableRipple>
+                        Add a task...
+                    </Button>
                 ) : (
-                    <ClickAwayListener onClickAway={this.toggleForm}>
-                        <div className={classes.messageInputRoot}>
-                            <TextField
-                                multiline
-                                type="text-field"
-                                autoFocus
-                                fullWidth
-                                variant="outlined"
-                                className={classes.textField}
-                                value={this.state.textMessage}
-                                onChange={this.handleInput("textMessage")}
-                                onKeyPress={this.handleKeypress}
-                                margin="normal"
-                            />
-                            <Button variant="contained" size="small" className={classes.buttonSmall} onClick={this.addTask}>
-                                Add
-                            </Button>
-                            <IconButton classes={{ label: classes.offsetIcon }} className={classNames(classes.iconButton, classes.rightIcon)} onClick={this.toggleForm}>
-                                <CloseIcon />
-                            </IconButton>
-                        </div>
-                    </ClickAwayListener>
+                    <SingleInput handleInput={this.handleInput} handleKeypress={this.handleKeypress} inputValue={this.state.textMessage} toggleForm={this.toggleForm} submit={this.addTask} />
                 )}
+                <SubtargetEvent updateSubTarget={this.editSubTarget} openEvent={this.state.openEvent} toggleEvent={this.toggleEvent} data={this.state.data[this.state.modalIndex]} />
             </div>
         );
     }

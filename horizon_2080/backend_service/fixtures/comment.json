@@ -1,0 +1,68 @@
+[
+    {
+        "model": "backend_service.comment",
+        "pk": 1,
+        "fields": {
+            "message": "Comment 1",
+            "target_id_individual": 23,
+            "reply_comment_id": 0,
+            "private": false,
+            "created_by_id": "123456"
+        }
+    },
+    {
+        "model": "backend_service.comment",
+        "pk": 2,
+        "fields": {
+            "message": "Reply to comment 1",
+            "target_id_individual": 23,
+            "reply_comment_id": 1,
+            "private": false,
+            "created_by_id": "123456"
+        }
+    },
+    {
+        "model": "backend_service.comment",
+        "pk": 3,
+        "fields": {
+            "message": "Comment 2",
+            "target_id_individual": 23,
+            "reply_comment_id": 0,
+            "private": false,
+            "created_by_id": "123456"
+        }
+    },
+    {
+        "model": "backend_service.comment",
+        "pk": 4,
+        "fields": {
+            "message": "Reply to Comment 2",
+            "target_id_individual": 23,
+            "reply_comment_id": 3,
+            "private": false,
+            "created_by_id": "123456"
+        }
+    },
+    {
+        "model": "backend_service.comment",
+        "pk": 5,
+        "fields": {
+            "message": "Comment 3",
+            "target_id_individual": 23,
+            "reply_comment_id": 0,
+            "private": false,
+            "created_by_id": "123456"
+        }
+    },
+    {
+        "model": "backend_service.comment",
+        "pk": 6,
+        "fields": {
+            "message": "Comment 4",
+            "target_id_individual": 23,
+            "reply_comment_id": 0,
+            "private": false,
+            "created_by_id": "123456"
+        }
+    }
+]

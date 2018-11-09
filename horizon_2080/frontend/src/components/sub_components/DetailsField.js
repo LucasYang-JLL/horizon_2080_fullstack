@@ -18,6 +18,9 @@ const styles = (theme) => ({
         maxWidth: "300px",
         flexDirection: "column"
     },
+    editMode: {
+        border: "1px solid #FF9800" // material design: Orange 500
+    },
     // fieldRoot: {
 
     //     flex: 1
@@ -154,10 +157,10 @@ class DetailsField extends Component {
     };
 
     render() {
-        const { classes } = this.props;
+        const { classes, editContent } = this.props;
         return (
             <form
-                className={classes.detailsFieldRoot}
+                className={editContent ? classNames(classes.detailsFieldRoot, classes.editMode) : classes.detailsFieldRoot}
                 onSubmit={(e) => {
                     e.preventDefault();
                     this.submitForm();
@@ -165,7 +168,7 @@ class DetailsField extends Component {
                 }}
             >
                 <this.Fields />
-                {this.props.editContent ? (
+                {editContent ? (
                     <Button type="submit" variant="contained" size="small" className={classes.button}>
                         <SaveIcon className={classNames(classes.leftIcon, classes.iconSmall)} />
                         Save

@@ -25,15 +25,15 @@ const styles = (theme) => ({
 
 class Checklist extends React.Component {
     render() {
-        const { classes, arr, toggleChecklist } = this.props;
+        const { classes, arr, toggleChecklist, editItem } = this.props;
         console.log(arr);
         return (
             <div className={classes.root}>
                 <List>
-                    {arr.map(({ completed_flag, name }, index) => (
+                    {arr.map((obj, index) => (
                         <ListItem className={classes.dense} key={index} role={undefined} dense button>
-                            <Checkbox onClick={toggleChecklist(index)} className={classes.iconDense} checked={completed_flag} tabIndex={-1} disableRipple />
-                            <ListItemText primary={`${name}`} />
+                            <Checkbox onClick={toggleChecklist(index)} className={classes.iconDense} checked={obj.completed_flag} tabIndex={-1} disableRipple />
+                            <ListItemText onClick={editItem(index)} primary={`${obj.name}`} />
                         </ListItem>
                     ))}
                 </List>

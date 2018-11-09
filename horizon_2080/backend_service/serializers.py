@@ -23,3 +23,13 @@ class SubTargetIndividualSerializer(serializers.ModelSerializer):
     class Meta:
         model = sub_target_individual
         fields = '__all__'
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = comment
+        fields = '__all__'
+
+class EventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = event
+        fields = '__all__'

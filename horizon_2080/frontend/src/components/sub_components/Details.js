@@ -10,6 +10,10 @@ import Tabs from "../_common/Tabs";
 import DetailsField from "./DetailsField";
 import SubtargetField from "./SubtargetField";
 import axios from "axios";
+import Hidden from "@material-ui/core/Hidden";
+import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
+import toRenderProps from "recompose/toRenderProps";
+const WithWidth = toRenderProps(withWidth());
 
 const styles = (theme) => ({
     content: {
@@ -75,7 +79,7 @@ class Details extends Component {
     };
 
     componentDidMount() {
-        console.log(this.props.endpoint, this.props.match.params.id)
+        console.log(this.props.endpoint, this.props.match.params.id);
         axios
             .get(`${this.props.endpoint}${this.props.match.params.id}/`)
             .then((response) => {
@@ -118,6 +122,7 @@ class Details extends Component {
         const { slideState, editContent, target_details_data, targetUpdate } = this.props.reduxState;
         const { pathname } = this.props.location;
         let depth = pathname.split("/").filter((value) => value !== "").length;
+        console.log();
         return (
             <Fragment>
                 <Slide direction={slideState} in mountOnEnter unmountOnExit>
@@ -125,7 +130,18 @@ class Details extends Component {
                         <div className={classes.toolbar} />
                         <Navigation buttonType={"edit"} depth={depth} history={history} slideFunc={this.props.slideDirection} buttonMethod={this.editPerformance} component="performance" />
                         <Paper className={classNames(classes.root, classes.rootMd, classes.rootSm)}>
-                            <Tabs activeTab={this.state.activeTab} handleTabChange={this.handleTabChange} msgID="tab.details.title" fullWidth={false} />
+                            <WithWidth>
+                                {({ width }) => (
+                                    <Tabs
+                                        hideTab={isWidthUp("sm", width) ? 1 : 0}
+                                        activeTab={this.state.activeTab}
+                                        handleTabChange={this.handleTabChange}
+                                        msgID="tab.details.title"
+                                        fullWidth={false}
+                                    />
+                                )}
+                            </WithWidth>
+
                             {this.state.activeTab === 0 && (
                                 <div className={classes.detailsWrapper}>
                                     <DetailsField
@@ -137,6 +153,13 @@ class Details extends Component {
                                         targetUpdate={targetUpdate}
                                         handleChange={this.props.handleDataChange}
                                     />
+                                    <Hidden xsDown>
+                                        <SubtargetField target_id={this.props.match.params.id} />
+                                    </Hidden>
+                                </div>
+                            )}
+                            {this.state.activeTab === 1 && (
+                                <div className={classes.detailsWrapper}>
                                     <SubtargetField target_id={this.props.match.params.id} />
                                 </div>
                             )}

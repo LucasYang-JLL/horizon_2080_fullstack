@@ -21,6 +21,20 @@ const styles = (theme) => ({
         width: "100%",
         height: "100%"
     },
+    dialogContentWrapper: {
+        postition: "relative",
+        display: "flex",
+        flexDirection: "column"
+    },
+    eventWrapper: {
+        display: "flex"
+    },
+    eventListWrapper: {
+        width: "100%",
+        flex: "1 1 100%",
+        maxWidth: 360,
+        backgroundColor: theme.palette.background.paper
+    },
     sidePadding: {
         paddingLeft: theme.spacing.unit * 3,
         paddingRight: theme.spacing.unit * 3
@@ -34,6 +48,13 @@ const styles = (theme) => ({
         height: "63px",
         textAlign: "left",
         textTransform: "unset"
+    },
+    stickerMenu: {
+        flex: "1 1 50%",
+        height: "250px",
+        position: "sticky",
+        top: 0,
+        paddingLeft: theme.spacing.unit * 3
     }
 });
 
@@ -171,7 +192,8 @@ class SubtargetEvent extends React.Component {
 
     updateEvent = (index, value) => {
         console.log(index);
-        let newEvents = this.state.eventList.slice();
+        if (value === this.state.eventList[index].name) return null; // skip update if the input is the same as previously inputted
+        let newEvents = [...this.state.eventList];
         newEvents[index].name = value;
         // the row to update in database
         let obj = newEvents[index];
@@ -218,24 +240,28 @@ class SubtargetEvent extends React.Component {
                     </DialogTitle>
                 )}
                 <DialogContent>
-                    <div>
+                    <div className={classes.dialogContentWrapper}>
                         <div>Summarize your encounters for this task:</div>
-                        <EventList updateEvent={this.updateEvent} events={eventList} />
-                        {!addMode ? (
-                            <Button className={classes.button} fullWidth onClick={this.toggleAddEvent} disableRipple>
-                                Record an event...
-                            </Button>
-                        ) : (
-                            <SingleInput
-                                handleInput={this.handleEventInput}
-                                handleKeypress={this.handleEventKeypress}
-                                inputValue={this.state.eventInput}
-                                toggleForm={this.toggleAddEvent}
-                                submit={this.submitEvent}
-                            />
-                        )}
+                        <div className={classes.eventWrapper}>
+                            <div className={classes.eventListWrapper}>
+                                <EventList updateEvent={this.updateEvent} events={eventList} />
+                                {!addMode ? (
+                                    <Button className={classes.button} fullWidth onClick={this.toggleAddEvent} disableRipple>
+                                        Record an event...
+                                    </Button>
+                                ) : (
+                                    <SingleInput
+                                        handleInput={this.handleEventInput}
+                                        handleKeypress={this.handleEventKeypress}
+                                        inputValue={this.state.eventInput}
+                                        toggleForm={this.toggleAddEvent}
+                                        submit={this.submitEvent}
+                                    />
+                                )}
+                            </div>
+                            <div className={classes.stickerMenu}>Stickers:</div>
+                        </div>
                     </div>
-                    <div />
                 </DialogContent>
                 <DialogActions>
                     {/* <Button onClick={toggleEvent} color="primary">

@@ -11,6 +11,7 @@ import Divider from "@material-ui/core/Divider";
 const styles = (theme) => ({
     root: {
         width: "100%",
+        flex: "1 1 100%",
         maxWidth: 360,
         backgroundColor: theme.palette.background.paper
     }
@@ -85,37 +86,36 @@ class EventList extends Component {
                 <List>
                     {events.length > 0
                         ? editMode
-                            ? tmpEvents.map(
-                                  (event, index) =>
-                                      index === editIndex ? (
-                                          <Fragment>
-                                              <SingleInput
-                                                  key={index}
-                                                  buttonName="Edit"
-                                                  handleInput={this.handleInput}
-                                                  handleKeypress={this.handleKeypress}
-                                                  inputValue={inputValue}
-                                                  toggleForm={this.handleCloseInput}
-                                                  submit={() => this.updateEvent(editIndex, inputValue)}
-                                              />
-                                              <li>
-                                                  <Divider />
-                                              </li>
-                                          </Fragment>
-                                      ) : (
-                                          <Fragment>
-                                              <ListItem key={index} onClick={() => this.handleEdit(index)}>
-                                                  <ListItemText primary={event.name} secondary={getDate(event.create_date)} />
-                                              </ListItem>
-                                              <li>
-                                                  <Divider />
-                                              </li>
-                                          </Fragment>
-                                      )
+                            ? tmpEvents.map((event, index) =>
+                                  index === editIndex ? (
+                                      <Fragment key={index}>
+                                          <SingleInput
+                                              buttonName="Edit"
+                                              handleInput={this.handleInput}
+                                              handleKeypress={this.handleKeypress}
+                                              inputValue={inputValue}
+                                              toggleForm={this.handleCloseInput}
+                                              submit={() => this.updateEvent(editIndex, inputValue)}
+                                          />
+                                          <br />
+                                          <li>
+                                              <Divider />
+                                          </li>
+                                      </Fragment>
+                                  ) : (
+                                      <Fragment key={index}>
+                                          <ListItem onClick={() => this.handleEdit(index)}>
+                                              <ListItemText primary={event.name} secondary={getDate(event.create_date)} />
+                                          </ListItem>
+                                          <li>
+                                              <Divider />
+                                          </li>
+                                      </Fragment>
+                                  )
                               )
                             : events.map(({ name, create_date }, index) => (
-                                  <Fragment>
-                                      <ListItem key={index} onClick={() => this.handleEdit(index)}>
+                                  <Fragment key={index}>
+                                      <ListItem onClick={() => this.handleEdit(index)}>
                                           <ListItemText primary={name} secondary={getDate(create_date)} />
                                       </ListItem>
                                       <li>

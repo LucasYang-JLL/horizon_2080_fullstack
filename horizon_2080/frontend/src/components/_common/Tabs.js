@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { FormattedMessage } from "react-intl";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
@@ -11,7 +11,7 @@ import color from "../../MuiTheme/color";
 const styles = (theme) => ({
     root: {
         backgroundColor: color.Concrete25,
-        color: color.Black75,  
+        color: color.Black75
     },
     tabRoot: {
         minWidth: "100px"
@@ -34,9 +34,12 @@ class SimpleTabs extends React.Component {
                 <FormattedMessage id={msgID}>
                     {(tabName) => (
                         <Tabs classes={{ flexContainer: flexEnd ? classes.flexContainer : null }} fullWidth={fullWidth} value={activeTab} onChange={handleTabChange}>
-                            {tabName.split(",").map((name, index) => (
-                                <Tab key={index} className={classes.tabRoot} label={name} />
-                            ))}
+                            {tabName
+                                .split(",")
+                                .map((name, index) => {
+                                    return <Tab key={index} className={classes.tabRoot} label={name} />;
+                                })
+                                .slice(this.props.hideTab)}
                         </Tabs>
                     )}
                 </FormattedMessage>
@@ -51,13 +54,15 @@ SimpleTabs.propTypes = {
     msgID: PropTypes.string.isRequired,
     fullWidth: PropTypes.bool.isRequired,
     activeTab: PropTypes.number.isRequired,
-    handleTabChange: PropTypes.func.isRequired
+    handleTabChange: PropTypes.func.isRequired,
+    hideTab: PropTypes.number.isRequired
 };
 
 SimpleTabs.defaultProps = {
     msgID: "",
     fullWidth: true,
-    flexEnd: false
+    flexEnd: false,
+    hideTab: 0
 };
 
 export default withStyles(styles)(SimpleTabs);

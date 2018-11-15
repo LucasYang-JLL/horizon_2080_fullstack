@@ -39,7 +39,7 @@ class SimpleTabs extends React.Component {
                                 .map((name, index) => {
                                     return <Tab key={index} className={classes.tabRoot} label={name} />;
                                 })
-                                .slice(this.props.hideTab)}
+                                .slice(0, this.props.hideTab)}
                         </Tabs>
                     )}
                 </FormattedMessage>

@@ -6,8 +6,11 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import ListIcon from "@material-ui/icons/List";
+import DoneIcon from "@material-ui/icons/Done";
 import Form from "./_common/Form";
 import axios from "axios";
+import color from "../MuiTheme/color";
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
 
@@ -19,7 +22,6 @@ const styles = (theme) => ({
         flexGrow: 1,
         backgroundColor: theme.palette.background.default,
         padding: theme.spacing.unit * 3,
-        // paddingTop: 0,
         [theme.breakpoints.up("md")]: {},
         [theme.breakpoints.down("sm")]: {},
         minWidth: 0 // So the Typography noWrap works
@@ -81,6 +83,33 @@ const styles = (theme) => ({
     iconButton: {
         width: "36px",
         height: "36px"
+    },
+    folderTitle: {
+        padding: 0,
+        margin: 0,
+        fontWeight: 500
+    },
+    cardContentRoot: {
+        padding: theme.spacing.unit,
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        "&:last-child": {
+            padding: theme.spacing.unit
+        }
+    },
+    labelWrapper: {
+        display: "flex",
+        flexDirection: "row"
+    },
+    cardLabel: {
+        display: "flex",
+        alignItems: "center",
+        margin: "0 4px",
+        color: color.Black50
+    },
+    spacer: {
+        flex: 1
     }
 });
 
@@ -173,12 +202,22 @@ function CardContainer(props) {
     const { classes, cards, setHover, hover, handleCardClick, toggleNewFolderModal, openModal, history } = props;
     return (
         <div className={classes.CardContainer}>
-            {cards.map(({ id, name }) => (
+            {cards.map(({ id, name, completed_target, total_target }) => (
                 <Card raised={id === hover ? true : false} key={id} className={classes.card} onClick={() => handleCardClick(id)} onMouseEnter={() => setHover(id)} onMouseLeave={() => setHover(-1)}>
-                    <CardContent>
-                        <Typography variant="h5" component="h2">
-                            {name}
-                        </Typography>
+                    <CardContent classes={{ root: classes.cardContentRoot }}>
+                        <h4 className={classes.folderTitle}>{name.length > 20 ? `${name.slice(0, 17)}...` : name}</h4>
+                        <div className={classes.spacer} />
+                        <div className={classes.labelWrapper}>
+                            <div className={classes.spacer} />
+                            <div className={classes.cardLabel}>
+                                <ListIcon />
+                                <span>{total_target}</span>
+                            </div>
+                            <div className={classes.cardLabel}>
+                                <DoneIcon />
+                                <span>{completed_target}</span>
+                            </div>
+                        </div>
                     </CardContent>
                 </Card>
             ))}

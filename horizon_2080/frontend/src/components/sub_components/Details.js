@@ -133,7 +133,7 @@ class Details extends Component {
                             <WithWidth>
                                 {({ width }) => (
                                     <Tabs
-                                        hideTab={isWidthUp("sm", width) ? 1 : 0}
+                                        hideTab={isWidthUp("sm", width) ? 1 : 2}
                                         activeTab={this.state.activeTab}
                                         handleTabChange={this.handleTabChange}
                                         msgID="tab.details.title"

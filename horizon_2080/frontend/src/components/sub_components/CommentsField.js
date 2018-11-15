@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import color from "../../MuiTheme/color";
 import { withStyles } from "@material-ui/core/styles";
@@ -8,6 +8,7 @@ import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Avatar from "@material-ui/core/Avatar";
+import CommentInput from "./CommentInput";
 
 const styles = (theme) => ({
     root: {
@@ -58,76 +59,97 @@ const styles = (theme) => ({
     },
     replyHeading: {
         display: "flex"
+    },
+    commentStickToBottom: {
+        position: "sticky",
+        bottom: 0
     }
 });
 
-function CommentsField(props) {
-    const { classes } = props;
-    return (
-        <div className={classes.root}>
-            <ExpansionPanel>
-                <ExpansionPanelSummary classes={{ content: classes.panelSummary }} expandIcon={<ExpandMoreIcon />}>
-                    <div className={classes.panelSummaryTitle}>
-                        <Avatar className={classes.avatar}>LY</Avatar>
-                        <Typography className={classes.userName}>Lucas Yang</Typography>
-                    </div>
-                    <Typography>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.</Typography>
-                    <div className={classes.commentsFooter}>
-                        <Typography>09/10, 2018</Typography>
-                    </div>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails classes={{ root: classes.panelDetails }}>
-                    <div className={classes.replyHeadingContainer}>
-                        <div className={classes.emptySpread} />
-                        <div className={classes.replyHeading}>
-                            <Avatar className={classes.avatar}>JJ</Avatar>
-                            <Typography className={classes.userName}>James Jiang</Typography>
-                        </div>
-                    </div>
-                    <div className={classes.replyContainer}>
-                        <div className={classes.spread} />
-                        <div className={classes.reply}>
+class CommentsField extends Component {
+    state = {
+        inputValue: ""
+    };
+
+    handleCommentInput = () => {
+        console.log("handle comments");
+    };
+
+    submitComment = () => {
+        console.log("submit comments");
+    };
+
+    render() {
+        const { classes } = this.props;
+        return (
+            <Fragment>
+                <div className={classes.root}>
+                    <ExpansionPanel>
+                        <ExpansionPanelSummary classes={{ content: classes.panelSummary }} expandIcon={<ExpandMoreIcon />}>
+                            <div className={classes.panelSummaryTitle}>
+                                <Avatar className={classes.avatar}>LY</Avatar>
+                                <Typography className={classes.userName}>Lucas Yang</Typography>
+                            </div>
                             <Typography>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.</Typography>
-                        </div>
-                    </div>
-                    <div className={classes.replyHeadingContainer}>
-                        <div className={classes.emptySpread} />
-                        <div className={classes.replyHeading}>
-                            <Avatar className={classes.avatar}>JJ</Avatar>
-                            <Typography className={classes.userName}>James Jiang</Typography>
-                        </div>
-                    </div>
-                    <div className={classes.replyContainer}>
-                        <div className={classes.spread} />
-                        <div className={classes.reply}>
+                            <div className={classes.commentsFooter}>
+                                <Typography>09/10, 2018</Typography>
+                            </div>
+                        </ExpansionPanelSummary>
+                        <ExpansionPanelDetails classes={{ root: classes.panelDetails }}>
+                            <div className={classes.replyHeadingContainer}>
+                                <div className={classes.emptySpread} />
+                                <div className={classes.replyHeading}>
+                                    <Avatar className={classes.avatar}>JJ</Avatar>
+                                    <Typography className={classes.userName}>James Jiang</Typography>
+                                </div>
+                            </div>
+                            <div className={classes.replyContainer}>
+                                <div className={classes.spread} />
+                                <div className={classes.reply}>
+                                    <Typography>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.</Typography>
+                                </div>
+                            </div>
+                            <div className={classes.replyHeadingContainer}>
+                                <div className={classes.emptySpread} />
+                                <div className={classes.replyHeading}>
+                                    <Avatar className={classes.avatar}>JJ</Avatar>
+                                    <Typography className={classes.userName}>James Jiang</Typography>
+                                </div>
+                            </div>
+                            <div className={classes.replyContainer}>
+                                <div className={classes.spread} />
+                                <div className={classes.reply}>
+                                    <Typography>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.</Typography>
+                                </div>
+                            </div>
+                            <div className={classes.replyHeadingContainer}>
+                                <div className={classes.emptySpread} />
+                                <div className={classes.replyHeading}>
+                                    <Avatar className={classes.avatar}>JJ</Avatar>
+                                    <Typography className={classes.userName}>James Jiang</Typography>
+                                </div>
+                            </div>
+                            <div className={classes.replyContainer}>
+                                <div className={classes.spread} />
+                                <div className={classes.reply}>
+                                    <Typography>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.</Typography>
+                                </div>
+                            </div>
+                        </ExpansionPanelDetails>
+                    </ExpansionPanel>
+                    <ExpansionPanel>
+                        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                            <Typography className={classes.heading}>Expansion Panel 2</Typography>
+                        </ExpansionPanelSummary>
+                        <ExpansionPanelDetails>
                             <Typography>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.</Typography>
-                        </div>
-                    </div>
-                    <div className={classes.replyHeadingContainer}>
-                        <div className={classes.emptySpread} />
-                        <div className={classes.replyHeading}>
-                            <Avatar className={classes.avatar}>JJ</Avatar>
-                            <Typography className={classes.userName}>James Jiang</Typography>
-                        </div>
-                    </div>
-                    <div className={classes.replyContainer}>
-                        <div className={classes.spread} />
-                        <div className={classes.reply}>
-                            <Typography>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.</Typography>
-                        </div>
-                    </div>
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
-            <ExpansionPanel>
-                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                    <Typography className={classes.heading}>Expansion Panel 2</Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                    <Typography>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.</Typography>
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
-        </div>
-    );
+                        </ExpansionPanelDetails>
+                    </ExpansionPanel>
+                </div>
+                <CommentInput handleInput={this.handleCommentInput} inputValue={this.state.inputValue} submit={this.submitComment} />
+            </Fragment>
+        );
+    }
 }
 
 CommentsField.propTypes = {

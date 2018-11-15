@@ -30,12 +30,12 @@ const styles = (theme) => ({
         whiteSpace: "normal",
         height: "100%",
         alignSelf: "flex-end",
-        overflowX: "hidden",
+        overflow: "hidden",
         // marginLeft: theme.spacing.unit * 3
     },
     dockedRootMd: {
         [theme.breakpoints.down("sm")]: {
-            overflowX: "hidden",
+            overflow: "hidden",
             // width: "100%",
             // height: "200px",
             // minHeight: "200px",

@@ -3,6 +3,9 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import color from "../../MuiTheme/color";
+import axios from "axios";
+axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+axios.defaults.xsrfCookieName = "csrftoken";
 
 const styles = (theme) => ({
     root: {
@@ -43,6 +46,20 @@ class Progress extends React.Component {
         if (nextProps.progress !== prevState.progress) {
             let norm_arr = nextProps.progress.map(({ completed_flag }) => completed_flag);
             let percentage = Math.round((norm_arr.reduce((acc, curr) => acc + curr) / norm_arr.length) * 100);
+            let id = nextProps.progress[0].target_id_individual;
+            let endpoint = `/api/update_horizon_target_individual_progress/${id}/`;
+
+            axios
+                .put(endpoint, { progress: percentage })
+                .then((response) => {
+                    // handle success
+                    console.log(percentage);
+                    console.log(response.data);
+                })
+                .catch((error) => {
+                    // handle error
+                    console.log(error);
+                });
             return {
                 completed: percentage // get the % completion, then round the number
             };
@@ -64,6 +81,7 @@ class Progress extends React.Component {
 
     render() {
         const { classes } = this.props;
+        console.log(this.props);
         return (
             <div className={classes.root}>
                 {/* <LinearProgress variant="determinate" value={this.state.completed} /> */}

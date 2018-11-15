@@ -6,6 +6,8 @@ import datetime
 
 class folder(models.Model):
     name = models.CharField(max_length=100)
+    completed_target = models.PositiveIntegerField(default=0)
+    total_target = models.PositiveIntegerField(default=0)
     create_date = models.DateTimeField(default=datetime.datetime.now)
     created_by_id = models.PositiveIntegerField(default=123456)
     def __str__(self):
@@ -30,13 +32,14 @@ class horizon_target_individual(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
     description = models.CharField(max_length=300, null=True, blank=True)
     critical_flag = models.BooleanField(max_length=300, blank=True, default=False)
-    countable_flag = models.BooleanField(max_length=300, blank=True, default=False)
+    # countable_flag = models.BooleanField(max_length=300, blank=True, default=False)
     completed_flag = models.BooleanField(max_length=300, blank=True, default=False)
     create_date = models.DateTimeField(default=datetime.datetime.now)
     start_date = models.DateField()
     expire_date = models.DateField()
     remind_date = models.DateField(null=True, blank=True)
     status = models.CharField(max_length=300, null=True, blank=True, default="Active")
+    progress = models.PositiveIntegerField(default=0)
     target_group_id = models.PositiveIntegerField(default=0)
     user_role_id = models.PositiveIntegerField(default=0)
     folder_id = models.PositiveIntegerField(default=0)
@@ -67,3 +70,4 @@ class event(models.Model):
     create_date = models.DateTimeField(default=datetime.datetime.now)
     modify_date = models.DateTimeField(auto_now=True)
     created_by_id = models.PositiveIntegerField(default=123456)
+

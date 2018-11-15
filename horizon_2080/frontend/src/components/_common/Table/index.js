@@ -186,8 +186,8 @@ class EnhancedTable extends React.Component {
                                                       <TableCell className={classes.tableCellLarge}>{n.description}</TableCell>
                                                       <TableCell className={classes.tableCell}>{n.critical_flag.toString()}</TableCell>
                                                       <TableCell className={classes.tableCell}>20/40</TableCell>
-                                                      <TableCell className={classes.tableCell}>50%</TableCell>
-                                                      <TableCell className={classes.tableCell}>{n.countable_flag.toString()}</TableCell>
+                                                      <TableCell className={classes.tableCell}>{n.progress}%</TableCell>
+                                                      {/* <TableCell className={classes.tableCell}>{n.countable_flag.toString()}</TableCell> */}
                                                       <TableCell className={classes.tableCell}>{n.expire_date}</TableCell>
                                                       <TableCell className={classes.tableCell}>Lucas Yang</TableCell>
                                                   </TableRow>

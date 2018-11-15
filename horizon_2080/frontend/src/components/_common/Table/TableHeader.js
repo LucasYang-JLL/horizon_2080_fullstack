@@ -14,7 +14,7 @@ const rows = [
     { id: "critical_flag", numeric: false, disablePadding: true, label: "20%" },
     { id: "event_count", numeric: false, disablePadding: true, label: "Event(Completed/Total)" },
     { id: "completion_status", numeric: false, disablePadding: true, label: "Completion Status" },
-    { id: "countable", numeric: false, disablePadding: true, label: "Countable" },
+    // { id: "countable", numeric: false, disablePadding: true, label: "Countable" },
     { id: "expire_date", numeric: false, disablePadding: true, label: "Expire Date" },
     { id: "created_by", numeric: false, disablePadding: true, label: "Created By" }
 ];

@@ -9,6 +9,8 @@ import classNames from "classnames";
 import DetailsContainer from "./_containers/DetailsContainer";
 import Form from "./_common/Form";
 import axios from "axios";
+axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+axios.defaults.xsrfCookieName = "csrftoken";
 
 const styles = (theme) => ({
     content: {
@@ -118,7 +120,41 @@ class Performance extends Component {
                 console.log(error);
             })
             .then(() => {
-                // always executed
+                // update folder item counts
+                if (this.state.tableData.length === 0) return;
+                this.fetchFolderInfo().then((folder_info) => {
+                    console.log(folder_info);
+                    const db_total_count = folder_info.total_target;
+                    const db_completed_count = folder_info.completed_target;
+                    const folder_id = this.state.tableData[0].folder_id;
+                    const total_target = this.state.tableData.length;
+                    const completed_target = this.state.tableData.filter(({ progress }) => progress === 100).length;
+                    if (db_total_count !== total_target || db_completed_count !== completed_target) {
+                        axios
+                            .put(`/api/updateTargetCountByFolder/${folder_id}/`, { total_target, completed_target })
+                            .then((response) => {
+                                // handle success
+                                console.log("folder count update", response);
+                            })
+                            .catch((error) => {
+                                // handle error
+                                console.log(error);
+                            });
+                    }
+                });
+            });
+    };
+
+    fetchFolderInfo = () => {
+        return axios
+            .get(`/api/fetch_horizon_folder_by_id/${this.props.match.params.id}/`)
+            .then((response) => {
+                // handle success
+                return response.data[0];
+            })
+            .catch((error) => {
+                // handle error
+                console.log(error);
             });
     };
 

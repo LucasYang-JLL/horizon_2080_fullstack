@@ -9,6 +9,11 @@ class FolderSerializer(serializers.ModelSerializer):
         model = folder
         fields = '__all__'
 
+class FolderTargetCountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = folder
+        fields = ['completed_target', 'total_target']
+
 class TargetGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = horizon_target_group
@@ -18,6 +23,11 @@ class TargetIndividualSerializer(serializers.ModelSerializer):
     class Meta:
         model = horizon_target_individual
         fields = '__all__'
+
+class TargetIndividualProgressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = horizon_target_individual
+        fields = ['progress']
 
 class SubTargetIndividualSerializer(serializers.ModelSerializer):
     class Meta:

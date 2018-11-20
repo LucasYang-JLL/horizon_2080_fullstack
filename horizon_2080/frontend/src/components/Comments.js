@@ -64,7 +64,7 @@ class Comments extends Component {
 
     handleTabChange = (event, value) => {
         this.setState({ activeTab: value }, () => {
-            console.log(this.state.activeTab);
+            // console.log(this.state.activeTab);
         });
     };
 
@@ -73,7 +73,7 @@ class Comments extends Component {
         const { slideState } = this.props.reduxState;
         const { pathname } = this.props.location;
         let depth = pathname.split("/").filter((value) => value !== "").length;
-        console.log(this.props);
+        // console.log(this.props);
         return docked ? (
             isWidthUp("md", this.props.width) ? (
                 <DockedLeft classes={classes} handleTabChange={this.handleTabChange} activeTab={this.state.activeTab} />
@@ -162,7 +162,7 @@ class FullscreenComment extends Component {
 
     render() {
         const { classes, activeTab, handleTabChange, isCommentActive, toggleComment } = this.props;
-        console.log(isCommentActive);
+        // console.log(isCommentActive);
 
         return (
             <Dialog fullScreen open={isCommentActive} onClose={toggleComment} TransitionComponent={Transition}>

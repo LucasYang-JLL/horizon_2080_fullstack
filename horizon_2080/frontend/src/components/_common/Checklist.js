@@ -26,7 +26,7 @@ const styles = (theme) => ({
 class Checklist extends React.Component {
     render() {
         const { classes, arr, toggleChecklist, editItem } = this.props;
-        console.log(arr);
+        // console.log(arr);
         return (
             <div className={classes.root}>
                 <List>

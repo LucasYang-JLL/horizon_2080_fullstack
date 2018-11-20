@@ -36,6 +36,19 @@ const styles = (theme) => ({
 const history = createBrowserHistory();
 
 class App extends Component {
+
+    // when app mounts remove loading effect
+    componentDidMount() {
+        const ele = document.getElementById("ipl-progress-indicator");
+        if (ele) {
+            // fade out
+            ele.classList.add("available");
+            setTimeout(() => {
+                // remove from DOM
+                ele.outerHTML = "";
+            }, 2000);
+        }
+    }
     render() {
         const { classes, toggleSnackbar, snackbarProp } = this.props;
         return (

@@ -12,6 +12,7 @@ import withMobileDialog from "@material-ui/core/withMobileDialog";
 import SingleInput from "../_common/SingleInput";
 import EventList from "./SubtargetEventList";
 import classNames from "classnames";
+import WithLoadingScreen from "../_common/WithLoadingScreen";
 import axios from "axios";
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
@@ -66,18 +67,23 @@ class SubtargetEvent extends React.Component {
         eventInput: "",
         data: this.props.data,
         openForm: false,
+        emptyRecord: false,
         eventList: []
     };
 
     static getDerivedStateFromProps(nextProps, prevState) {
         if (nextProps.data !== prevState.data) {
-            console.log(nextProps.data);
             return { data: nextProps.data };
         } else return null;
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.state.data !== prevProps.data) {
+            this.setState({
+                ...this.state,
+                eventList: [],
+                emptyRecord: false
+            });
             this.fetchEvent();
         }
     }
@@ -88,10 +94,17 @@ class SubtargetEvent extends React.Component {
             .get(`/api/fetch_event_by_sub_target/${data.id}/`)
             .then((response) => {
                 // handle success
-                console.log("event", response);
-                this.setState({
-                    eventList: response.data
-                });
+                if (response.data.length === 0) {
+                    this.setState({
+                        eventList: response.data,
+                        emptyRecord: true
+                    });
+                } else {
+                    this.setState({
+                        eventList: response.data,
+                        emptyRecord: false
+                    });
+                }
             })
             .catch((error) => {
                 // handle error
@@ -128,7 +141,6 @@ class SubtargetEvent extends React.Component {
     };
 
     handleEventKeypress = (e) => {
-        console.log(e.key);
         if (e.key === "Enter") {
             e.preventDefault();
             this.submitEvent();
@@ -158,7 +170,6 @@ class SubtargetEvent extends React.Component {
     };
 
     submitEvent = () => {
-        console.log("submit event");
         const { data } = this.state;
         let endpoint = `/api/create_event_by_sub_target/${data.id}/`;
         const form = {
@@ -218,7 +229,7 @@ class SubtargetEvent extends React.Component {
     };
 
     render() {
-        const { classes, fullScreen, openEvent, toggleEvent, data } = this.props;
+        const { classes, fullScreen, openEvent, data, toggleEvent } = this.props;
         let { editMode, addMode, eventList } = this.state;
         if (!data) return null;
         return (
@@ -244,7 +255,7 @@ class SubtargetEvent extends React.Component {
                         <div>Summarize your encounters for this task:</div>
                         <div className={classes.eventWrapper}>
                             <div className={classes.eventListWrapper}>
-                                <EventList updateEvent={this.updateEvent} events={eventList} />
+                                <EventListWithLoad emptyRecord={this.state.emptyRecord} updateEvent={this.updateEvent} data={eventList} />
                                 {!addMode ? (
                                     <Button className={classes.button} fullWidth onClick={this.toggleAddEvent} disableRipple>
                                         Record an event...
@@ -282,6 +293,8 @@ SubtargetEvent.propTypes = {
     toggleEvent: PropTypes.func.isRequired,
     updateSubTarget: PropTypes.func.isRequired
 };
+
+const EventListWithLoad = WithLoadingScreen(EventList);
 
 export default compose(
     withStyles(styles),

@@ -116,7 +116,6 @@ class DetailsField extends Component {
             .put(endpoint, data)
             .then((response) => {
                 // handle success
-                console.log(response);
                 toggleSnackbar(true, "success", "Saved!");
                 this.props.updateTarget(!this.props.targetUpdate);
             })

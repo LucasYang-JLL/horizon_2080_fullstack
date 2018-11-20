@@ -11,6 +11,8 @@ import DetailsField from "./DetailsField";
 import SubtargetField from "./SubtargetField";
 import axios from "axios";
 import Hidden from "@material-ui/core/Hidden";
+import { compose } from "redux";
+import WithLoadingScreen from "../_common/WithLoadingScreen";
 import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
 import toRenderProps from "recompose/toRenderProps";
 const WithWidth = toRenderProps(withWidth());
@@ -79,12 +81,10 @@ class Details extends Component {
     };
 
     componentDidMount() {
-        console.log(this.props.endpoint, this.props.match.params.id);
         axios
             .get(`${this.props.endpoint}${this.props.match.params.id}/`)
             .then((response) => {
                 // handle success
-                console.log(response);
                 this.props.storeData(response.data[0]);
             })
             .catch((error) => {
@@ -96,12 +96,15 @@ class Details extends Component {
             });
     }
 
+    componentWillUnmount() {
+        this.props.storeData({}); // clears the store
+    }
+
     handleTabChange = (event, value) => {
         this.setState({ activeTab: value }, () => {});
     };
 
     handleChange = (name) => (event) => {
-        console.log(name, event.target.value);
         this.setState({
             ...this.state,
             data: {
@@ -114,7 +117,6 @@ class Details extends Component {
     editPerformance = () => {
         let { editContent } = this.props.reduxState;
         this.props.toggleEditButton(!editContent);
-        console.log("edit performance");
     };
 
     render() {
@@ -122,7 +124,6 @@ class Details extends Component {
         const { slideState, editContent, target_details_data, targetUpdate } = this.props.reduxState;
         const { pathname } = this.props.location;
         let depth = pathname.split("/").filter((value) => value !== "").length;
-        console.log();
         return (
             <Fragment>
                 <Slide direction={slideState} in mountOnEnter unmountOnExit>
@@ -144,7 +145,7 @@ class Details extends Component {
 
                             {this.state.activeTab === 0 && (
                                 <div className={classes.detailsWrapper}>
-                                    <DetailsField
+                                    <DetailsFieldWithLoad
                                         toggleSnackbar={this.props.toggleSnackbar}
                                         toggleEditButton={this.props.toggleEditButton}
                                         data={target_details_data}
@@ -181,5 +182,7 @@ Details.defaultProps = {
     classes: {},
     endpoint: "/api/horizon_target_individual/"
 };
+
+const DetailsFieldWithLoad = WithLoadingScreen(DetailsField);
 
 export default withStyles(styles)(Details);

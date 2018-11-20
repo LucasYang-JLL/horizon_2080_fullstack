@@ -53,7 +53,7 @@ function desc(a, b, orderBy) {
 }
 
 function stableSort(array, cmp) {
-    console.log(array);
+    // console.log(array);
     const stabilizedThis = array.map((el, index) => [el, index]);
     stabilizedThis.sort((a, b) => {
         const order = cmp(a[0], b[0]);
@@ -125,7 +125,7 @@ class EnhancedTable extends React.Component {
         const { selected } = this.state;
         const selectedIndex = selected.indexOf(id);
         let newSelected = [];
-        console.log(this.props, id);
+        // console.log(this.props, id);
         this.props.slideDirection("left");
         this.props.history.push(`/performance/project/${id}`);
     };
@@ -141,7 +141,7 @@ class EnhancedTable extends React.Component {
     isSelected = (id) => this.state.selected.indexOf(id) !== -1;
 
     render() {
-        const { classes } = this.props;
+        const { classes, folderTitle, emptyRecords } = this.props;
         const { slideState } = this.props.reduxState;
         const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
@@ -149,58 +149,61 @@ class EnhancedTable extends React.Component {
         return (
             <Slide direction={slideState} in mountOnEnter unmountOnExit>
                 <Paper className={classes.root}>
-                    <EnhancedTableToolbar numSelected={selected.length} />
+                    <EnhancedTableToolbar folderTitle={folderTitle} numSelected={selected.length} />
                     <div className={classes.tableWrapper}>
-                        <Table className={classes.table} aria-labelledby="tableTitle">
-                            <EnhancedTableHead
-                                numSelected={selected.length}
-                                order={order}
-                                orderBy={orderBy}
-                                onSelectAllClick={this.handleSelectAllClick}
-                                onRequestSort={this.handleRequestSort}
-                                rowCount={data.length}
-                                title="target"
-                            />
-                            <TableBody>
-                                {data.length > 0
-                                    ? stableSort(data, getSorting(order, orderBy))
-                                          .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                          .map((n) => {
-                                              const isSelected = this.isSelected(n.id);
-                                              return (
-                                                  <TableRow
-                                                      hover
-                                                      onClick={(event) => this.handleClick(event, n.id)}
-                                                      role="checkbox"
-                                                      aria-checked={isSelected}
-                                                      tabIndex={-1}
-                                                      key={n.id}
-                                                      selected={isSelected}
-                                                  >
-                                                      {/* <TableCell padding="checkbox">
+                        {data.length > 0 ? (
+                            <Table className={classes.table} aria-labelledby="tableTitle">
+                                <EnhancedTableHead
+                                    numSelected={selected.length}
+                                    order={order}
+                                    orderBy={orderBy}
+                                    onSelectAllClick={this.handleSelectAllClick}
+                                    onRequestSort={this.handleRequestSort}
+                                    rowCount={data.length}
+                                    title="target"
+                                />
+
+                                <TableBody>
+                                    {stableSort(data, getSorting(order, orderBy))
+                                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                        .map((n) => {
+                                            const isSelected = this.isSelected(n.id);
+                                            return (
+                                                <TableRow
+                                                    hover
+                                                    onClick={(event) => this.handleClick(event, n.id)}
+                                                    role="checkbox"
+                                                    aria-checked={isSelected}
+                                                    tabIndex={-1}
+                                                    key={n.id}
+                                                    selected={isSelected}
+                                                >
+                                                    {/* <TableCell padding="checkbox">
                                                 <Checkbox checked={isSelected} />
                                             </TableCell> */}
-                                                      <TableCell className={classes.tableCellLarge} component="th" scope="row">
-                                                          {n.name}
-                                                      </TableCell>
-                                                      <TableCell className={classes.tableCellLarge}>{n.description}</TableCell>
-                                                      <TableCell className={classes.tableCell}>{n.critical_flag.toString()}</TableCell>
-                                                      <TableCell className={classes.tableCell}>20/40</TableCell>
-                                                      <TableCell className={classes.tableCell}>{n.progress}%</TableCell>
-                                                      {/* <TableCell className={classes.tableCell}>{n.countable_flag.toString()}</TableCell> */}
-                                                      <TableCell className={classes.tableCell}>{n.expire_date}</TableCell>
-                                                      <TableCell className={classes.tableCell}>Lucas Yang</TableCell>
-                                                  </TableRow>
-                                              );
-                                          })
-                                    : null}
-                                {emptyRows > 0 && (
+                                                    <TableCell className={classes.tableCellLarge} component="th" scope="row">
+                                                        {n.name}
+                                                    </TableCell>
+                                                    <TableCell className={classes.tableCellLarge}>{n.description}</TableCell>
+                                                    <TableCell className={classes.tableCell}>{n.critical_flag.toString()}</TableCell>
+                                                    <TableCell className={classes.tableCell}>20/40</TableCell>
+                                                    <TableCell className={classes.tableCell}>{n.progress}%</TableCell>
+                                                    {/* <TableCell className={classes.tableCell}>{n.countable_flag.toString()}</TableCell> */}
+                                                    <TableCell className={classes.tableCell}>{n.expire_date}</TableCell>
+                                                    <TableCell className={classes.tableCell}>Lucas Yang</TableCell>
+                                                </TableRow>
+                                            );
+                                        })}
                                     <TableRow style={{ height: 49 * emptyRows }}>
-                                        <TableCell colSpan={8} />
+                                        <TableCell style={{ textAlign: "center" }} colSpan={8} />
                                     </TableRow>
-                                )}
-                            </TableBody>
-                        </Table>
+                                </TableBody>
+                            </Table>
+                        ) : (
+                            <div style={{ height: 49 * emptyRows, display: "flex", alignItems: "center", justifyContent: "center", color: "#808080" }}>
+                                <div style={{ margin: "16px" }}>Looks like you haven't made any targets. Create a new one now</div>
+                            </div>
+                        )}
                     </div>
                     <TablePagination
                         labelRowsPerPage=""

@@ -53,8 +53,8 @@ class Progress extends React.Component {
                 .put(endpoint, { progress: percentage })
                 .then((response) => {
                     // handle success
-                    console.log(percentage);
-                    console.log(response.data);
+                    // console.log(percentage);
+                    // console.log(response.data);
                 })
                 .catch((error) => {
                     // handle error
@@ -81,7 +81,7 @@ class Progress extends React.Component {
 
     render() {
         const { classes } = this.props;
-        console.log(this.props);
+        // console.log(this.props);
         return (
             <div className={classes.root}>
                 {/* <LinearProgress variant="determinate" value={this.state.completed} /> */}

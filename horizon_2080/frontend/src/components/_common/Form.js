@@ -38,8 +38,12 @@ class Form extends React.Component {
 
     componentDidMount() {
         const fieldObj = {};
-        this.props.inputFields.forEach(({ name }) => {
-            fieldObj[name] = null;
+        this.props.inputFields.forEach(({ name, type }) => {
+            if (type === "checkbox") {
+                fieldObj[name] = false;
+            } else {
+                fieldObj[name] = null;
+            }
         });
         this.setState({
             fields: fieldObj

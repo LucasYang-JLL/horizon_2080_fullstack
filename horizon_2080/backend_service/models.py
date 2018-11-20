@@ -31,7 +31,7 @@ class horizon_target_group(models.Model):
 class horizon_target_individual(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
     description = models.CharField(max_length=300, null=True, blank=True)
-    critical_flag = models.BooleanField(max_length=300, blank=True, default=False)
+    critical_flag = models.BooleanField(blank=True, default=False)
     # countable_flag = models.BooleanField(max_length=300, blank=True, default=False)
     completed_flag = models.BooleanField(max_length=300, blank=True, default=False)
     create_date = models.DateTimeField(default=datetime.datetime.now)

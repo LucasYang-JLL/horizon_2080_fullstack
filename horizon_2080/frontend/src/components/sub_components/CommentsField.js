@@ -72,11 +72,11 @@ class CommentsField extends Component {
     };
 
     handleCommentInput = () => {
-        console.log("handle comments");
+        // console.log("handle comments");
     };
 
     submitComment = () => {
-        console.log("submit comments");
+        // console.log("submit comments");
     };
 
     render() {

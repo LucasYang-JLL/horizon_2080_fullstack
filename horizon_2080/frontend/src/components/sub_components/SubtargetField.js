@@ -98,7 +98,6 @@ class SubtargetField extends Component {
             .get(`/api/query_sub_target_individual/${this.props.target_id}/`)
             .then((response) => {
                 // handle success
-                console.log("HI", response);
                 this.setState({
                     data: response.data
                 });
@@ -113,12 +112,10 @@ class SubtargetField extends Component {
     };
 
     updateSubTarget = (obj) => {
-        console.log("update sub-target");
         axios
             .put(`/api/update_sub_target_individual/${obj.id}/`, obj)
             .then((response) => {
                 // handle success
-                console.log("HI", response);
             })
             .catch((error) => {
                 // handle error
@@ -140,9 +137,7 @@ class SubtargetField extends Component {
             .post(endpoint, form)
             .then((response) => {
                 // handle success
-                console.log(response);
                 this.setState((prevState) => {
-                    console.log(prevState);
                     return {
                         ...this.state,
                         data: prevState.data.concat([response.data])
@@ -198,7 +193,6 @@ class SubtargetField extends Component {
     };
 
     handleCheckListClick = (index) => () => {
-        console.log("Hi :)", index);
         this.setState(
             {
                 modalIndex: index
@@ -220,7 +214,6 @@ class SubtargetField extends Component {
             e.preventDefault();
             const { data } = this.state;
             if (this.state.textMessage) {
-                console.log("add task");
                 this.sendForm();
                 // reset text input
                 this.setState({
@@ -233,7 +226,6 @@ class SubtargetField extends Component {
     addTask = () => {
         const { data } = this.state;
         if (this.state.textMessage) {
-            console.log("add task");
             this.sendForm();
             // reset text input
             this.setState({
@@ -273,6 +265,7 @@ class SubtargetField extends Component {
                     <SingleInput handleInput={this.handleInput} handleKeypress={this.handleKeypress} inputValue={this.state.textMessage} toggleForm={this.toggleForm} submit={this.addTask} />
                 )}
                 <SubtargetEvent updateSubTarget={this.editSubTarget} openEvent={this.state.openEvent} toggleEvent={this.toggleEvent} data={this.state.data[this.state.modalIndex]} />
+
             </div>
         );
     }

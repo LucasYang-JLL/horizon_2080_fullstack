@@ -36,7 +36,7 @@ const toolbarStyles = (theme) => ({
 });
 
 let EnhancedTableToolbar = (props) => {
-    const { numSelected, classes } = props;
+    const { numSelected, classes, folderTitle } = props;
 
     return (
         <Toolbar
@@ -51,7 +51,7 @@ let EnhancedTableToolbar = (props) => {
                     </Typography>
                 ) : (
                     <Typography variant="h6" id="tableTitle">
-                        Dashboard
+                        {folderTitle}
                     </Typography>
                 )}
             </div>

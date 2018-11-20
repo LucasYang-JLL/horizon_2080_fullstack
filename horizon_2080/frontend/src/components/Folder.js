@@ -6,9 +6,11 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import WithLoadingScreen from "./_common/WithLoadingScreen";
 import ListIcon from "@material-ui/icons/List";
 import DoneIcon from "@material-ui/icons/Done";
 import Form from "./_common/Form";
+import { compose } from "redux";
 import axios from "axios";
 import color from "../MuiTheme/color";
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
@@ -140,7 +142,6 @@ class Folder extends Component {
             .get("/api/horizon_folder/")
             .then((response) => {
                 // handle success
-                console.log(response);
                 this.setState({
                     cards: response.data
                 });
@@ -182,14 +183,14 @@ class Folder extends Component {
                 <div className={classes.content}>
                     <div className={classes.toolbar} />
                     <h2 style={{ marginTop: 0 }}>Campaigns</h2>
-                    <CardContainer
+                    <WrapComponent
                         toggleNewFolderModal={this.toggleNewFolderModal}
                         handleCardClick={this.handleCardClick}
                         hover={this.state.hover}
                         setHover={this.setHover}
                         openModal={this.state.openModal}
-                        cards={this.state.cards}
-                        classes={classes}
+                        data={this.state.cards}
+                        // classes={classes}
                         history={this.props.history}
                     />
                 </div>
@@ -198,11 +199,59 @@ class Folder extends Component {
     }
 }
 
+const styleCard = (theme) => ({
+    spacer: {
+        flex: 1
+    },
+    cardLabel: {
+        display: "flex",
+        alignItems: "center",
+        margin: "0 4px",
+        color: color.Black50
+    },
+    labelWrapper: {
+        display: "flex",
+        flexDirection: "row"
+    },
+    folderTitle: {
+        padding: 0,
+        margin: 0,
+        fontWeight: 500
+    },
+    CardContainer: {
+        display: "flex",
+        flexWrap: "wrap",
+        overflow: "auto"
+    },
+    card: {
+        maxWidth: 275,
+        minWidth: 175,
+        maxHeight: 175,
+        minHeight: 71,
+        margin: theme.spacing.unit * 3,
+        cursor: "pointer",
+        textTransform: "none"
+    },
+    cardContentRoot: {
+        padding: theme.spacing.unit,
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        "&:last-child": {
+            padding: theme.spacing.unit
+        }
+    }
+});
+const WrapComponent = compose(
+    WithLoadingScreen,
+    withStyles(styleCard)
+)(CardContainer);
+
 function CardContainer(props) {
-    const { classes, cards, setHover, hover, handleCardClick, toggleNewFolderModal, openModal, history } = props;
+    const { classes, data, setHover, hover, handleCardClick, toggleNewFolderModal, openModal, history } = props;
     return (
         <div className={classes.CardContainer}>
-            {cards.map(({ id, name, completed_target, total_target }) => (
+            {data.map(({ id, name, completed_target, total_target }) => (
                 <Card raised={id === hover ? true : false} key={id} className={classes.card} onClick={() => handleCardClick(id)} onMouseEnter={() => setHover(id)} onMouseLeave={() => setHover(-1)}>
                     <CardContent classes={{ root: classes.cardContentRoot }}>
                         <h4 className={classes.folderTitle}>{name.length > 20 ? `${name.slice(0, 17)}...` : name}</h4>

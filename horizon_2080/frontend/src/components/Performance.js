@@ -7,6 +7,7 @@ import EnhancedTable from "./_common/Table";
 import { Route } from "react-router-dom";
 import classNames from "classnames";
 import DetailsContainer from "./_containers/DetailsContainer";
+import WithLoadingScreen from "./_common/WithLoadingScreen";
 import Form from "./_common/Form";
 import axios from "axios";
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
@@ -18,7 +19,7 @@ const styles = (theme) => ({
         width: "100%",
         flexDirection: "column",
         flexGrow: 1,
-        flexWrap: "wrap",
+        // flexWrap: "wrap",
         backgroundColor: theme.palette.background.default,
         padding: theme.spacing.unit * 3,
         paddingTop: 0,
@@ -91,11 +92,18 @@ const inputFields = [
 class Performance extends Component {
     state = {
         openForm: false,
-        tableData: []
+        emptyRecord: false,
+        tableData: [],
+        folderTitle: ""
     };
 
     componentDidMount() {
         this.fetchIndividualTargets();
+        this.fetchFolderInfo().then((folder_info) => {
+            this.setState({
+                folderTitle: folder_info.name
+            });
+        });
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -105,15 +113,20 @@ class Performance extends Component {
     }
 
     fetchIndividualTargets = () => {
-        console.log(this.props.match);
         axios
             .get(`/api/fetch_horizon_target_individual_by_folder/${this.props.match.params.id}/`)
             .then((response) => {
                 // handle success
-                console.log("HI", response);
-                this.setState({
-                    tableData: response.data
-                });
+                if (response.data.length === 0) {
+                    this.setState({
+                        tableData: response.data,
+                        emptyRecord: true
+                    });
+                } else {
+                    this.setState({
+                        tableData: response.data
+                    });
+                }
             })
             .catch((error) => {
                 // handle error
@@ -123,7 +136,6 @@ class Performance extends Component {
                 // update folder item counts
                 if (this.state.tableData.length === 0) return;
                 this.fetchFolderInfo().then((folder_info) => {
-                    console.log(folder_info);
                     const db_total_count = folder_info.total_target;
                     const db_completed_count = folder_info.completed_target;
                     const folder_id = this.state.tableData[0].folder_id;
@@ -134,7 +146,6 @@ class Performance extends Component {
                             .put(`/api/updateTargetCountByFolder/${folder_id}/`, { total_target, completed_target })
                             .then((response) => {
                                 // handle success
-                                console.log("folder count update", response);
                             })
                             .catch((error) => {
                                 // handle error
@@ -160,20 +171,17 @@ class Performance extends Component {
 
     addPerformance = () => {
         this.setState((prevState) => {
-            console.log(prevState);
             if (prevState.openForm === true) {
-                console.log("hi");
                 this.fetchIndividualTargets();
             }
             return {
                 openForm: !prevState.openForm
             };
         });
-        console.log("add performance");
     };
 
     render() {
-        const { classes, history } = this.props;
+        const { classes, ...otherProps } = this.props;
         const { slideState } = this.props.reduxState;
         const { pathname } = this.props.location;
         let depth = pathname.split("/").filter((value) => value !== "").length;
@@ -185,9 +193,9 @@ class Performance extends Component {
                     <div className={classes.toolbar} />
                     <div className={contentLayout}>
                         <div className={classes.toolbar} />
-                        <Navigation buttonType={"add"} depth={depth} history={history} slideFunc={this.props.slideDirection} buttonMethod={this.addPerformance} component="performance" />
+                        <Navigation buttonType={"add"} depth={depth} history={this.props.history} slideFunc={this.props.slideDirection} buttonMethod={this.addPerformance} component="performance" />
                         <Fragment>
-                            <EnhancedTable data={this.state.tableData} {...this.props} />
+                            <TableWithLoad emptyRecord={this.state.emptyRecord} folderTitle={this.state.folderTitle} data={this.state.tableData} {...otherProps} />
                             <Form
                                 title="Add New Target"
                                 toggleSnackbar={this.props.toggleSnackbar}
@@ -208,5 +216,7 @@ class Performance extends Component {
 Performance.propTypes = {
     classes: PropTypes.object.isRequired
 };
+
+const TableWithLoad = WithLoadingScreen(EnhancedTable);
 
 export default withStyles(styles)(Performance);

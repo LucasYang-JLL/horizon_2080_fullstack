@@ -19,7 +19,7 @@ const styles = (theme) => ({
 
 class EventList extends Component {
     state = {
-        events: this.props.events,
+        events: this.props.data,
         tmpEvents: [], // another store used to splice SingleInput into the array
         editMode: false,
         editIndex: null,
@@ -27,8 +27,8 @@ class EventList extends Component {
     };
 
     static getDerivedStateFromProps(nextProps, prevState) {
-        if (nextProps.events !== prevState.events) {
-            return { events: nextProps.events };
+        if (nextProps.data !== prevState.data) {
+            return { events: nextProps.data };
         } else return null;
     }
 
@@ -56,20 +56,17 @@ class EventList extends Component {
     handleKeypress = (e) => {
         if (e.key === "Enter") {
             e.preventDefault();
-            console.log("update event");
             this.updateEvent(this.state.editIndex, this.state.inputValue);
         }
     };
 
     handleCloseInput = () => {
-        console.log("close input");
         this.setState({
             editMode: false
         });
     };
 
     updateEvent = (index, value) => {
-        console.log("update Event");
         // update the database and state
         this.props.updateEvent(index, value);
         // update open state
@@ -132,7 +129,7 @@ class EventList extends Component {
 
 EventList.propTypes = {
     classes: PropTypes.object.isRequired,
-    events: PropTypes.array.isRequired
+    data: PropTypes.array.isRequired
 };
 
 export default withStyles(styles)(EventList);

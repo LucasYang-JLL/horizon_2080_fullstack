@@ -39,7 +39,17 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'backend_service',
     'rest_framework',
-    'frontend'
+    'frontend',
+    'django_crontab',
+]
+
+CRONJOBS = [
+    ('*/1 * * * *', 'backend_service.crontab.my_scheduled_job')
+]
+
+CRON_CLASSES = [
+    "backend_service.cron.MyCronJob",
+    # ...
 ]
 
 MIDDLEWARE = [
@@ -113,6 +123,17 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+# development email config
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
+
+# production email config
+# EMAIL_USE_TLS = False
+# EMAIL_HOST = 'relay3.ap.jllnet.com'
+# EMAIL_PORT = 25
+# EMAIL_HOST_USER = 'TDIM.China@ap.jll.com'
+# EMAIL_HOST_PASSWORD = '7/#Mgz]/'
 
 
 # Internationalization

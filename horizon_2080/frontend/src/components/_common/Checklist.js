@@ -5,6 +5,7 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
+import EventNoteIcon from "@material-ui/icons/EventNote";
 import Checkbox from "@material-ui/core/Checkbox";
 
 const styles = (theme) => ({
@@ -20,6 +21,14 @@ const styles = (theme) => ({
     },
     iconDense: {
         padding: "5px"
+    },
+    eventIcon: {
+        color: "#808080",
+        fontSize: "14px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        marginRight: theme.spacing.unit
     }
 });
 
@@ -34,6 +43,10 @@ class Checklist extends React.Component {
                         <ListItem className={classes.dense} key={index} role={undefined} dense button>
                             <Checkbox onClick={toggleChecklist(index)} className={classes.iconDense} checked={obj.completed_flag} tabIndex={-1} disableRipple />
                             <ListItemText onClick={editItem(index)} primary={`${obj.name}`} />
+                            <div className={classes.eventIcon} onClick={editItem(index)}>
+                                <span>{obj.event_count > 0 ? obj.event_count : null}</span>
+                                <EventNoteIcon />
+                            </div>
                         </ListItem>
                     ))}
                 </List>

@@ -65,20 +65,19 @@ class Form extends React.Component {
         let { toggleSnackbar, endpoint, dest, folder_id } = this.props;
         let fields = Object.assign(this.state.fields);
         if (folder_id) {
-            fields.folder_id = folder_id;
+            fields.folder = folder_id;
         }
         axios
             .post(endpoint, fields)
             .then((response) => {
                 // handle success
-                console.log(response);
+                this.props.toggle();
                 if (dest) {
                     this.props.history.push(`${dest}${response.data.id}`);
                 }
                 if (toggleSnackbar) {
                     toggleSnackbar(true, "success", "Submitted!");
                 }
-                this.props.toggle();
             })
             .catch((error) => {
                 // handle error

@@ -21,6 +21,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin', admin.site.urls),
+    path('', include('okta.urls')),
+    path('', include('users.urls')),
     path('', include('backend_service.urls')),
     path('', include('frontend.urls')),
     url(r'^(?:.*)/?$', include('frontend.urls'))

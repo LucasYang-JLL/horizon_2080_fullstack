@@ -55,14 +55,14 @@ SimpleTabs.propTypes = {
     fullWidth: PropTypes.bool.isRequired,
     activeTab: PropTypes.number.isRequired,
     handleTabChange: PropTypes.func.isRequired,
-    hideTab: PropTypes.number.isRequired
+    // hideTab: PropTypes.number.isRequired
 };
 
 SimpleTabs.defaultProps = {
     msgID: "",
     fullWidth: true,
     flexEnd: false,
-    hideTab: 0
+    // hideTab: 0
 };
 
 export default withStyles(styles)(SimpleTabs);

@@ -30,7 +30,9 @@ const styles = (theme) => ({
         whiteSpace: "normal",
         height: "100%",
         alignSelf: "flex-end",
-        overflow: "hidden",
+        overflow: "auto",
+        display: "flex",
+        flexDirection: "column"
         // marginLeft: theme.spacing.unit * 3
     },
     dockedRootMd: {
@@ -45,9 +47,9 @@ const styles = (theme) => ({
         }
     },
     dockedBottomRoot: {
-        position: 'absolute',
+        position: "absolute",
         bottom: theme.spacing.unit * 3,
-        right: theme.spacing.unit * 3,
+        right: theme.spacing.unit * 3
     },
     toolbar: theme.mixins.toolbar,
     toolbarMd: {
@@ -69,16 +71,15 @@ class Comments extends Component {
     };
 
     render() {
-        const { classes, docked, history } = this.props;
+        const { classes, docked, history, match } = this.props;
         const { slideState } = this.props.reduxState;
         const { pathname } = this.props.location;
         let depth = pathname.split("/").filter((value) => value !== "").length;
-        // console.log(this.props);
         return docked ? (
             isWidthUp("md", this.props.width) ? (
-                <DockedLeft classes={classes} handleTabChange={this.handleTabChange} activeTab={this.state.activeTab} />
+                <DockedLeft history={history} match={match} classes={classes} handleTabChange={this.handleTabChange} activeTab={this.state.activeTab} />
             ) : (
-                <DockedBottom classes={classes} handleTabChange={this.handleTabChange} activeTab={this.state.activeTab} />
+                <DockedBottom history={history} match={match} classes={classes} handleTabChange={this.handleTabChange} activeTab={this.state.activeTab} />
             )
         ) : (
             <Slide direction={slideState} in mountOnEnter unmountOnExit>
@@ -103,13 +104,13 @@ Comments.defaultProps = {
 
 class DockedLeft extends Component {
     render() {
-        let { classes, handleTabChange, activeTab } = this.props;
+        let { classes, handleTabChange, activeTab, history, match } = this.props;
         return (
             <Slide direction={"left"} in mountOnEnter unmountOnExit>
                 <Paper className={classNames(classes.dockedRoot, classes.dockedRootMd)}>
                     <div className={classNames(classes.toolbar, classes.toolbarMd)} />
                     <Tabs activeTab={activeTab} handleTabChange={handleTabChange} msgID="tab.comments.title" />
-                    {activeTab === 0 && <CommentsField />}
+                    {activeTab === 0 && <CommentsField history={history} match={match} />}
                     {activeTab === 1 && "Notes"}
                 </Paper>
             </Slide>
@@ -129,13 +130,21 @@ class DockedBottom extends Component {
     };
 
     render() {
-        const { classes, handleTabChange, activeTab } = this.props;
+        const { classes, handleTabChange, activeTab, history, match } = this.props;
         return (
             <div className={classes.dockedBottomRoot}>
                 <IconButton className={classes.button} aria-label="Delete" onClick={this.toggleComment}>
                     <ForumIcon />
                 </IconButton>
-                <FullscreenComment toggleComment={this.toggleComment} isCommentActive={this.state.isCommentActive} classes={classes} handleTabChange={handleTabChange} activeTab={activeTab} />
+                <FullscreenComment
+                    history={history}
+                    match={match}
+                    toggleComment={this.toggleComment}
+                    isCommentActive={this.state.isCommentActive}
+                    classes={classes}
+                    handleTabChange={handleTabChange}
+                    activeTab={activeTab}
+                />
             </div>
         );
     }
@@ -161,7 +170,7 @@ class FullscreenComment extends Component {
     };
 
     render() {
-        const { classes, activeTab, handleTabChange, isCommentActive, toggleComment } = this.props;
+        const { classes, activeTab, handleTabChange, isCommentActive, toggleComment, history, match } = this.props;
         // console.log(isCommentActive);
 
         return (
@@ -172,7 +181,7 @@ class FullscreenComment extends Component {
                         <ClearIcon />
                     </Button>
                     <TabsContainer flexEnd={true} fullWidth={false} activeTab={activeTab} handleTabChange={handleTabChange} msgID="tab.comments.title" />
-                    {activeTab === 0 && <CommentsField />}
+                    {activeTab === 0 && <CommentsField history={history} match={match} />}
                     {activeTab === 1 && "Notes"}
                     bottom12345
                 </div>

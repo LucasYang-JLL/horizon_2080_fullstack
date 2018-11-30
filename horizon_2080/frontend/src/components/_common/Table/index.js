@@ -83,25 +83,6 @@ class EnhancedTable extends React.Component {
         } else return null;
     }
 
-    // componentDidMount() {
-    //     axios
-    //         .get(this.props.endpoint)
-    //         .then((response) => {
-    //             // handle success
-    //             console.log(response);
-    //             this.setState({
-    //                 data: response.data
-    //             });
-    //         })
-    //         .catch((error) => {
-    //             // handle error
-    //             console.log(error);
-    //         })
-    //         .then(() => {
-    //             // always executed
-    //         });
-    // }
-
     handleRequestSort = (event, property) => {
         const orderBy = property;
         let order = "desc";
@@ -186,11 +167,11 @@ class EnhancedTable extends React.Component {
                                                     </TableCell>
                                                     <TableCell className={classes.tableCellLarge}>{n.description}</TableCell>
                                                     <TableCell className={classes.tableCell}>{n.critical_flag.toString()}</TableCell>
-                                                    <TableCell className={classes.tableCell}>20/40</TableCell>
+                                                    {/* <TableCell className={classes.tableCell}>20/40</TableCell> */}
                                                     <TableCell className={classes.tableCell}>{n.progress}%</TableCell>
                                                     {/* <TableCell className={classes.tableCell}>{n.countable_flag.toString()}</TableCell> */}
                                                     <TableCell className={classes.tableCell}>{n.expire_date}</TableCell>
-                                                    <TableCell className={classes.tableCell}>Lucas Yang</TableCell>
+                                                    <TableCell className={classes.tableCell}>{n.created_by_id}</TableCell>
                                                 </TableRow>
                                             );
                                         })}
@@ -201,7 +182,7 @@ class EnhancedTable extends React.Component {
                             </Table>
                         ) : (
                             <div style={{ height: 49 * emptyRows, display: "flex", alignItems: "center", justifyContent: "center", color: "#808080" }}>
-                                <div style={{ margin: "16px" }}>Looks like you haven't made any targets. Create a new one now</div>
+                                <div style={{ margin: "16px" }}>Looks like there's no targets. Create a new one now</div>
                             </div>
                         )}
                     </div>
@@ -229,11 +210,9 @@ class EnhancedTable extends React.Component {
 
 EnhancedTable.propTypes = {
     classes: PropTypes.object.isRequired,
-    endpoint: PropTypes.string.isRequired
 };
 EnhancedTable.defaultProps = {
     classes: {},
-    endpoint: "/api/horizon_target_individual/"
 };
 
 EnhancedTable = withStyles(styles)(EnhancedTable);

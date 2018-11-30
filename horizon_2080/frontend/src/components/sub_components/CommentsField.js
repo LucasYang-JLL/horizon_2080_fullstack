@@ -9,6 +9,11 @@ import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Avatar from "@material-ui/core/Avatar";
 import CommentInput from "./CommentInput";
+import CommentList from "./CommentList";
+import WithLoadingScreen from "../_common/WithLoadingScreen";
+import axios from "axios";
+axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+axios.defaults.xsrfCookieName = "csrftoken";
 
 const styles = (theme) => ({
     root: {
@@ -68,84 +73,73 @@ const styles = (theme) => ({
 
 class CommentsField extends Component {
     state = {
-        inputValue: ""
+        inputValue: "",
+        data: [],
+        emptyRecord: false
     };
 
-    handleCommentInput = () => {
-        // console.log("handle comments");
+    componentDidMount() {
+        this.fetchComments();
+    }
+
+    fetchComments = () => {
+        axios
+            .get(`/api/fetch_comment_by_target/${this.props.match.params.id}/`)
+            .then((response) => {
+                // handle success. 
+                if (response.data.length === 0) {
+                    this.setState({
+                        data: response.data,
+                        emptyRecord: true // If empty record, set empty flag to true
+                    });
+                } else {
+                    this.setState({
+                        data: response.data
+                    });
+                }
+            })
+            .catch((error) => {
+                // handle error
+                console.log(error);
+            })
+            .then(() => {
+                // always executed
+            });
+    };
+
+    handleCommentInput = (e) => {
+        console.log(e.target.value);
+        this.setState({
+            inputValue: e.target.value
+        });
     };
 
     submitComment = () => {
-        // console.log("submit comments");
+        console.log(this.props);
+        const endpoint = `/api/create_comment_by_target/${this.props.match.params.id}/`;
+        // post to database
+        axios
+            .post(endpoint, { message: this.state.inputValue, target: this.props.match.params.id })
+            .then((response) => {
+                // set the record to state
+                this.setState({
+                    data: this.state.data.concat(response.data),
+                    inputValue: ""
+                });
+                // handle success
+                // toggleSnackbar(true, "success", "Comment Posted!");
+            })
+            .catch((error) => {
+                // handle error
+                console.log(error);
+            });
     };
 
     render() {
         const { classes } = this.props;
         return (
             <Fragment>
-                <div className={classes.root}>
-                    <ExpansionPanel>
-                        <ExpansionPanelSummary classes={{ content: classes.panelSummary }} expandIcon={<ExpandMoreIcon />}>
-                            <div className={classes.panelSummaryTitle}>
-                                <Avatar className={classes.avatar}>LY</Avatar>
-                                <Typography className={classes.userName}>Lucas Yang</Typography>
-                            </div>
-                            <Typography>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.</Typography>
-                            <div className={classes.commentsFooter}>
-                                <Typography>09/10, 2018</Typography>
-                            </div>
-                        </ExpansionPanelSummary>
-                        <ExpansionPanelDetails classes={{ root: classes.panelDetails }}>
-                            <div className={classes.replyHeadingContainer}>
-                                <div className={classes.emptySpread} />
-                                <div className={classes.replyHeading}>
-                                    <Avatar className={classes.avatar}>JJ</Avatar>
-                                    <Typography className={classes.userName}>James Jiang</Typography>
-                                </div>
-                            </div>
-                            <div className={classes.replyContainer}>
-                                <div className={classes.spread} />
-                                <div className={classes.reply}>
-                                    <Typography>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.</Typography>
-                                </div>
-                            </div>
-                            <div className={classes.replyHeadingContainer}>
-                                <div className={classes.emptySpread} />
-                                <div className={classes.replyHeading}>
-                                    <Avatar className={classes.avatar}>JJ</Avatar>
-                                    <Typography className={classes.userName}>James Jiang</Typography>
-                                </div>
-                            </div>
-                            <div className={classes.replyContainer}>
-                                <div className={classes.spread} />
-                                <div className={classes.reply}>
-                                    <Typography>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.</Typography>
-                                </div>
-                            </div>
-                            <div className={classes.replyHeadingContainer}>
-                                <div className={classes.emptySpread} />
-                                <div className={classes.replyHeading}>
-                                    <Avatar className={classes.avatar}>JJ</Avatar>
-                                    <Typography className={classes.userName}>James Jiang</Typography>
-                                </div>
-                            </div>
-                            <div className={classes.replyContainer}>
-                                <div className={classes.spread} />
-                                <div className={classes.reply}>
-                                    <Typography>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.</Typography>
-                                </div>
-                            </div>
-                        </ExpansionPanelDetails>
-                    </ExpansionPanel>
-                    <ExpansionPanel>
-                        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                            <Typography className={classes.heading}>Expansion Panel 2</Typography>
-                        </ExpansionPanelSummary>
-                        <ExpansionPanelDetails>
-                            <Typography>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.</Typography>
-                        </ExpansionPanelDetails>
-                    </ExpansionPanel>
-                </div>
+                <CommentListWithLoad data={this.state.data} emptyRecord={this.state.emptyRecord} />
                 <CommentInput handleInput={this.handleCommentInput} inputValue={this.state.inputValue} submit={this.submitComment} />
             </Fragment>
         );
@@ -155,5 +149,7 @@ class CommentsField extends Component {
 CommentsField.propTypes = {
     classes: PropTypes.object.isRequired
 };
+
+const CommentListWithLoad = WithLoadingScreen(CommentList);
 
 export default withStyles(styles)(CommentsField);

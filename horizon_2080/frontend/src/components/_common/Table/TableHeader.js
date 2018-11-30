@@ -12,7 +12,7 @@ const rows = [
     { id: "name", numeric: false, disablePadding: true, label: "Target Name" },
     { id: "description", numeric: false, disablePadding: true, label: "Target Description" },
     { id: "critical_flag", numeric: false, disablePadding: true, label: "20%" },
-    { id: "event_count", numeric: false, disablePadding: true, label: "Event(Completed/Total)" },
+    // { id: "event_count", numeric: false, disablePadding: true, label: "Event(Completed/Total)" },
     { id: "completion_status", numeric: false, disablePadding: true, label: "Completion Status" },
     // { id: "countable", numeric: false, disablePadding: true, label: "Countable" },
     { id: "expire_date", numeric: false, disablePadding: true, label: "Expire Date" },

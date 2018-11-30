@@ -17,4 +17,13 @@ const slideState = (direction = "down", action) => {
     }
 };
 
-export { language, slideState };
+const userID = (id = null, action) => {
+    switch(action.type) {
+        case "USER_ID":
+            return action.id;
+        default:
+            return id;
+    }
+}
+
+export { language, slideState, userID };

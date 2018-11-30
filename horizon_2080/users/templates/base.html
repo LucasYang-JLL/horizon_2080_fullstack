@@ -1,0 +1,70 @@
+{% load i18n staticfiles %}<!DOCTYPE html>
+<html lang="en">
+<head>
+	{% load static %}
+	<meta charset="utf-8">
+	<!--link href="/static/bootstrap/dist/css/bootstrap.css" rel="stylesheet"-->
+	<link href="{% static "bootstrap/dist/css/bootstrap.css" %}" rel="stylesheet">
+	<!--link href="/static/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet"-->
+	<link href="{% static "bootstrap/dist/css/bootstrap-theme.css"%}" rel="stylesheet">
+	<!--script src="/static/jquery/dist/jquery.js"></script-->
+	<script src="{% static "jquery/dist/jquery.js" %}"></script>
+	<!--script src="/static/bootstrap/dist/js/bootstrap.js"></script-->
+	<script src="{% static "bootstrap/dist/js/bootstrap.js"%}"></script>
+	<title>{% block title %}{{ title|default:"django-users2"}}{% endblock %}</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="">
+</head>
+<body>
+	<nav class="navbar navbar-expand-lg navbar-light" role="navigation" style="background-color: #000000; height:50px; ">
+        <!--div class="container-fluid"-->
+        <a class="navbar-brand" href="{% url 'index' %}" style="color: #e30613; font-size:25px; font-family: "Source Sans Pro";">Transhare</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <!-- <li class="nav-item active"><a class="nav-link" href="{% url 'index' %}" style="color: #ffffff; font-family: "Source Sans Pro"; ">Home</a></li> -->
+                {% if request.user.is_authenticated %}
+                <li class="nav-item"><a class="nav-link" href="/posts/" style="color: #ffffff;">Posted</a></li>
+                <li class="nav-item"><a class="nav-link" href="/myposts/" style="color: #ffffff;">My Post</a></li>
+                <!-- {% if request.user.is_superuser %}
+                <li class="nav-item"><a class="nav-link" href="#">Data Admin</a></li>
+                {% endif %} -->
+                <!-- <li class="nav-item"><a class="nav-link" href="#" style="color: #ffffff;">{{ request.user.name }}</a></li> -->
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #ffffff;">
+                        {{ request.user.name }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Tools</a>
+                        <a class="dropdown-item" href="#">Favourates</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item"  href="/accounts/logout/">Sign Out</a>
+                    </div>
+                </li>
+                {% else %}
+                <li class="nav-item"><a class="nav-link" href="/accounts/login/" style="color: #ffffff; font-family: "Source Sans Pro"; " >Sign In</a></li>
+                <!-- <li class="nav-item"><a class="nav-link" href="/accounts/register/" style="color: #ffffff; font-family: "Source Sans Pro"; " >SignUp</a></li> -->
+                {% endif %}
+                
+            </ul>
+        </div>
+        <img id="jll_logo" alt="Brand" style="max-width:170px;" src="{% static "logo/JLL_Achieve_Ambitions_Negative.png"%}">
+        <!--/div-->
+    </nav>
+<div class="container jumbotron">
+	{% if messages %}
+		{% for message in messages %}
+			<div class="alert {% if message.tags %}alert-{{ message.tags }}"{% endif %}>{{ message }}</div>
+		{% endfor %}
+	{% endif %}
+	{% block content %}
+		<p>Use this template get you up and running with django-users2.</p>
+	{% endblock content %}
+</div>
+</body>
+</html>

@@ -142,7 +142,6 @@ class Details extends Component {
                                     />
                                 )}
                             </WithWidth>
-
                             {this.state.activeTab === 0 && (
                                 <div className={classes.detailsWrapper}>
                                     <DetailsFieldWithLoad
@@ -167,7 +166,7 @@ class Details extends Component {
                         </Paper>
                     </div>
                 </Slide>
-                <CommentsContainer location={this.props.location} docked={true} />
+                <CommentsContainer history={this.props.history} match={this.props.match} location={this.props.location} docked={true} />
             </Fragment>
         );
     }

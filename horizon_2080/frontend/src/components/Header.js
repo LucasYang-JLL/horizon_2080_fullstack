@@ -29,7 +29,9 @@ import Paper from "@material-ui/core/Paper";
 import Popper from "@material-ui/core/Popper";
 import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
-import LogoWhite from "../images/logo/JLL_Logo.png";
+import axios from "axios";
+axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+axios.defaults.xsrfCookieName = "csrftoken";
 
 const drawerWidth = 240;
 
@@ -107,7 +109,8 @@ class Header extends Component {
             value: 0,
             mobileOpen: false,
             open: false,
-            activeDrawer: 0
+            activeDrawer: 0,
+            userInfo: ""
         };
     }
 
@@ -116,6 +119,7 @@ class Header extends Component {
         this.setState({
             activeDrawer: drawerState === -1 ? 0 : drawerState // normalize unfound index to above 0
         });
+        this.fetchUserInfo();
     }
 
     componentWillReceiveProps(props) {
@@ -127,7 +131,23 @@ class Header extends Component {
             });
         }
     }
-    componentWillUnmount() {}
+
+    fetchUserInfo = () => {
+        axios
+            .get(`/api/user_info/`)
+            .then((response) => {
+                // handle success
+                const user = response.data.user;
+                this.props.saveUserID(user);
+                this.setState({
+                    userInfo: user
+                });
+            })
+            .catch((error) => {
+                // handle error
+                console.log(error);
+            });
+    };
 
     handleDrawerToggle = () => {
         this.setState((state) => ({ mobileOpen: !state.mobileOpen }));
@@ -199,6 +219,9 @@ class Header extends Component {
                                 Horizon
                             </Typography>
                             <Grid className={classes.appBarMenu}>
+                                <div style={{ cursor: "pointer" }}>
+                                    <span>{this.state.userInfo.split(".").join(" ")}</span>
+                                </div>
                                 <IconButton
                                     color="inherit"
                                     onClick={this.handleMenuOpen}
@@ -226,7 +249,6 @@ class Header extends Component {
                                 </Popper>
                                 {/* <img src={LogoWhite} style={{ width: "90px" }} /> */}
                                 <img src={"/static/img/JLL_Logo.png"} style={{ width: "90px" }} />
-                                
                             </Grid>
                         </Grid>
                     </Toolbar>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?><md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" entityID="http://www.okta.com/exk1gesvg5rUr0NV00h8"><md:IDPSSODescriptor WantAuthnRequestsSigned="false" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol"><md:KeyDescriptor use="signing"><ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><ds:X509Data><ds:X509Certificate>MIIDljCCAn6gAwIBAgIGAV0KRH2zMA0GCSqGSIb3DQEBCwUAMIGLMQswCQYDVQQGEwJVUzETMBEG
+A1UECAwKQ2FsaWZvcm5pYTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzENMAsGA1UECgwET2t0YTEU
+MBIGA1UECwwLU1NPUHJvdmlkZXIxDDAKBgNVBAMMA2psbDEcMBoGCSqGSIb3DQEJARYNaW5mb0Bv
+a3RhLmNvbTAeFw0xNzA3MDMyMTAzMDdaFw0yNzA3MDMyMTA0MDZaMIGLMQswCQYDVQQGEwJVUzET
+MBEGA1UECAwKQ2FsaWZvcm5pYTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzENMAsGA1UECgwET2t0
+YTEUMBIGA1UECwwLU1NPUHJvdmlkZXIxDDAKBgNVBAMMA2psbDEcMBoGCSqGSIb3DQEJARYNaW5m
+b0Bva3RhLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAIbwrTDH8ObndG3UCNRq
+EAotbcA01Jkew7sIweFeT3akVHpGNd1UY329QddMNCf2N5mEMojVEE+Hw8cpPa01aOcnwDfCkOb2
+56mHFKj45pdhJHQREMqaXFUjJoC5Wd7GM+Whh5k374Jl4B/S4q0jwV2jGEfiLtOtApCDZ6xyUcY0
+j1rlMFJuEHokN/5GRkT6TfF9I8THt5fL9N8ROJoRWCJ0uL0tkLaPWK8isrXzLzR3edVKvFZd5r0E
+iZIzB3CpuUcfKXXSUB6sifde1wGUdyVCD9M8d9q7EgJ3V8b1KYmbTDSWGARGBlpCKGJGtM+fjSzk
+MuTRDOe2ESwW4nRUUXMCAwEAATANBgkqhkiG9w0BAQsFAAOCAQEAQw/2ju6R3IEF1i4qtUetOOeJ
+9dSoii1raX3CJ8g3BzGO3cTZZ/0vmwkwcoAnhOzmsH3ikmsi49tjjD7UyWUuTmEL2RtC0aJKvcoF
+qx62g7JqKd9SVjrI8InuOnGCn/xkAYE1vjMCg9z7I8GijYJPtX6kMn8XL6NIC1AZ7g0Jq6SeEKVF
+N4/c2OMnsUET31YarXhePxcywjVgyHIkMcczdkbY6vYnCtJ7QGhPIM4TtgLil2ZlFW/2DjK3orq8
+pVd466u8uJcXzFSx+wID4Kxhqw+DjvuPJ772G5gMdY5RiWz8oJolFT9Ep0WO+xjuNzodG9qcI4+3
+fhiGkKxZLhSJvA==</ds:X509Certificate></ds:X509Data></ds:KeyInfo></md:KeyDescriptor><md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</md:NameIDFormat><md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress</md:NameIDFormat><md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://jll.okta.com/app/jll_transharesamlap_1/exk1gesvg5rUr0NV00h8/sso/saml"/><md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://jll.okta.com/app/jll_transharesamlap_1/exk1gesvg5rUr0NV00h8/sso/saml"/></md:IDPSSODescriptor></md:EntityDescriptor>

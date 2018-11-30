@@ -1,0 +1,14 @@
+{% extends "basemain.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    body {
+        background-image: url("{% static "logo/grey_cavas.png"%}");
+        background-repeat: no-repeat;
+        background-size: cover;
+        /* background-color: #cccccc; */
+    }
+</style>
+<p style="color:#ffffff; text-align:center; padding:40vh 0; font-size:40px;">You have logged out.</p>
+{% endblock %}

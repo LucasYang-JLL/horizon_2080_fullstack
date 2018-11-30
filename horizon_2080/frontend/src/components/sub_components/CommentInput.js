@@ -3,7 +3,8 @@ import PropTypes from "prop-types";
 import TextField from "@material-ui/core/TextField";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
+import SendIcon from "@material-ui/icons/Send";
+import AlternateEmailIcon from "@material-ui/icons/AlternateEmail";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
@@ -43,10 +44,25 @@ const styles = (theme) => ({
         width: "100%"
     },
     messageInputRoot: {
-        display: "flex",
         flexDirection: "row",
-        // flex: "1 1 100%",
-        flexWrap: "wrap"
+        flexWrap: "wrap",
+        marginTop: "auto",
+        position: "sticky",
+        bottom: 0,
+        background: "#FFFFFF"
+    },
+    commentToolbar: {
+        width: "100%",
+        display: "flex",
+        backgroundColor: "rgba(0, 0, 0, 0.12)",
+        justifyContent: "flex-end"
+    },
+    overrideOutline: {
+        borderTop: "1px solid rgba(0, 0, 0, 0.23)",
+        borderBottom: "1px solid rgba(0, 0, 0, 0.23)",
+        borderLeft: "none",
+        borderRight: "none",
+        borderRadius: 0,
     }
 });
 
@@ -57,18 +73,33 @@ class CommentInput extends React.Component {
             <div className={classes.messageInputRoot}>
                 <TextField
                     multiline
+                    required
+                    rows="2"
+                    rowsMax="2"
                     type="text-field"
-                    autoFocus
+                    placeholder="Enter your comment..."
                     fullWidth
                     variant="outlined"
                     className={classes.textField}
                     value={inputValue}
-                    onChange={handleInput("textMessage")}
-                    margin="normal"
+                    onChange={handleInput}
+                    InputProps={{
+                        classes: {
+                            notchedOutline: classes.overrideOutline
+                        }
+                    }}
                 />
-                <Button variant="contained" size="small" className={classes.buttonSmall} onClick={submit}>
-                    {buttonName}
-                </Button>
+                <div className={classes.commentToolbar}>
+                    {/* <Button variant="outlined" mini className={classes.buttonSmall} onClick={submit}>
+                        {buttonName}
+                    </Button> */}
+                    <IconButton onClick={()=>{console.log("@ some fams")}}>
+                        <AlternateEmailIcon fontSize="small" />
+                    </IconButton>
+                    <IconButton onClick={submit}>
+                        <SendIcon fontSize="small" />
+                    </IconButton>
+                </div>
             </div>
         );
     }

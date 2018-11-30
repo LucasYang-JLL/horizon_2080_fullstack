@@ -13,6 +13,7 @@ import SingleInput from "../_common/SingleInput";
 import EventList from "./SubtargetEventList";
 import classNames from "classnames";
 import WithLoadingScreen from "../_common/WithLoadingScreen";
+import getDate from "../_utils/getDate";
 import axios from "axios";
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
@@ -56,6 +57,12 @@ const styles = (theme) => ({
         position: "sticky",
         top: 0,
         paddingLeft: theme.spacing.unit * 3
+    },
+    subTargetEventTitle: {
+        display: "flex",
+        alignItems: "center",
+        fontStyle: "italic",
+        color: "#404040"
     }
 });
 
@@ -105,6 +112,22 @@ class SubtargetEvent extends React.Component {
                         emptyRecord: false
                     });
                 }
+            })
+            .catch((error) => {
+                // handle error
+                console.log(error);
+            })
+            .then(() => {
+                // always executed
+            });
+    };
+
+    updateEventCount = () => {
+        axios
+            .put(`/api/update_event_count/${this.state.data.id}`, { event_count: this.state.eventList.length })
+            .then((response) => {
+                // handle success
+                this.props.updateEventCount(this.state.eventList.length);
             })
             .catch((error) => {
                 // handle error
@@ -174,19 +197,25 @@ class SubtargetEvent extends React.Component {
         let endpoint = `/api/create_event_by_sub_target/${data.id}/`;
         const form = {
             name: this.state.eventInput,
-            sub_target_id: data.id
+            sub_target: data.id,
+            target: this.props.target_id
         };
         axios
             .post(endpoint, form)
             .then((response) => {
                 // handle success
-                this.setState((prevState) => {
-                    return {
-                        ...this.state,
-                        eventInput: "",
-                        eventList: prevState.eventList.concat([response.data])
-                    };
-                });
+                this.setState(
+                    (prevState) => {
+                        return {
+                            ...this.state,
+                            eventInput: "",
+                            eventList: prevState.eventList.concat([response.data])
+                        };
+                    },
+                    () => {
+                        this.updateEventCount();
+                    }
+                );
             })
             .catch((error) => {
                 // handle error
@@ -230,6 +259,7 @@ class SubtargetEvent extends React.Component {
 
     render() {
         const { classes, fullScreen, openEvent, data, toggleEvent } = this.props;
+        console.log(this.state);
         let { editMode, addMode, eventList } = this.state;
         if (!data) return null;
         return (
@@ -246,9 +276,12 @@ class SubtargetEvent extends React.Component {
                         />
                     </div>
                 ) : (
-                    <DialogTitle id="scroll-dialog-title" onClick={this.toggleEditMode}>
-                        {data.name}
-                    </DialogTitle>
+                    <div className={classes.subTargetEventTitle}>
+                        <DialogTitle style={{flex: 1}} onClick={this.toggleEditMode}>{data.name}</DialogTitle>
+                        <div style={{marginRight: "16px", marginTop: "8px"}}>
+                            <span>{getDate(data.create_date)}</span>
+                        </div>
+                    </div>
                 )}
                 <DialogContent>
                     <div className={classes.dialogContentWrapper}>

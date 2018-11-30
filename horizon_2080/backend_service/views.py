@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
+from django.http import JsonResponse
 from rest_framework import generics
 from backend_service.models import *
 from backend_service.serializers import *
@@ -9,8 +10,17 @@ from backend_service.serializers import *
 #
 
 class FolderQuery(generics.ListCreateAPIView):
-    queryset = folder.objects.all()
+    # queryset = folder.objects.all()
     serializer_class = FolderSerializer
+    def get_queryset(self):
+        userID = self.request.user.name # my user id
+        print(self.request.user.report_to.all()) # the users that I report to
+        userArr = self.request.user.user_set.all() # the users that report to me
+        nameList = [userID]
+        for user in userArr:
+            nameList.append(user.name)
+        print(nameList)
+        return folder.objects.filter(created_by_id__in = nameList)
 
 class FolderQueryByID(generics.ListCreateAPIView):
     serializer_class = FolderSerializer
@@ -25,7 +35,9 @@ class FolderCreate(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         # parse the model to be put into database
         # don't put the instance in here!! that causes the model to be ran on an existing row!!
-        serializer = self.get_serializer(data=request.data)
+        entry = request.data
+        entry['created_by_id'] = request.user.name
+        serializer = self.get_serializer(data=entry)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         return Response(serializer.data)
@@ -42,19 +54,11 @@ class UpdateTargetCountByFolder(generics.UpdateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         return Response(serializer.data)
-#
-# Target Group Views
-#
-
-class TargetGroupCreate(generics.ListCreateAPIView):
-    queryset = horizon_target_group.objects.all()
-    serializer_class = TargetGroupSerializer
 
 #
 # Target Individual Views
 #
-
-class TargetIndividualCreate(generics.ListCreateAPIView):
+class TargetIndividualQuery(generics.ListCreateAPIView):
     queryset = horizon_target_individual.objects.all()
     serializer_class = TargetIndividualSerializer
 
@@ -68,7 +72,12 @@ class TargetIndividualDetailsQueryByFolder(generics.ListCreateAPIView):
     serializer_class = TargetIndividualSerializer
     # queryset = horizon_target_individual.objects.all()
     def get_queryset(self):
-        return horizon_target_individual.objects.filter(folder_id=self.kwargs['folder_id'])
+        userID = self.request.user.name # my user id
+        userArr = self.request.user.user_set.all() # the users that report to me
+        nameList = [userID]
+        for user in userArr:
+            nameList.append(user.name)
+        return horizon_target_individual.objects.filter(folder_id=self.kwargs['folder_id'], created_by_id__in = nameList)
 
 class UpdateTargetIndividualDetails(generics.UpdateAPIView):
     queryset = horizon_target_individual.objects.all()
@@ -104,7 +113,10 @@ class CreateTargetIndividualDetails(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         # parse the model to be put into database
         # don't put the instance in here!! that causes the model to be ran on an existing row!!
-        serializer = self.get_serializer(data=request.data)
+        entry = request.data
+        entry['created_by_id'] = request.user.name
+        serializer = self.get_serializer(data=entry)
+        # serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         return Response(serializer.data)
@@ -120,7 +132,9 @@ class CreateSubTargetIndividual(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         # parse the model to be put into database
         # don't put the instance in here!! that causes the model to be ran on an existing row!!
-        serializer = self.get_serializer(data=request.data)
+        entry = request.data
+        entry['created_by_id'] = request.user.name
+        serializer = self.get_serializer(data=entry)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         return Response(serializer.data)
@@ -129,11 +143,29 @@ class QuerySubTargetIndividual(generics.ListCreateAPIView):
     serializer_class = SubTargetIndividualSerializer
     # queryset = horizon_target_individual.objects.all()
     def get_queryset(self):
-        return sub_target_individual.objects.filter(target_id_individual=self.kwargs['target_id_individual'])
+        userID = self.request.user.name # my user id
+        userArr = self.request.user.user_set.all() # the users that report to me
+        nameList = [userID]
+        for user in userArr:
+            nameList.append(user.name)
+        return sub_target_individual.objects.filter(target_id=self.kwargs['target_id_individual'], created_by_id__in = nameList)
 
 class UpdateSubTargetIndividual(generics.UpdateAPIView):
     queryset = sub_target_individual.objects.all()
     serializer_class = SubTargetIndividualSerializer
+    
+    def update(self, request, *args, **kwargs):
+        # creates an instance of the model object from the requested id
+        instance = self.get_object()
+        # parse the model to be put into database
+        serializer = self.get_serializer(instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
+class UpdateEventCountBySubTarget(generics.UpdateAPIView):
+    queryset = sub_target_individual.objects.all()
+    serializer_class = SubTargetEventCountSerializer
     
     def update(self, request, *args, **kwargs):
         # creates an instance of the model object from the requested id
@@ -152,8 +184,22 @@ class QueryCommentByTarget(generics.ListCreateAPIView):
     serializer_class = CommentSerializer
     # queryset = horizon_target_individual.objects.all()
     def get_queryset(self):
-        return comment.objects.filter(target_id_individual=self.kwargs['target_id_individual'])
+        return comment.objects.filter(target_id=self.kwargs['target_id_individual'])
 
+class CreateCommentByTarget(generics.CreateAPIView):
+    queryset = comment.objects.all()
+    serializer_class = CommentSerializer
+
+    def create(self, request, *args, **kwargs):
+        # parse the model to be put into database
+        # don't put the instance in here!! that causes the model to be ran on an existing row!!
+        entry = request.data
+        entry['created_by_id'] = request.user.name
+        serializer = self.get_serializer(data=entry)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(serializer.data)
+        
 #
 # Event Views
 #
@@ -162,7 +208,12 @@ class QueryEventBySubTarget(generics.ListCreateAPIView):
     serializer_class = EventSerializer
     # queryset = horizon_target_individual.objects.all()
     def get_queryset(self):
-        return event.objects.filter(sub_target_id=self.kwargs['sub_target_id'])
+        userID = self.request.user.name # my user id
+        userArr = self.request.user.user_set.all() # the users that report to me
+        nameList = [userID]
+        for user in userArr:
+            nameList.append(user.name)
+        return event.objects.filter(sub_target=self.kwargs['sub_target_id'], created_by_id__in = nameList)
 
 class CreateEventBySubTarget(generics.CreateAPIView):
     queryset = event.objects.all()
@@ -171,7 +222,9 @@ class CreateEventBySubTarget(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         # parse the model to be put into database
         # don't put the instance in here!! that causes the model to be ran on an existing row!!
-        serializer = self.get_serializer(data=request.data)
+        entry = request.data
+        entry['created_by_id'] = request.user.name
+        serializer = self.get_serializer(data=entry)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         return Response(serializer.data)
@@ -188,3 +241,13 @@ class UpdateEventBySubTarget(generics.UpdateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         return Response(serializer.data)
+
+#
+#  Joined Queries
+#
+
+class QuerySubTargetAndEventDateDesc(generics.ListCreateAPIView):
+    serializer_class = EventAndSubTargetSerializer
+    def get_queryset(self):
+        newSet = horizon_target_individual.objects.all().exclude(event__isnull=True, sub_target_individual__isnull=True)
+        return newSet

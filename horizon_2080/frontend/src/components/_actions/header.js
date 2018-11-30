@@ -9,4 +9,9 @@ const slideDirection = (value) => ({
     value: value,
 });
 
-export { selectLanguage, slideDirection };
+const saveUserID = (id) => ({
+    type: "USER_ID",
+    id: id,
+});
+
+export { selectLanguage, slideDirection, saveUserID };

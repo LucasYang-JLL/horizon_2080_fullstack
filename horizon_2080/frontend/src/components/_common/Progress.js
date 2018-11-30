@@ -43,12 +43,12 @@ class Progress extends React.Component {
     };
 
     static getDerivedStateFromProps(nextProps, prevState) {
-        if (nextProps.progress !== prevState.progress) {
-            let norm_arr = nextProps.progress.map(({ completed_flag }) => completed_flag);
-            let percentage = Math.round((norm_arr.reduce((acc, curr) => acc + curr) / norm_arr.length) * 100);
-            let id = nextProps.progress[0].target_id_individual;
+        let norm_arr = nextProps.progress.map(({ completed_flag }) => completed_flag);
+        let percentage = Math.round((norm_arr.reduce((acc, curr) => acc + curr) / norm_arr.length) * 100);
+        if (JSON.stringify(nextProps.progress) !== JSON.stringify(prevState.progress)) {
+            console.log(nextProps.progress, prevState.progress);
+            let id = nextProps.progress[0].target;
             let endpoint = `/api/update_horizon_target_individual_progress/${id}/`;
-
             axios
                 .put(endpoint, { progress: percentage })
                 .then((response) => {
@@ -64,7 +64,7 @@ class Progress extends React.Component {
                 completed: percentage // get the % completion, then round the number
             };
             // return { progress: nextProps.progress };
-        } else return null;
+        } else return { completed: percentage };
     }
 
     componentDidMount() {

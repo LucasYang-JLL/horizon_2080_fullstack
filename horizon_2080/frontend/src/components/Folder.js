@@ -11,6 +11,7 @@ import ListIcon from "@material-ui/icons/List";
 import DoneIcon from "@material-ui/icons/Done";
 import Form from "./_common/Form";
 import { compose } from "redux";
+import Divider from "@material-ui/core/Divider";
 import axios from "axios";
 import color from "../MuiTheme/color";
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
@@ -130,10 +131,13 @@ class Folder extends Component {
         cards: [],
         hover: -1,
         openModal: false,
-        newFolderTitle: ""
+        emptyRecord: false,
+        newFolderTitle: "",
+        userList: []
     };
 
     componentDidMount() {
+        this.fetchUserInfo();
         this.fetchFolder();
     }
 
@@ -142,8 +146,33 @@ class Folder extends Component {
             .get("/api/horizon_folder/")
             .then((response) => {
                 // handle success
+                if (response.data.length === 0) {
+                    this.setState({
+                        emptyRecord: true
+                    });
+                } else {
+                    this.setState({
+                        cards: response.data
+                    });
+                }
+            })
+            .catch((error) => {
+                // handle error
+                console.log(error);
+            })
+            .then(() => {
+                // always executed
+            });
+    };
+
+    fetchUserInfo = () => {
+        axios
+            .get("/api/user_subset_info/")
+            .then((response) => {
+                // handle success
+                console.log(response.data);
                 this.setState({
-                    cards: response.data
+                    userList: response.data.userList
                 });
             })
             .catch((error) => {
@@ -177,22 +206,44 @@ class Folder extends Component {
 
     render() {
         const { classes } = this.props;
-        const { slideState } = this.props.reduxState;
+        const { slideState, userID } = this.props.reduxState;
         return (
             <Slide direction={slideState} in mountOnEnter unmountOnExit>
                 <div className={classes.content}>
                     <div className={classes.toolbar} />
                     <h2 style={{ marginTop: 0 }}>Campaigns</h2>
-                    <WrapComponent
+                    {<h3>My projects</h3>}
+                    <Divider />
+                    <CardWithLoad
                         toggleNewFolderModal={this.toggleNewFolderModal}
                         handleCardClick={this.handleCardClick}
                         hover={this.state.hover}
                         setHover={this.setHover}
                         openModal={this.state.openModal}
-                        data={this.state.cards}
-                        // classes={classes}
+                        data={this.state.cards.filter(({ created_by_id }) => created_by_id === userID)}
+                        emptyRecord={this.state.emptyRecord}
                         history={this.props.history}
+                        creatable={true}
                     />
+                    {this.state.userList.map((user) =>
+                        this.state.cards.filter(({ created_by_id }) => created_by_id === user).length !== 0 ? (
+                            <Fragment key={user}>
+                                {<h3>{user}'s projects</h3>}
+                                <Divider />
+                                <CardWithLoad
+                                    toggleNewFolderModal={this.toggleNewFolderModal}
+                                    handleCardClick={this.handleCardClick}
+                                    hover={this.state.hover}
+                                    setHover={this.setHover}
+                                    openModal={this.state.openModal}
+                                    data={this.state.cards.filter(({ created_by_id }) => created_by_id === user)}
+                                    emptyRecord={this.state.emptyRecord}
+                                    history={this.props.history}
+                                    creatable={false}
+                                />
+                            </Fragment>
+                        ) : null
+                    )}
                 </div>
             </Slide>
         );
@@ -242,13 +293,14 @@ const styleCard = (theme) => ({
         }
     }
 });
-const WrapComponent = compose(
+
+const CardWithLoad = compose(
     WithLoadingScreen,
     withStyles(styleCard)
 )(CardContainer);
 
 function CardContainer(props) {
-    const { classes, data, setHover, hover, handleCardClick, toggleNewFolderModal, openModal, history } = props;
+    const { classes, data, setHover, hover, handleCardClick, toggleNewFolderModal, openModal, history, creatable } = props;
     return (
         <div className={classes.CardContainer}>
             {data.map(({ id, name, completed_target, total_target }) => (
@@ -270,10 +322,22 @@ function CardContainer(props) {
                     </CardContent>
                 </Card>
             ))}
-            <Button className={classes.card} variant="outlined" color="primary" onClick={toggleNewFolderModal}>
-                Create new folder...
-            </Button>
-            <Form title="Enter folder name" open={openModal} toggle={toggleNewFolderModal} endpoint="api/create_horizon_folder/" inputFields={inputFields} dest="/performance/" history={history} />
+            {creatable ? (
+                <Fragment>
+                    <Button className={classes.card} variant="outlined" color="primary" onClick={toggleNewFolderModal}>
+                        Create new folder...
+                    </Button>
+                    <Form
+                        title="Enter folder name"
+                        open={openModal}
+                        toggle={toggleNewFolderModal}
+                        endpoint="api/create_horizon_folder/"
+                        inputFields={inputFields}
+                        dest="/performance/"
+                        history={history}
+                    />
+                </Fragment>
+            ) : null}
         </div>
     );
 }

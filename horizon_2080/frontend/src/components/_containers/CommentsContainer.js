@@ -1,5 +1,6 @@
 import { connect } from "react-redux";
 import Comments from "../Comments";
+import { toggleSnackbar } from "../_actions/common";
 
 // redux provided wrapper to map state to props
 const mapStateToProps = (state) => {
@@ -14,6 +15,9 @@ const mapDispatchToProps = (dispatch) => {
         // selectLanguage: (value) => {
         //     dispatch(selectLanguage(value));
         // },
+        toggleSnackbar: (snackbarOpen, variant = "info", message = "Input message here") => {
+            dispatch(toggleSnackbar(snackbarOpen, variant, message));
+        }
     };
 };
 

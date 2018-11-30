@@ -37,11 +37,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'okta',
+    'users',
     'backend_service',
     'rest_framework',
     'frontend',
     'django_crontab',
 ]
+
+AUTH_USER_MODEL = 'users.User'
 
 CRONJOBS = [
     ('*/1 * * * *', 'backend_service.crontab.my_scheduled_job')
@@ -61,6 +65,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'livereload.middleware.LiveReloadScript',
+    'okta.middleware.AuthRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'horizon_2080.urls'
@@ -97,12 +102,12 @@ WSGI_APPLICATION = 'horizon_2080.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'react_django_db',
+        'NAME': 'horizon_2080',
         'USER': 'root',
         'PASSWORD': 'newpassword',
         'HOST': '',
         'PORT': ''
-    }
+    },
 }
 
 

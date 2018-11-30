@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { selectLanguage, slideDirection } from "../_actions/header";
+import { selectLanguage, slideDirection, saveUserID } from "../_actions/header";
 import Header from "../Header";
 
 // redux provided wrapper to map state to props
@@ -17,6 +17,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         slideDirection: (value) => {
             dispatch(slideDirection(value));
+        },
+        saveUserID: (id) => {
+            dispatch(saveUserID(id));
         }
     };
 };

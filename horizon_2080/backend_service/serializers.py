@@ -1,9 +1,6 @@
 from rest_framework import serializers
 from backend_service.models import *
-# class LeadSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Lead
-#         fields = ('id', 'name', 'email', 'message')
+
 class FolderSerializer(serializers.ModelSerializer):
     class Meta:
         model = folder
@@ -14,12 +11,8 @@ class FolderTargetCountSerializer(serializers.ModelSerializer):
         model = folder
         fields = ['completed_target', 'total_target']
 
-class TargetGroupSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = horizon_target_group
-        fields = '__all__'
-
 class TargetIndividualSerializer(serializers.ModelSerializer):
+    # folder = FolderSerializer(many=False)
     class Meta:
         model = horizon_target_individual
         fields = '__all__'
@@ -34,6 +27,11 @@ class SubTargetIndividualSerializer(serializers.ModelSerializer):
         model = sub_target_individual
         fields = '__all__'
 
+class SubTargetEventCountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = sub_target_individual
+        fields = ['event_count']
+
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = comment
@@ -43,3 +41,12 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = event
         fields = '__all__'
+
+class EventAndSubTargetSerializer(serializers.ModelSerializer):
+    # serializing event. nested JSON
+    # event = EventSerializer(many = True, read_only=True, source='event_set')
+    sub_target = SubTargetIndividualSerializer(many = True, read_only=True, source='sub_target_individual_set')
+    event = EventSerializer(many = True, read_only=True, source='event_set')
+    class Meta:
+        model = horizon_target_individual
+        fields = ['sub_target', 'event']

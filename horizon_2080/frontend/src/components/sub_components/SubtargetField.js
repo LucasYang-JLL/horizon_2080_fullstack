@@ -131,7 +131,7 @@ class SubtargetField extends Component {
         const form = {
             completed_flag: false,
             name: this.state.textMessage,
-            target_id_individual: this.props.target_id
+            target: this.props.target_id
         };
         axios
             .post(endpoint, form)
@@ -190,6 +190,16 @@ class SubtargetField extends Component {
                 }
             );
         }
+    };
+
+    updateEventCount = (count) => {
+        const { data, modalIndex } = this.state;
+        const currentIndex = modalIndex;
+        const newData = [...data];
+        newData[currentIndex].event_count = count;
+        this.setState({
+            data: newData
+        });
     };
 
     handleCheckListClick = (index) => () => {
@@ -264,8 +274,14 @@ class SubtargetField extends Component {
                 ) : (
                     <SingleInput handleInput={this.handleInput} handleKeypress={this.handleKeypress} inputValue={this.state.textMessage} toggleForm={this.toggleForm} submit={this.addTask} />
                 )}
-                <SubtargetEvent updateSubTarget={this.editSubTarget} openEvent={this.state.openEvent} toggleEvent={this.toggleEvent} data={this.state.data[this.state.modalIndex]} />
-
+                <SubtargetEvent
+                    target_id={this.props.target_id}
+                    updateSubTarget={this.editSubTarget}
+                    updateEventCount={this.updateEventCount}
+                    openEvent={this.state.openEvent}
+                    toggleEvent={this.toggleEvent}
+                    data={this.state.data[this.state.modalIndex]}
+                />
             </div>
         );
     }

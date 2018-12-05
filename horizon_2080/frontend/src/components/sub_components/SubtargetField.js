@@ -80,18 +80,25 @@ class SubtargetField extends Component {
             textMessage: "",
             editIndex: null,
             openEvent: false,
-            modalIndex: null
+            modalIndex: null,
+            sub_target_id: null,
+            selectedSubTarget: null
         };
     }
 
     componentDidMount() {
         this.fetchSubTarget();
+        this.props.ResetOpenEvent();
     }
-    // static getDerivedStateFromProps(nextProps, prevState) {
-    //     if (nextProps.data !== prevState.fields) {
-    //         return { fields: nextProps.data };
-    //     } else return null;
-    // }
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if (nextProps.OpenEventID !== null) {
+            console.log(nextProps.OpenEventID);
+            return {
+                openEvent: true,
+                sub_target_id: nextProps.OpenEventID
+            };
+        } else return null;
+    }
 
     fetchSubTarget = () => {
         axios
@@ -205,7 +212,8 @@ class SubtargetField extends Component {
     handleCheckListClick = (index) => () => {
         this.setState(
             {
-                modalIndex: index
+                modalIndex: index,
+                sub_target_id: this.state.data[index].id
             },
             () => {
                 this.toggleEvent();
@@ -250,8 +258,10 @@ class SubtargetField extends Component {
         });
     };
 
+    handleEventOpenRequest = () => {};
+
     render() {
-        const { classes } = this.props;
+        const { classes, OpenEventID } = this.props;
         return (
             <div className={classes.SubtargetRoot}>
                 {this.state.data.length > 0 ? (
@@ -276,11 +286,12 @@ class SubtargetField extends Component {
                 )}
                 <SubtargetEvent
                     target_id={this.props.target_id}
+                    sub_target_id={this.state.sub_target_id}
                     updateSubTarget={this.editSubTarget}
                     updateEventCount={this.updateEventCount}
                     openEvent={this.state.openEvent}
                     toggleEvent={this.toggleEvent}
-                    data={this.state.data[this.state.modalIndex]}
+                    data={this.state.data.find(({ id }) => id === this.state.sub_target_id)}
                 />
             </div>
         );

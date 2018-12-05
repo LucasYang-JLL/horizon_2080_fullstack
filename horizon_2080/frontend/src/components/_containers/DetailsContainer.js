@@ -1,6 +1,7 @@
 import { connect } from "react-redux";
 import Details from "../sub_components/Details";
 import { slideDirection } from "../_actions/header";
+import { ResetOpenEvent } from "../_actions/event";
 import { toggleEditButton, handleDataChange, storeData, updateTarget } from "../_actions/performance";
 import { toggleSnackbar } from "../_actions/common";
 
@@ -31,6 +32,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         updateTarget: (value) => {
             dispatch(updateTarget(value))
+        },
+        ResetOpenEvent: () => {
+            dispatch(ResetOpenEvent())
         }
     };
 };

@@ -15,7 +15,6 @@ def UserQuery(request):
 
 def UserAndSubsetQuery(request):
     userID = request.user.name # my user id
-    userID = request.user.name # my user id
     userArr = request.user.user_set.all() # the users that report to me
     nameList = []
     for user in userArr:

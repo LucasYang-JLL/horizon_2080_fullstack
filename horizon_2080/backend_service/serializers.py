@@ -47,6 +47,7 @@ class EventAndSubTargetSerializer(serializers.ModelSerializer):
     # event = EventSerializer(many = True, read_only=True, source='event_set')
     sub_target = SubTargetIndividualSerializer(many = True, read_only=True, source='sub_target_individual_set')
     event = EventSerializer(many = True, read_only=True, source='event_set')
+    folder = FolderSerializer()
     class Meta:
         model = horizon_target_individual
-        fields = ['sub_target', 'event']
+        fields = ['sub_target', 'event', 'name', 'folder', 'id']

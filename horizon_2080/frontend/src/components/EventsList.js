@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Directory from "./_common/Directory";
@@ -12,7 +12,7 @@ const styles = (theme) => ({
     content: {
         flexGrow: 1,
         backgroundColor: theme.palette.background.default,
-        padding: theme.spacing.unit * 3,
+        padding: `12px ${theme.spacing.unit * 3}px`,
         minWidth: 0 // So the Typography noWrap works
     },
     toolbar: theme.mixins.toolbar,
@@ -23,16 +23,58 @@ const styles = (theme) => ({
     dateStyle: {
         color: "#202020",
         fontStyle: "italic"
+    },
+    linkStyle: {
+        color: "#0000EE",
+        textDecoration: "underline",
+        cursor: "pointer"
     }
 });
 
 class EventsList extends Component {
+    handleOpenSubtargetRequest = (sub_target_id ,target_id) => {
+        this.props.openEventRequest(sub_target_id);
+        this.props.history.push(`/performance/project/${target_id}`);
+    };
+
+    handleOpenTargetRequest = (target_id) => {
+        this.props.history.push(`/performance/project/${target_id}`);
+    };
+
     render() {
-        const { classes } = this.props;
+        const { classes, data } = this.props;
         return (
             <div className={classes.content}>
-                <Directory />
-                <Divider light />
+                {data.map(({ sub_target, event, name, folder, id }, index) => {
+                    return (
+                        <Fragment key={index}>
+                            <Directory folder={folder.name} target={name} />
+                            <Divider />
+                            {sub_target.reverse().map(({ name, create_date, created_by_id }) => {
+                                return (
+                                    <ListItem key={create_date}>
+                                        <p className={classes.pStyle}>
+                                            {created_by_id} added <b>Sub-target</b>: "<span className={classes.linkStyle} onClick={() => this.handleOpenTargetRequest(id)}>{name}</span>"{" "}
+                                            <span className={classes.dateStyle}>{getDate(create_date)}</span>
+                                        </p>
+                                    </ListItem>
+                                );
+                            })}
+                            {event.reverse().map(({ name, create_date, created_by_id, target, sub_target }) => {
+                                return (
+                                    <ListItem key={create_date}>
+                                        <p className={classes.pStyle}>
+                                            {created_by_id} posted <b>Event</b>: "<span className={classes.linkStyle} onClick={() => this.handleOpenSubtargetRequest(sub_target, target)}>{name}</span>"{" "}
+                                            <span className={classes.dateStyle}>{getDate(create_date)}</span>
+                                        </p>
+                                    </ListItem>
+                                );
+                            })}
+                        </Fragment>
+                    );
+                })}
+                {/* <Directory />
+                <Divider />
                 <List>
                     <ListItem>
                         <p className={classes.pStyle}>
@@ -44,7 +86,7 @@ class EventsList extends Component {
                             Benson recorded Event "Done! Boss" on sub-target: "get this done" <span className={classes.dateStyle}>22-11-2018</span>
                         </p>
                     </ListItem>
-                </List>
+                </List> */}
             </div>
         );
     }

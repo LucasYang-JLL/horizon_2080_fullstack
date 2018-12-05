@@ -154,13 +154,13 @@ class Details extends Component {
                                         handleChange={this.props.handleDataChange}
                                     />
                                     <Hidden xsDown>
-                                        <SubtargetField target_id={this.props.match.params.id} />
+                                        <SubtargetField target_id={this.props.match.params.id} OpenEventID={this.props.reduxState.OpenEventID} ResetOpenEvent={this.props.ResetOpenEvent} />
                                     </Hidden>
                                 </div>
                             )}
                             {this.state.activeTab === 1 && (
                                 <div className={classes.detailsWrapper}>
-                                    <SubtargetField target_id={this.props.match.params.id} />
+                                    <SubtargetField target_id={this.props.match.params.id} OpenEventID={this.props.reduxState.OpenEventID} ResetOpenEvent={this.props.ResetOpenEvent}/>
                                 </div>
                             )}
                         </Paper>

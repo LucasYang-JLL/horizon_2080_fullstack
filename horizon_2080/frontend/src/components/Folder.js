@@ -211,7 +211,7 @@ class Folder extends Component {
             <Slide direction={slideState} in mountOnEnter unmountOnExit>
                 <div className={classes.content}>
                     <div className={classes.toolbar} />
-                    <h2 style={{ marginTop: 0 }}>Campaigns</h2>
+                    {/* <h2 style={{ marginTop: 0 }}>Campaigns</h2> */}
                     {<h3>My projects</h3>}
                     <Divider />
                     <CardWithLoad

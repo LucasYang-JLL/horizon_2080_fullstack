@@ -249,5 +249,11 @@ class UpdateEventBySubTarget(generics.UpdateAPIView):
 class QuerySubTargetAndEventDateDesc(generics.ListCreateAPIView):
     serializer_class = EventAndSubTargetSerializer
     def get_queryset(self):
-        newSet = horizon_target_individual.objects.all().exclude(event__isnull=True, sub_target_individual__isnull=True)
+        userID = self.request.user.name # my user id
+        userArr = self.request.user.user_set.all() # the users that report to me
+        nameList = [userID]
+        for user in userArr:
+            nameList.append(user.name)
+        newSet = horizon_target_individual.objects.all().filter(created_by_id__in = nameList).exclude(event__isnull=True, sub_target_individual__isnull=True)
+        print(newSet[0].folder.name)
         return newSet

@@ -1,4 +1,5 @@
 import { connect } from "react-redux";
+import { openEventRequest } from "../_actions/event";
 import Events from "../Events";
 
 // redux provided wrapper to map state to props
@@ -14,6 +15,9 @@ const mapDispatchToProps = (dispatch) => {
         // selectLanguage: (value) => {
         //     dispatch(selectLanguage(value));
         // },
+        openEventRequest: (id) => {
+            dispatch(openEventRequest(id))
+        }
     };
 };
 

@@ -96,9 +96,9 @@ class SubtargetEvent extends React.Component {
     }
 
     fetchEvent = () => {
-        const { data } = this.state;
+        const { sub_target_id } = this.props;
         axios
-            .get(`/api/fetch_event_by_sub_target/${data.id}/`)
+            .get(`/api/fetch_event_by_sub_target/${sub_target_id}/`)
             .then((response) => {
                 // handle success
                 if (response.data.length === 0) {
@@ -123,8 +123,9 @@ class SubtargetEvent extends React.Component {
     };
 
     updateEventCount = () => {
+        const { sub_target_id } = this.props;
         axios
-            .put(`/api/update_event_count/${this.state.data.id}`, { event_count: this.state.eventList.length })
+            .put(`/api/update_event_count/${sub_target_id}`, { event_count: this.state.eventList.length })
             .then((response) => {
                 // handle success
                 this.props.updateEventCount(this.state.eventList.length);
@@ -193,12 +194,12 @@ class SubtargetEvent extends React.Component {
     };
 
     submitEvent = () => {
-        const { data } = this.state;
-        let endpoint = `/api/create_event_by_sub_target/${data.id}/`;
+        const { target_id, sub_target_id } = this.props;
+        let endpoint = `/api/create_event_by_sub_target/${sub_target_id}/`;
         const form = {
             name: this.state.eventInput,
-            sub_target: data.id,
-            target: this.props.target_id
+            sub_target: sub_target_id,
+            target: target_id
         };
         axios
             .post(endpoint, form)
@@ -246,7 +247,7 @@ class SubtargetEvent extends React.Component {
             .put(`/api/update_event_by_sub_target/${obj.id}/`, obj)
             .then((response) => {
                 // handle success
-                console.log("HI", response);
+                // console.log("HI", response);
             })
             .catch((error) => {
                 // handle error
@@ -259,7 +260,6 @@ class SubtargetEvent extends React.Component {
 
     render() {
         const { classes, fullScreen, openEvent, data, toggleEvent } = this.props;
-        console.log(this.state);
         let { editMode, addMode, eventList } = this.state;
         if (!data) return null;
         return (
@@ -277,8 +277,10 @@ class SubtargetEvent extends React.Component {
                     </div>
                 ) : (
                     <div className={classes.subTargetEventTitle}>
-                        <DialogTitle style={{flex: 1}} onClick={this.toggleEditMode}>{data.name}</DialogTitle>
-                        <div style={{marginRight: "16px", marginTop: "8px"}}>
+                        <DialogTitle style={{ flex: 1 }} onClick={this.toggleEditMode}>
+                            {data.name}
+                        </DialogTitle>
+                        <div style={{ marginRight: "16px", marginTop: "8px" }}>
                             <span>{getDate(data.create_date)}</span>
                         </div>
                     </div>

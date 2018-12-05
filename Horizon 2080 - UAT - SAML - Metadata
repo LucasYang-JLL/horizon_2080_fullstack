@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?><md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" entityID="http://www.okta.com/exki1fjm7oNRdj9HG0h7"><md:IDPSSODescriptor WantAuthnRequestsSigned="false" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol"><md:KeyDescriptor use="signing"><ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><ds:X509Data><ds:X509Certificate>MIIDnDCCAoSgAwIBAgIGAVzrNGvSMA0GCSqGSIb3DQEBCwUAMIGOMQswCQYDVQQGEwJVUzETMBEG
+A1UECAwKQ2FsaWZvcm5pYTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzENMAsGA1UECgwET2t0YTEU
+MBIGA1UECwwLU1NPUHJvdmlkZXIxDzANBgNVBAMMBmpsbHBvYzEcMBoGCSqGSIb3DQEJARYNaW5m
+b0Bva3RhLmNvbTAeFw0xNzA2MjcyMDE3MjBaFw0yNzA2MjcyMDE4MTlaMIGOMQswCQYDVQQGEwJV
+UzETMBEGA1UECAwKQ2FsaWZvcm5pYTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzENMAsGA1UECgwE
+T2t0YTEUMBIGA1UECwwLU1NPUHJvdmlkZXIxDzANBgNVBAMMBmpsbHBvYzEcMBoGCSqGSIb3DQEJ
+ARYNaW5mb0Bva3RhLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKgOika3quLf
+Qbj7ZCauVsZaywRhgeK+3dUZpgC8J8iPPA904dAyTIvh+IAZxDMsrA0+KwejB/zyA8vXXPSS2jUd
+sMHkcNJ3DUGNwKYdH2d1sK9KGhu4rsdpZ8JGZ2dVY5OErPFdA3IiqK4Ta0zZBcLUDWrJUqbrSpTm
+DoCIP89aTIJ2xvuQW5i47iDvfmavcluknBIQ0MdwrvlEcgllwq5rHryZCSEK4aNCVE+6Udd4/fI5
+9BaGxsWrww311axAvXuPQp4YjoVlN2ehQkjIZedMLosnYk0WDFHGUuWe70a9Cbas2DrY0gm9a5e5
+zWotnpoYQWAVpFC8kdqc9Ohq4OsCAwEAATANBgkqhkiG9w0BAQsFAAOCAQEAf9J07XB3DkVPI+mW
+AnwQIp/TtAd9+e0bNaezy7t0OLGiiS1lgtwT78v2OP6nhqrmzfPnWqAnDVxK0a6RpCczyfDPPjVB
+3jWNUIKIaLduJP5D2ziRTszU3pmf2qzlY0CWmz9LKcUlUM4lmj8CGrSK8eQKURFvo8er5d4h6+1k
+t8tDEbv91nG0u41Q2lVcJHu9GA+yH5JO5OuT+o4zRkzg3P6i51TurlImlkx1KnmwsMMJcykfW2VP
+l+ut9zyKMvQ2KEpR7/NlIJv7mPW3f91H8cSEbwY72RG+9pC84F8VFrIpxmXmFLoaTN6E2K32pZFd
+KP/iXXguqhSAsVBLEkXp5A==</ds:X509Certificate></ds:X509Data></ds:KeyInfo></md:KeyDescriptor><md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</md:NameIDFormat><md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress</md:NameIDFormat><md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://jllpoc.oktapreview.com/app/jllpocuat_horizon2080uatsamlap_1/exki1fjm7oNRdj9HG0h7/sso/saml"/><md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://jllpoc.oktapreview.com/app/jllpocuat_horizon2080uatsamlap_1/exki1fjm7oNRdj9HG0h7/sso/saml"/></md:IDPSSODescriptor></md:EntityDescriptor>

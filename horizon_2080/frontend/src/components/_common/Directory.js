@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 
 const Directory = (props) => {
+    const { folder, target } = props;
     return (
         <div>
-            <h4 style={{marginTop: 0}}>Folder 1 / Target 1</h4>
+            <h4>
+                {folder} / {target}
+            </h4>
         </div>
     );
 };

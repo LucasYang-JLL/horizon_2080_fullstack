@@ -1,5 +1,6 @@
 import { combineReducers } from "redux";
 import { language, slideState, userID } from "./headerStore";
+import { OpenEventID } from "./eventStore";
 import { editContent, target_details_data, snackbarProp, targetUpdate } from "./performanceStore";
 // combines everything into a single entry point for store
 export default combineReducers({
@@ -9,5 +10,6 @@ export default combineReducers({
     editContent,
     target_details_data,
     snackbarProp,
-    targetUpdate
+    targetUpdate,
+    OpenEventID
 });

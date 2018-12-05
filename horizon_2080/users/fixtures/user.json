@@ -14,7 +14,7 @@
         "pk": 2,
         "fields": {
             "email": "yuanly.li@ap.jll.com",
-            "name": "yuanly.li",
+            "name": "Yuanly.Li",
             "department": "TDIM",
             "city": "Shanghai"
         }
@@ -24,7 +24,7 @@
         "pk": 3,
         "fields": {
             "email": "ly.yuanli@gmail.com",
-            "name": "yuan.li",
+            "name": "Yuan.Li",
             "department": "TDIM",
             "city": "Shanghai"
         }

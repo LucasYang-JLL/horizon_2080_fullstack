@@ -17,13 +17,13 @@ def my_scheduled_job():
             upTillNow = (datetime.date.today() - element['start_date']).total_seconds()
             timeLapse = upTillNow / total_duration
             progress = element['progress']/100
-            print(timeLapse, progress)
+            print('time lapsed:',timeLapse)
+            print('progress(%):', progress)
             if (timeLapse >= threshold_1 and timeLapse < threshold_2 and progress < threshold_1):
                 print('this target is behind progress, sending email to user')
                 remind_list.append({"target": element["created_by_id"], "template": "template 1"})
             elif (timeLapse >= threshold_2 and progress < 1):
                 print('this target is almost due, please wrap up the last details')
                 remind_list.append({"target": element["created_by_id"], "template": "template 2"})
-    
     print(remind_list)
     pass

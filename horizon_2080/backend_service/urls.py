@@ -20,5 +20,6 @@ urlpatterns = [
     path('api/fetch_event_by_sub_target/<int:sub_target_id>/', views.QueryEventBySubTarget.as_view() ),
     path('api/create_event_by_sub_target/<int:sub_target_id>/', views.CreateEventBySubTarget.as_view() ),
     path('api/update_event_by_sub_target/<int:pk>/', views.UpdateEventBySubTarget.as_view() ),
-    path('api/fetch_sub_target_and_event_limit_10/', views.QuerySubTargetAndEventDateDesc.as_view() ),
+    path('api/fetch_recent_sub_target_and_event/', views.QuerySubTargetAndEventDateDesc.as_view() ),
+    path('api/fetch_recent_comments/', views.QueryEventDateDesc.as_view() ),
 ]

@@ -9,12 +9,16 @@ import classNames from "classnames";
 import Tabs from "./_common/Tabs";
 import TabsContainer from "./_containers/TabsContainer";
 import Slide from "@material-ui/core/Slide";
-import Navigation from "./_common/Navigation";
+import CommentsList from "./CommentsList";
+import WithLoadingScreen from "./_common/WithLoadingScreen";
 import CommentsField from "./sub_components/CommentsField";
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
 import ClearIcon from "@material-ui/icons/Clear";
 import ForumIcon from "@material-ui/icons/Forum";
+import axios from "axios";
+axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+axios.defaults.xsrfCookieName = "csrftoken";
 
 const styles = (theme) => ({
     root: {
@@ -61,13 +65,45 @@ const styles = (theme) => ({
 
 class Comments extends Component {
     state = {
-        activeTab: 0
+        activeTab: 0,
+        data: [],
+        emptyRecord: false,
     };
+
+    componentDidMount() {
+        this.fetchRecentSubtargetAndEvent();
+    }
 
     handleTabChange = (event, value) => {
         this.setState({ activeTab: value }, () => {
             // console.log(this.state.activeTab);
         });
+    };
+
+    fetchRecentSubtargetAndEvent = () => {
+        axios
+            .get("/api/fetch_recent_comments/")
+            .then((response) => {
+                // handle success
+                console.log(response.data);
+                // handle success
+                if (response.data.length === 0) {
+                    this.setState({
+                        emptyRecord: true
+                    });
+                } else {
+                    this.setState({
+                        data: response.data
+                    });
+                }
+            })
+            .catch((error) => {
+                // handle error
+                console.log(error);
+            })
+            .then(() => {
+                // always executed
+            });
     };
 
     render() {
@@ -85,8 +121,8 @@ class Comments extends Component {
             <Slide direction={slideState} in mountOnEnter unmountOnExit>
                 <div className={classes.root}>
                     <div className={classes.toolbar} />
-                    <Navigation depth={depth} history={history} slideFunc={this.props.slideDirection} component="comments" />
-                    Comments
+                    <h2 style={{ margin: 0 }}>Recent Comments</h2>
+                    <CommentsListWithLoad history={history} data={this.state.data} emptyRecord={this.state.emptyRecord} />
                 </div>
             </Slide>
         );
@@ -101,6 +137,8 @@ Comments.defaultProps = {
     docked: false,
     classes: {}
 };
+
+const CommentsListWithLoad = WithLoadingScreen(CommentsList);
 
 class DockedLeft extends Component {
     render() {
@@ -172,7 +210,6 @@ class FullscreenComment extends Component {
     render() {
         const { classes, activeTab, handleTabChange, isCommentActive, toggleComment, history, match } = this.props;
         // console.log(isCommentActive);
-
         return (
             <Dialog fullScreen open={isCommentActive} onClose={toggleComment} TransitionComponent={Transition}>
                 {/* <div className={classNames(classes.toolbar)} style={{opacity: 0}} /> */}

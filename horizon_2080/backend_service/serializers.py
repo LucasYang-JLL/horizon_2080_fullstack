@@ -51,3 +51,12 @@ class EventAndSubTargetSerializer(serializers.ModelSerializer):
     class Meta:
         model = horizon_target_individual
         fields = ['sub_target', 'event', 'name', 'folder', 'id']
+
+
+class CombinedCommentSerializer(serializers.ModelSerializer):
+    # serializing event. nested JSON
+    comment = CommentSerializer(many = True, read_only=True, source='comment_set')
+    folder = FolderSerializer()
+    class Meta:
+        model = horizon_target_individual
+        fields = ['comment', 'name', 'folder', 'id']

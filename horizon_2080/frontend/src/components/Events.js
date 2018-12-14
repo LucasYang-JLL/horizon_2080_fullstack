@@ -14,6 +14,7 @@ const styles = (theme) => ({
         flexGrow: 1,
         backgroundColor: theme.palette.background.default,
         padding: theme.spacing.unit * 3,
+        overflow: "auto",
         minWidth: 0 // So the Typography noWrap works
     },
     toolbar: theme.mixins.toolbar
@@ -31,7 +32,7 @@ class Events extends Component {
 
     fetchRecentSubtargetAndEvent = () => {
         axios
-            .get("/api/fetch_sub_target_and_event_limit_10/")
+            .get("/api/fetch_recent_sub_target_and_event/")
             .then((response) => {
                 // handle success
                 console.log(response.data);

@@ -32,7 +32,7 @@ const translationConfig = {
         en: {
             "header.drawers": `Performance, Events, Comments / Reply, Actions, Settings`,
             "navigation.performance.title": `Target, Details`,
-            "navigation.comments.title": `My Comments`,
+            "navigation.comments.title": `Recent Comments`,
             "tab.comments.title": "Comments, Actions",
             "tab.details.title": "Summary, Sub Target",
             "details.field.target_name": "Target Name",

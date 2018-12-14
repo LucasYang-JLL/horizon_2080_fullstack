@@ -9,6 +9,7 @@ import Typography from "@material-ui/core/Typography";
 import WithLoadingScreen from "./_common/WithLoadingScreen";
 import ListIcon from "@material-ui/icons/List";
 import DoneIcon from "@material-ui/icons/Done";
+import DoneAllIcon from "@material-ui/icons/DoneAll";
 import Form from "./_common/Form";
 import { compose } from "redux";
 import Divider from "@material-ui/core/Divider";
@@ -310,14 +311,22 @@ function CardContainer(props) {
                         <div className={classes.spacer} />
                         <div className={classes.labelWrapper}>
                             <div className={classes.spacer} />
-                            <div className={classes.cardLabel}>
-                                <ListIcon />
-                                <span>{total_target}</span>
-                            </div>
-                            <div className={classes.cardLabel}>
-                                <DoneIcon />
-                                <span>{completed_target}</span>
-                            </div>
+                            {completed_target / total_target === 1 ? (
+                                <div className={classes.cardLabel} style={{ color: "#4CAF50" }}>
+                                    <DoneAllIcon />
+                                </div>
+                            ) : (
+                                <Fragment>
+                                    <div className={classes.cardLabel}>
+                                        <ListIcon />
+                                        <span>{total_target}</span>
+                                    </div>
+                                    <div className={classes.cardLabel}>
+                                        <DoneIcon />
+                                        <span>{completed_target}</span>
+                                    </div>
+                                </Fragment>
+                            )}
                         </div>
                     </CardContent>
                 </Card>

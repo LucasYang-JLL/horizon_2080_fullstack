@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
 from django.http import JsonResponse
+from django.db.models import Max
 from rest_framework import generics
 from backend_service.models import *
 from backend_service.serializers import *
@@ -254,6 +255,22 @@ class QuerySubTargetAndEventDateDesc(generics.ListCreateAPIView):
         nameList = [userID]
         for user in userArr:
             nameList.append(user.name)
-        newSet = horizon_target_individual.objects.all().filter(created_by_id__in = nameList).exclude(event__isnull=True, sub_target_individual__isnull=True)
-        print(newSet[0].folder.name)
-        return newSet
+
+        horizon_target_individual_Annotated = horizon_target_individual.objects.annotate(latest_id = Max('sub_target_individual__id')) # annotated with sub target's newest id
+        filtered_list = horizon_target_individual_Annotated.all().filter(created_by_id__in = nameList).exclude(event__isnull=True, sub_target_individual__isnull=True).order_by('-latest_id') # order the list by the newest sub target at the front
+        limited_filter_list = filtered_list[:5]
+        return limited_filter_list
+
+class QueryEventDateDesc(generics.ListCreateAPIView):
+    serializer_class = CombinedCommentSerializer
+    def get_queryset(self):
+        userID = self.request.user.name # my user id
+        userArr = self.request.user.user_set.all() # the users that report to me
+        nameList = [userID]
+        for user in userArr:
+            nameList.append(user.name)
+
+        horizon_target_individual_Annotated = horizon_target_individual.objects.annotate(latest_id = Max('comment__id')) # annotated with sub target's newest id
+        filtered_list = horizon_target_individual_Annotated.all().filter(created_by_id__in = nameList).exclude(comment__isnull=True).order_by('-latest_id') # order the list by the newest sub target at the front
+        limited_filter_list = filtered_list[:5]
+        return limited_filter_list

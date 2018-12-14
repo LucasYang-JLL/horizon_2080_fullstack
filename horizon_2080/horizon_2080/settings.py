@@ -138,7 +138,7 @@ EMAIL_PORT = 1025
 # EMAIL_HOST = 'relay3.ap.jllnet.com'
 # EMAIL_PORT = 25
 # EMAIL_HOST_USER = 'TDIM.China@ap.jll.com'
-# EMAIL_HOST_PASSWORD = '7/#Mgz]/'
+# EMAIL_HOST_PASSWORD = '7ujm*IK<'
 
 
 # Internationalization

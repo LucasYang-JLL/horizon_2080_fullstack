@@ -29,6 +29,7 @@ class horizon_target_individual(models.Model):
     user_role_id = models.PositiveIntegerField(default=0)
     city = models.CharField(max_length=100, null=True, blank=True)
     created_by_id = models.CharField(max_length=100)
+    urgent = models.BooleanField(blank=True, default=False)
     def __str__(self):
         return self.name
 
@@ -57,5 +58,4 @@ class comment(models.Model):
     create_date = models.DateTimeField(default=datetime.datetime.now)
     modify_date = models.DateTimeField(default=datetime.datetime.now)
     created_by_id = models.CharField(max_length=100)
-
 

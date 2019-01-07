@@ -122,6 +122,7 @@ class Details extends Component {
     render() {
         const { classes, history } = this.props;
         const { slideState, editContent, target_details_data, targetUpdate } = this.props.reduxState;
+        // console.log(target_details_data);
         const { pathname } = this.props.location;
         let depth = pathname.split("/").filter((value) => value !== "").length;
         return (

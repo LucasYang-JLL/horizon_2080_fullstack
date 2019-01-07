@@ -9,6 +9,7 @@ import classNames from "classnames";
 import DetailsContainer from "./_containers/DetailsContainer";
 import WithLoadingScreen from "./_common/WithLoadingScreen";
 import Form from "./_common/Form";
+import { FormattedMessage } from "react-intl";
 import axios from "axios";
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
@@ -134,10 +135,10 @@ class Performance extends Component {
             })
             .then(() => {
                 // update folder item counts
-                console.log(this.state.tableData.length)
+                // console.log(this.state.tableData.length);
                 if (this.state.tableData.length === 0) return;
                 this.fetchFolderInfo().then((folder_info) => {
-                    console.log(this.state.tableData[0])
+                    // console.log(this.state.tableData[0]);
                     const db_total_count = folder_info.total_target;
                     const db_completed_count = folder_info.completed_target;
                     const folder_id = this.state.tableData[0].folder;
@@ -198,15 +199,19 @@ class Performance extends Component {
                         <Navigation buttonType={"add"} depth={depth} history={this.props.history} slideFunc={this.props.slideDirection} buttonMethod={this.addPerformance} component="performance" />
                         <Fragment>
                             <TableWithLoad emptyRecord={this.state.emptyRecord} folderTitle={this.state.folderTitle} data={this.state.tableData} {...otherProps} />
-                            <Form
-                                title="Add New Target"
-                                toggleSnackbar={this.props.toggleSnackbar}
-                                open={this.state.openForm}
-                                toggle={this.addPerformance}
-                                inputFields={inputFields}
-                                endpoint={`/api/create_horizon_target_individual/${this.props.match.params.id}/`}
-                                folder_id={this.props.match.params.id}
-                            />
+                            <FormattedMessage id={"target.add.title"}>
+                                {(msg) => (
+                                    <Form
+                                        title={msg}
+                                        toggleSnackbar={this.props.toggleSnackbar}
+                                        open={this.state.openForm}
+                                        toggle={this.addPerformance}
+                                        inputFields={inputFields}
+                                        endpoint={`/api/create_horizon_target_individual/${this.props.match.params.id}/`}
+                                        folder_id={this.props.match.params.id}
+                                    />
+                                )}
+                            </FormattedMessage>
                         </Fragment>
                     </div>
                 </Fragment>

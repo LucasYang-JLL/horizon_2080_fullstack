@@ -9,6 +9,7 @@ import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Tooltip from "@material-ui/core/Tooltip";
 
 const rows = [
+    { id: "urgent", numeric: false, disablePadding: true, label: "urgency" },
     { id: "name", numeric: false, disablePadding: true, label: "Target Name" },
     { id: "description", numeric: false, disablePadding: true, label: "Target Description" },
     { id: "critical_flag", numeric: false, disablePadding: true, label: "20%" },

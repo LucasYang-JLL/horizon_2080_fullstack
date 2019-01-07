@@ -12,7 +12,7 @@ const styles = (theme) => ({
     root: {
         width: "100%",
         flex: "1 1 100%",
-        maxWidth: 360,
+        // maxWidth: 360,
         backgroundColor: theme.palette.background.paper
     }
 });
@@ -96,7 +96,7 @@ class EventList extends Component {
                                           />
                                           <br />
                                           <li>
-                                              <Divider />
+                                              <Divider light />
                                           </li>
                                       </Fragment>
                                   ) : (
@@ -105,18 +105,23 @@ class EventList extends Component {
                                               <ListItemText primary={event.name} secondary={getDate(event.create_date)} />
                                           </ListItem>
                                           <li>
-                                              <Divider />
+                                              <Divider light />
                                           </li>
                                       </Fragment>
                                   )
                               )
                             : events.map(({ name, create_date }, index) => (
                                   <Fragment key={index}>
+                                      {index === 0 ? (
+                                          <li>
+                                              <Divider light />
+                                          </li>
+                                      ) : null}
                                       <ListItem onClick={() => this.handleEdit(index)}>
                                           <ListItemText primary={name} secondary={getDate(create_date)} />
                                       </ListItem>
                                       <li>
-                                          <Divider />
+                                          <Divider light />
                                       </li>
                                   </Fragment>
                               ))

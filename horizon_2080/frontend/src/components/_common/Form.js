@@ -51,7 +51,7 @@ class Form extends React.Component {
     }
 
     handleChange = (name, value) => {
-        console.log(name, value);
+        // console.log(name, value);
         this.setState({
             ...this.state,
             fields: {
@@ -132,12 +132,20 @@ class Form extends React.Component {
                         ))}
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={toggle} color="primary">
-                            Cancel
-                        </Button>
-                        <Button type="submit" color="primary">
-                            Submit
-                        </Button>
+                        <FormattedMessage id={"generic.button.cancel"}>
+                            {(msg) => (
+                                <Button onClick={toggle} color="primary">
+                                    {msg}
+                                </Button>
+                            )}
+                        </FormattedMessage>
+                        <FormattedMessage id={"generic.button.submit"}>
+                            {(msg) => (
+                                <Button type="submit" color="primary">
+                                    {msg}
+                                </Button>
+                            )}
+                        </FormattedMessage>
                     </DialogActions>
                 </form>
             </Dialog>

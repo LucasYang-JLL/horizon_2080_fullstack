@@ -8,6 +8,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 import getDate from "./_utils/getDate";
 import Divider from "@material-ui/core/Divider";
+import { FormattedMessage } from "react-intl";
 
 const styles = (theme) => ({
     content: {
@@ -41,44 +42,37 @@ class CommentsList extends Component {
         const { classes, data } = this.props;
         // console.log(data);
         return (
-            <div className={classes.content}>
-                {data.map(({ comment, name, folder, id }, index) => {
+            <FormattedMessage id={"recent.text.recent_comments"}>
+                {(msg) => {
+                    let msgArr = msg.split(",");
                     return (
-                        <Fragment key={index}>
-                            <Directory folder={folder.name} target={name} />
-                            <Divider />
-                            {comment.reverse().map(({ message, create_date, created_by_id }) => {
+                        <div className={classes.content}>
+                            {data.map(({ comment, name, folder, id }, index) => {
                                 return (
-                                    <ListItem key={create_date}>
-                                        <ChatBubbleOutlineIcon fontSize="small" style={{marginRight: "8px"}} />
-                                        <p className={classes.pStyle}>
-                                            {created_by_id} posted <b>Comment</b>: "
-                                            <span className={classes.linkStyle} onClick={() => this.handleOpenTargetRequest(id)}>
-                                                {message}
-                                            </span>
-                                            " <span className={classes.dateStyle}>{getDate(create_date)}</span>
-                                        </p>
-                                    </ListItem>
+                                    <Fragment key={index}>
+                                        <Directory folder={folder.name} target={name} />
+                                        <Divider />
+                                        {comment.reverse().map(({ message, create_date, created_by_id }) => {
+                                            return (
+                                                <ListItem key={create_date}>
+                                                    <ChatBubbleOutlineIcon fontSize="small" style={{ marginRight: "8px" }} />
+                                                    <p className={classes.pStyle}>
+                                                        {created_by_id} {msgArr[0]} <b>{msgArr[1]}</b>: "
+                                                        <span className={classes.linkStyle} onClick={() => this.handleOpenTargetRequest(id)}>
+                                                            {message}
+                                                        </span>
+                                                        " <span className={classes.dateStyle}>{getDate(create_date)}</span>
+                                                    </p>
+                                                </ListItem>
+                                            );
+                                        })}
+                                    </Fragment>
                                 );
                             })}
-                        </Fragment>
+                        </div>
                     );
-                })}
-                {/* <Directory />
-                <Divider />
-                <List>
-                    <ListItem>
-                        <p className={classes.pStyle}>
-                            Lucas added sub-target: "get this done" <span className={classes.dateStyle}>22-11-2018</span>
-                        </p>
-                    </ListItem>
-                    <ListItem>
-                        <p className={classes.pStyle}>
-                            Benson recorded Event "Done! Boss" on sub-target: "get this done" <span className={classes.dateStyle}>22-11-2018</span>
-                        </p>
-                    </ListItem>
-                </List> */}
-            </div>
+                }}
+            </FormattedMessage>
         );
     }
 }

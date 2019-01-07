@@ -155,15 +155,15 @@ class CommentList extends Component {
                                       </Fragment>
                                   )
                               )
-                            : comments.map(({ message, create_date }, index) => (
+                            : comments.map(({ message, create_date, created_by_id }, index) => (
                                   <Fragment key={index}>
                                       <ListItem className={classes.liStyle}>
                                           <div className={classes.avatarWrapper}>
-                                              <Avatar className={classes.avatar}>LY</Avatar>
+                                              <Avatar className={classes.avatar}>{created_by_id.split('.').map((value) => value[0]).join('').toUpperCase()}</Avatar>
                                           </div>
                                           <div className={classes.liContentWrapper}>
                                               <div className={classes.liTitleWrapper}>
-                                                  <div className={classes.nameTextStyle}>Lucas Yang</div>
+                                                  <div className={classes.nameTextStyle}>{created_by_id.split('.').join(" ")}</div>
                                                   <div className={classes.secondaryTextStyle}>{getDate(create_date)}</div>
                                               </div>
                                               <div className={classes.primaryTextStyle}>{message}</div>

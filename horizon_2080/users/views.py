@@ -18,5 +18,5 @@ def UserAndSubsetQuery(request):
     userArr = request.user.user_set.all() # the users that report to me
     nameList = []
     for user in userArr:
-        nameList.append(user.name)
+        nameList.append({"name": user.name, "department": user.department})
     return JsonResponse({"userList": nameList})

@@ -10,6 +10,9 @@ import Paper from "@material-ui/core/Paper";
 import EnhancedTableHead from "./TableHeader";
 import EnhancedTableToolbar from "./TableToolbar";
 import Slide from "@material-ui/core/Slide";
+import FiberManualRecord from "@material-ui/icons/FiberManualRecord";
+import Tooltip from "@material-ui/core/Tooltip";
+import { FormattedMessage } from "react-intl";
 import Checkbox from "@material-ui/core/Checkbox";
 import axios from "axios";
 
@@ -30,7 +33,11 @@ const styles = (theme) => ({
     },
     tableCell: {
         width: "150px",
-        minWidth: "120px"
+        minWidth: "150px"
+    },
+    tableCellSmall: {
+        width: "60px",
+        minWidth: "60px"
     },
     tableCellLarge: {
         width: "200px",
@@ -149,6 +156,7 @@ class EnhancedTable extends React.Component {
                                         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                         .map((n) => {
                                             const isSelected = this.isSelected(n.id);
+                                            console.log(n);
                                             return (
                                                 <TableRow
                                                     hover
@@ -158,10 +166,19 @@ class EnhancedTable extends React.Component {
                                                     tabIndex={-1}
                                                     key={n.id}
                                                     selected={isSelected}
+                                                    style={{ cursor: "pointer" }}
                                                 >
-                                                    {/* <TableCell padding="checkbox">
-                                                <Checkbox checked={isSelected} />
-                                            </TableCell> */}
+                                                    <TableCell className={classes.tableCellSmall} padding="dense">
+                                                        {n.urgent ? (
+                                                            <Tooltip title="Behind Schedule" placement="bottom-start">
+                                                                <FiberManualRecord fontSize="small" style={{ color: "#E30613" }} />
+                                                            </Tooltip>
+                                                        ) : (
+                                                            <Tooltip title="On Schedule" placement="bottom-start">
+                                                                <FiberManualRecord fontSize="small" style={{ color: "#4CAF50" }} />
+                                                            </Tooltip>
+                                                        )}
+                                                    </TableCell>
                                                     <TableCell className={classes.tableCellLarge} component="th" scope="row">
                                                         {n.name}
                                                     </TableCell>
@@ -182,7 +199,7 @@ class EnhancedTable extends React.Component {
                             </Table>
                         ) : (
                             <div style={{ height: 49 * emptyRows, display: "flex", alignItems: "center", justifyContent: "center", color: "#808080" }}>
-                                <div style={{ margin: "16px" }}>Looks like there's no targets. Create a new one now</div>
+                                <FormattedMessage id={"target.creation.message"}>{(msg) => <div style={{ margin: "16px" }}>{msg}</div>}</FormattedMessage>
                             </div>
                         )}
                     </div>
@@ -209,10 +226,10 @@ class EnhancedTable extends React.Component {
 }
 
 EnhancedTable.propTypes = {
-    classes: PropTypes.object.isRequired,
+    classes: PropTypes.object.isRequired
 };
 EnhancedTable.defaultProps = {
-    classes: {},
+    classes: {}
 };
 
 EnhancedTable = withStyles(styles)(EnhancedTable);

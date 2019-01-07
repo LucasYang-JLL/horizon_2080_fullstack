@@ -6,6 +6,7 @@ import Progress from "../_common/Progress";
 import Checklist from "../_common/Checklist";
 import SingleInput from "../_common/SingleInput";
 import SubtargetEvent from "./SubtargetEvent";
+import { FormattedMessage } from "react-intl";
 import axios from "axios";
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
@@ -270,17 +271,25 @@ class SubtargetField extends Component {
                         {/* Progress: 0% */}
                         <Checklist arr={this.state.data} toggleChecklist={this.toggleChecklist} editItem={this.handleCheckListClick} />
                         {!this.state.openForm ? (
-                            <Button className={classes.button} fullWidth onClick={this.toggleForm} disableRipple>
-                                Add a task...
-                            </Button>
+                            <FormattedMessage id={"sub_target.button.add"}>
+                                {(msg) => (
+                                    <Button className={classes.button} fullWidth onClick={this.toggleForm} disableRipple>
+                                        {msg}
+                                    </Button>
+                                )}
+                            </FormattedMessage>
                         ) : (
                             <SingleInput handleInput={this.handleInput} handleKeypress={this.handleKeypress} inputValue={this.state.textMessage} toggleForm={this.toggleForm} submit={this.addTask} />
                         )}
                     </div>
                 ) : !this.state.openForm ? (
-                    <Button className={classes.button} fullWidth onClick={this.toggleForm} disableRipple>
-                        Add a task...
-                    </Button>
+                    <FormattedMessage id={"sub_target.button.add"}>
+                        {(msg) => (
+                            <Button className={classes.button} fullWidth onClick={this.toggleForm} disableRipple>
+                                {msg}
+                            </Button>
+                        )}
+                    </FormattedMessage>
                 ) : (
                     <SingleInput handleInput={this.handleInput} handleKeypress={this.handleKeypress} inputValue={this.state.textMessage} toggleForm={this.toggleForm} submit={this.addTask} />
                 )}

@@ -48,7 +48,8 @@ INSTALLED_APPS = [
 AUTH_USER_MODEL = 'users.User'
 
 CRONJOBS = [
-    ('*/1 * * * *', 'backend_service.crontab.my_scheduled_job')
+    # ('*/1 * * * *', 'backend_service.crontab.my_scheduled_job'),
+    ('*/1 * * * *', 'backend_service.crontab.target_urgency')
 ]
 
 CRON_CLASSES = [
@@ -130,15 +131,15 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # development email config
-EMAIL_HOST = 'localhost'
-EMAIL_PORT = 1025
+# EMAIL_HOST = 'localhost'
+# EMAIL_PORT = 1025
 
 # production email config
-# EMAIL_USE_TLS = False
-# EMAIL_HOST = 'relay3.ap.jllnet.com'
-# EMAIL_PORT = 25
-# EMAIL_HOST_USER = 'TDIM.China@ap.jll.com'
-# EMAIL_HOST_PASSWORD = '7ujm*IK<'
+EMAIL_USE_TLS = False
+EMAIL_HOST = 'relay3.ap.jllnet.com'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = 'TDIM.China@ap.jll.com'
+EMAIL_HOST_PASSWORD = '7ujm*IK<'
 
 
 # Internationalization

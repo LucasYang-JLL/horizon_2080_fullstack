@@ -4,7 +4,12 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import { FormattedMessage } from "react-intl";
 import classNames from "classnames";
+import Switch from "@material-ui/core/Switch";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import SaveIcon from "@material-ui/icons/Save";
+import StarBorder from "@material-ui/icons/StarBorder";
+import Star from "@material-ui/icons/Star";
+import Checkbox from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
@@ -51,7 +56,8 @@ const styles = (theme) => ({
     },
     iconSmall: {
         fontSize: 20
-    }
+    },
+    disabledStarStyle: { color: "#e30613" }
 });
 
 const inputFields = [
@@ -125,6 +131,7 @@ class DetailsField extends Component {
             });
     };
 
+    // loops through the field array and render them, toggle disable based on if editContent
     Fields = () => {
         const { classes, editContent } = this.props;
         return inputFields.map(({ type, label, name, required, props, disabled }) => (
@@ -167,6 +174,19 @@ class DetailsField extends Component {
                 }}
             >
                 <this.Fields />
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            classes={{ disabled: classes.disabledStarStyle }}
+                            icon={<StarBorder />}
+                            checkedIcon={<Star />}
+                            value="checked"
+                            checked={this.state.fields.critical_flag}
+                            onChange={(e) => (editContent ? this.props.handleChange("critical_flag", !this.state.fields.critical_flag) : null)}
+                        />
+                    }
+                    label="20%"
+                />
                 {editContent ? (
                     <Button type="submit" variant="contained" size="small" className={classes.button}>
                         <SaveIcon className={classNames(classes.leftIcon, classes.iconSmall)} />

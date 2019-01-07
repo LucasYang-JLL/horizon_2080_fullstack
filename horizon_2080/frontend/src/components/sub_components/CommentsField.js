@@ -108,14 +108,14 @@ class CommentsField extends Component {
     };
 
     handleCommentInput = (e) => {
-        console.log(e.target.value);
+        // console.log(e.target.value);
         this.setState({
             inputValue: e.target.value
         });
     };
 
     submitComment = () => {
-        console.log(this.props);
+        // console.log(this.props);
         const endpoint = `/api/create_comment_by_target/${this.props.match.params.id}/`;
         // post to database
         axios

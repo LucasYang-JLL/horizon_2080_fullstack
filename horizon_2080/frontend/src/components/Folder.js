@@ -12,7 +12,9 @@ import DoneIcon from "@material-ui/icons/Done";
 import DoneAllIcon from "@material-ui/icons/DoneAll";
 import Form from "./_common/Form";
 import { compose } from "redux";
+import FilterBar from "./_common/FilterBar";
 import Divider from "@material-ui/core/Divider";
+import { FormattedMessage } from "react-intl";
 import axios from "axios";
 import color from "../MuiTheme/color";
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
@@ -20,7 +22,8 @@ axios.defaults.xsrfCookieName = "csrftoken";
 
 const styles = (theme) => ({
     content: {
-        display: "flex",
+        // display: "flex",
+        overflow: "auto",
         width: "100%",
         flexDirection: "column",
         flexGrow: 1,
@@ -134,7 +137,22 @@ class Folder extends Component {
         openModal: false,
         emptyRecord: false,
         newFolderTitle: "",
-        userList: []
+        userList: [],
+        Departments: [],
+        Users: [
+            // {
+            //     name: "Lucas.Yang",
+            //     department: "TDIM",
+            //     active: true,
+            //     visible: true
+            // },
+            // {
+            //     name: "Tammy.Yu",
+            //     department: "Markets",
+            //     active: false,
+            //     visible: true
+            // }
+        ]
     };
 
     componentDidMount() {
@@ -171,9 +189,15 @@ class Folder extends Component {
             .get("/api/user_subset_info/")
             .then((response) => {
                 // handle success
-                console.log(response.data);
+                let userList = response.data.userList.map(({ name }) => name);
+                let Departments = response.data.userList.map(({ department }) => department);
+                let uniqueDepartments = [...new Set(Departments)].map((department) => ({ name: department, active: true }));
+                let Users = response.data.userList.map(({ name, department }) => ({ name, department, active: true, visible: true }));
+                // console.log(Users);
                 this.setState({
-                    userList: response.data.userList
+                    userList,
+                    Departments: uniqueDepartments,
+                    Users
                 });
             })
             .catch((error) => {
@@ -205,6 +229,30 @@ class Folder extends Component {
         });
     };
 
+    filterItemClickHandler = (name, index) => {
+        this.setState((prevState) => {
+            let arr = [...prevState[name]];
+            arr[index].active = !arr[index].active;
+            return {
+                [name]: arr
+            };
+        });
+        if (name === "Departments") {
+            let userArr = [...this.state.Users];
+            userArr.map((user) => {
+                if (user.department === this.state.Departments[index].name) {
+                    user.visible = !user.visible;
+                    user.active = !user.active;
+                    return user;
+                }
+                return user;
+            });
+            this.setState({
+                Users: userArr
+            });
+        }
+    };
+
     render() {
         const { classes } = this.props;
         const { slideState, userID } = this.props.reduxState;
@@ -212,8 +260,10 @@ class Folder extends Component {
             <Slide direction={slideState} in mountOnEnter unmountOnExit>
                 <div className={classes.content}>
                     <div className={classes.toolbar} />
+                    <FilterBar filterItemClickHandler={this.filterItemClickHandler} Departments={this.state.Departments} Users={this.state.Users} />
                     {/* <h2 style={{ marginTop: 0 }}>Campaigns</h2> */}
-                    {<h3>My projects</h3>}
+
+                    <FormattedMessage id={"folder.title.self"}>{(msg) => <h3>{msg}</h3>}</FormattedMessage>
                     <Divider />
                     <CardWithLoad
                         toggleNewFolderModal={this.toggleNewFolderModal}
@@ -226,23 +276,32 @@ class Folder extends Component {
                         history={this.props.history}
                         creatable={true}
                     />
-                    {this.state.userList.map((user) =>
-                        this.state.cards.filter(({ created_by_id }) => created_by_id === user).length !== 0 ? (
-                            <Fragment key={user}>
-                                {<h3>{user}'s projects</h3>}
-                                <Divider />
-                                <CardWithLoad
-                                    toggleNewFolderModal={this.toggleNewFolderModal}
-                                    handleCardClick={this.handleCardClick}
-                                    hover={this.state.hover}
-                                    setHover={this.setHover}
-                                    openModal={this.state.openModal}
-                                    data={this.state.cards.filter(({ created_by_id }) => created_by_id === user)}
-                                    emptyRecord={this.state.emptyRecord}
-                                    history={this.props.history}
-                                    creatable={false}
-                                />
-                            </Fragment>
+                    {this.state.Users.map((user) =>
+                        this.state.cards.filter(({ created_by_id }) => created_by_id === user.name).length !== 0 ? (
+                            user.active ? (
+                                <Fragment key={user.name}>
+                                    <FormattedMessage id={"folder.title.others"}>
+                                        {(msg) => (
+                                            <h3>
+                                                {user.name.split(".").join(" ")}
+                                                {msg}
+                                            </h3>
+                                        )}
+                                    </FormattedMessage>
+                                    <Divider />
+                                    <CardWithLoad
+                                        toggleNewFolderModal={this.toggleNewFolderModal}
+                                        handleCardClick={this.handleCardClick}
+                                        hover={this.state.hover}
+                                        setHover={this.setHover}
+                                        openModal={this.state.openModal}
+                                        data={this.state.cards.filter(({ created_by_id }) => created_by_id === user.name)}
+                                        emptyRecord={this.state.emptyRecord}
+                                        history={this.props.history}
+                                        creatable={false}
+                                    />
+                                </Fragment>
+                            ) : null
                         ) : null
                     )}
                 </div>
@@ -333,18 +392,18 @@ function CardContainer(props) {
             ))}
             {creatable ? (
                 <Fragment>
-                    <Button className={classes.card} variant="outlined" color="primary" onClick={toggleNewFolderModal}>
-                        Create new folder...
-                    </Button>
-                    <Form
-                        title="Enter folder name"
-                        open={openModal}
-                        toggle={toggleNewFolderModal}
-                        endpoint="api/create_horizon_folder/"
-                        inputFields={inputFields}
-                        dest="/performance/"
-                        history={history}
-                    />
+                    <FormattedMessage id={"folder.creation.message"}>
+                        {(msg) => (
+                            <Button className={classes.card} variant="outlined" color="primary" onClick={toggleNewFolderModal}>
+                                {msg}
+                            </Button>
+                        )}
+                    </FormattedMessage>
+                    <FormattedMessage id={"folder.creation.create"}>
+                        {(msg) => (
+                            <Form title={msg} open={openModal} toggle={toggleNewFolderModal} endpoint="api/create_horizon_folder/" inputFields={inputFields} dest="/performance/" history={history} />
+                        )}
+                    </FormattedMessage>
                 </Fragment>
             ) : null}
         </div>

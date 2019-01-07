@@ -16,6 +16,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
 import ClearIcon from "@material-ui/icons/Clear";
 import ForumIcon from "@material-ui/icons/Forum";
+import { FormattedMessage } from "react-intl";
 import axios from "axios";
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
@@ -85,7 +86,7 @@ class Comments extends Component {
             .get("/api/fetch_recent_comments/")
             .then((response) => {
                 // handle success
-                console.log(response.data);
+                // console.log(response.data);
                 // handle success
                 if (response.data.length === 0) {
                     this.setState({
@@ -121,7 +122,7 @@ class Comments extends Component {
             <Slide direction={slideState} in mountOnEnter unmountOnExit>
                 <div className={classes.root}>
                     <div className={classes.toolbar} />
-                    <h2 style={{ margin: 0 }}>Recent Comments</h2>
+                    <FormattedMessage id={"recent.title.comments"}>{(msg) => <h2 style={{ margin: 0 }}>{msg}</h2>}</FormattedMessage>
                     <CommentsListWithLoad history={history} data={this.state.data} emptyRecord={this.state.emptyRecord} />
                 </div>
             </Slide>

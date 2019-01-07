@@ -6,6 +6,7 @@ import Snackbar from "./_common/Snackbar";
 import EventsList from "./EventsList";
 import WithLoadingScreen from "./_common/WithLoadingScreen";
 import axios from "axios";
+import { FormattedMessage } from "react-intl";
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
 
@@ -35,7 +36,7 @@ class Events extends Component {
             .get("/api/fetch_recent_sub_target_and_event/")
             .then((response) => {
                 // handle success
-                console.log(response.data);
+                // console.log(response.data);
                 // handle success
                 if (response.data.length === 0) {
                     this.setState({
@@ -63,7 +64,7 @@ class Events extends Component {
             <Slide direction={slideState} in mountOnEnter unmountOnExit>
                 <div className={classes.content}>
                     <div className={classes.toolbar} />
-                    <h2 style={{ margin: 0 }}>Recent Updates</h2>
+                    <FormattedMessage id={"recent.title.events"}>{(msg) => <h2 style={{ margin: 0 }}>{msg}</h2>}</FormattedMessage>
                     <EventListWithLoad history={history} data={this.state.data} emptyRecord={this.state.emptyRecord} openEventRequest={this.props.openEventRequest} />
                 </div>
             </Slide>

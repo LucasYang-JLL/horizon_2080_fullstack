@@ -12,7 +12,9 @@ import withMobileDialog from "@material-ui/core/withMobileDialog";
 import SingleInput from "../_common/SingleInput";
 import EventList from "./SubtargetEventList";
 import classNames from "classnames";
+import Divider from "@material-ui/core/Divider";
 import WithLoadingScreen from "../_common/WithLoadingScreen";
+import { FormattedMessage } from "react-intl";
 import getDate from "../_utils/getDate";
 import axios from "axios";
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
@@ -34,7 +36,7 @@ const styles = (theme) => ({
     eventListWrapper: {
         width: "100%",
         flex: "1 1 100%",
-        maxWidth: 360,
+        // maxWidth: 360,
         backgroundColor: theme.palette.background.paper
     },
     sidePadding: {
@@ -232,7 +234,7 @@ class SubtargetEvent extends React.Component {
     };
 
     updateEvent = (index, value) => {
-        console.log(index);
+        // console.log(index);
         if (value === this.state.eventList[index].name) return null; // skip update if the input is the same as previously inputted
         let newEvents = [...this.state.eventList];
         newEvents[index].name = value;
@@ -287,14 +289,18 @@ class SubtargetEvent extends React.Component {
                 )}
                 <DialogContent>
                     <div className={classes.dialogContentWrapper}>
-                        <div>Summarize your encounters for this task:</div>
+                        <FormattedMessage id={"event.title.description"}>{(msg) => <div>{msg}:</div>}</FormattedMessage>
                         <div className={classes.eventWrapper}>
                             <div className={classes.eventListWrapper}>
                                 <EventListWithLoad emptyRecord={this.state.emptyRecord} updateEvent={this.updateEvent} data={eventList} />
                                 {!addMode ? (
-                                    <Button className={classes.button} fullWidth onClick={this.toggleAddEvent} disableRipple>
-                                        Record an event...
-                                    </Button>
+                                    <FormattedMessage id={"event.button.add"}>
+                                        {(msg) => (
+                                            <Button className={classes.button} fullWidth onClick={this.toggleAddEvent} disableRipple>
+                                                {msg}
+                                            </Button>
+                                        )}
+                                    </FormattedMessage>
                                 ) : (
                                     <SingleInput
                                         handleInput={this.handleEventInput}
@@ -305,7 +311,7 @@ class SubtargetEvent extends React.Component {
                                     />
                                 )}
                             </div>
-                            <div className={classes.stickerMenu}>Stickers:</div>
+                            {/* <div className={classes.stickerMenu}>Stickers:</div> */}
                         </div>
                     </div>
                 </DialogContent>
@@ -313,9 +319,14 @@ class SubtargetEvent extends React.Component {
                     {/* <Button onClick={toggleEvent} color="primary">
                         Cancel
                     </Button> */}
-                    <Button onClick={toggleEvent} color="primary">
-                        Close
-                    </Button>
+
+                    <FormattedMessage id={"event.button.close"}>
+                        {(msg) => (
+                            <Button onClick={toggleEvent} color="primary">
+                                {msg}
+                            </Button>
+                        )}
+                    </FormattedMessage>
                 </DialogActions>
             </Dialog>
         );

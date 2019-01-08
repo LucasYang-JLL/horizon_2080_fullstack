@@ -68,7 +68,7 @@ class Comments extends Component {
     state = {
         activeTab: 0,
         data: [],
-        emptyRecord: false,
+        emptyRecord: false
     };
 
     componentDidMount() {
@@ -111,7 +111,6 @@ class Comments extends Component {
         const { classes, docked, history, match } = this.props;
         const { slideState } = this.props.reduxState;
         const { pathname } = this.props.location;
-        let depth = pathname.split("/").filter((value) => value !== "").length;
         return docked ? (
             isWidthUp("md", this.props.width) ? (
                 <DockedLeft history={history} match={match} classes={classes} handleTabChange={this.handleTabChange} activeTab={this.state.activeTab} />
@@ -123,7 +122,12 @@ class Comments extends Component {
                 <div className={classes.root}>
                     <div className={classes.toolbar} />
                     <FormattedMessage id={"recent.title.comments"}>{(msg) => <h2 style={{ margin: 0 }}>{msg}</h2>}</FormattedMessage>
-                    <CommentsListWithLoad history={history} data={this.state.data} emptyRecord={this.state.emptyRecord} />
+                    <FormattedMessage id={"recent.text.recentComments"}>
+                        {(msg) => {
+                            let msgArr = msg.split(",");
+                            return <CommentsListWithLoad msgArr={msgArr} history={history} data={this.state.data} emptyRecord={this.state.emptyRecord} />;
+                        }}
+                    </FormattedMessage>
                 </div>
             </Slide>
         );
@@ -214,15 +218,14 @@ class FullscreenComment extends Component {
         return (
             <Dialog fullScreen open={isCommentActive} onClose={toggleComment} TransitionComponent={Transition}>
                 {/* <div className={classNames(classes.toolbar)} style={{opacity: 0}} /> */}
-                <div>
+                {/* <div> */}
                     <Button mini variant="text" color="primary" style={{ position: "absolute", top: "5px", zIndex: 2 }} onClick={toggleComment}>
                         <ClearIcon />
                     </Button>
                     <TabsContainer flexEnd={true} fullWidth={false} activeTab={activeTab} handleTabChange={handleTabChange} msgID="tab.comments.title" />
                     {activeTab === 0 && <CommentsField history={history} match={match} />}
                     {activeTab === 1 && "Notes"}
-                    bottom12345
-                </div>
+                {/* </div> */}
             </Dialog>
         );
     }

@@ -1,13 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 import TextField from "@material-ui/core/TextField";
-import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import IconButton from "@material-ui/core/IconButton";
 import SendIcon from "@material-ui/icons/Send";
 import AlternateEmailIcon from "@material-ui/icons/AlternateEmail";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
+import { FormattedMessage } from "react-intl";
 
 const styles = (theme) => ({
     marginTop: {
@@ -62,7 +62,7 @@ const styles = (theme) => ({
         borderBottom: "1px solid rgba(0, 0, 0, 0.23)",
         borderLeft: "none",
         borderRight: "none",
-        borderRadius: 0,
+        borderRadius: 0
     }
 });
 
@@ -71,29 +71,38 @@ class CommentInput extends React.Component {
         const { classes, handleInput, inputValue, submit, buttonName } = this.props;
         return (
             <div className={classes.messageInputRoot}>
-                <TextField
-                    multiline
-                    required
-                    rows="2"
-                    rowsMax="2"
-                    type="text-field"
-                    placeholder="Enter your comment..."
-                    fullWidth
-                    variant="outlined"
-                    className={classes.textField}
-                    value={inputValue}
-                    onChange={handleInput}
-                    InputProps={{
-                        classes: {
-                            notchedOutline: classes.overrideOutline
-                        }
-                    }}
-                />
+                <FormattedMessage id="comment.text.placeholder">
+                    {(msg) => (
+                        <TextField
+                            multiline
+                            required
+                            rows="2"
+                            rowsMax="2"
+                            type="text-field"
+                            placeholder={msg}
+                            fullWidth
+                            variant="outlined"
+                            className={classes.textField}
+                            value={inputValue}
+                            onChange={handleInput}
+                            InputProps={{
+                                classes: {
+                                    notchedOutline: classes.overrideOutline
+                                }
+                            }}
+                        />
+                    )}
+                </FormattedMessage>
+
                 <div className={classes.commentToolbar}>
                     {/* <Button variant="outlined" mini className={classes.buttonSmall} onClick={submit}>
                         {buttonName}
                     </Button> */}
-                    <IconButton onClick={()=>{console.log("@ some fams")}}>
+                    <IconButton
+                        onClick={() => {
+                            console.log("@ some fams");
+                        }}
+                    >
                         <AlternateEmailIcon fontSize="small" />
                     </IconButton>
                     <IconButton onClick={submit}>

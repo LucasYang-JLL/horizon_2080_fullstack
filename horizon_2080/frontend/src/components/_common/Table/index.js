@@ -156,7 +156,6 @@ class EnhancedTable extends React.Component {
                                         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                         .map((n) => {
                                             const isSelected = this.isSelected(n.id);
-                                            console.log(n);
                                             return (
                                                 <TableRow
                                                     hover

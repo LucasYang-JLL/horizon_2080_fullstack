@@ -5,8 +5,6 @@ import { injectIntl, IntlProvider, FormattedRelative } from "react-intl";
 import { connect } from "react-redux";
 import { addLocaleData } from "react-intl";
 import en from "react-intl/locale-data/en";
-import fr from "react-intl/locale-data/fr";
-import es from "react-intl/locale-data/es";
 import zh from "react-intl/locale-data/zh";
 import { toggleSnackbar } from "../_actions/common";
 
@@ -60,8 +58,10 @@ const translationConfig = {
             "recent.title.events": "Recent Updates",
             "recent.title.comments": "Recent Comments",
             "recent.title.actions": "Recent Actions",
-            "recent.text.recent_updates": " added, Sub-target, posted, Event",
-            "recent.text.recent_comments": " posted, Comment",
+            "recent.text.recentUpdates": ` added, Sub-target, posted, Event`,
+            "recent.text.recentComments": ` posted, Comment`,
+            "comment.text.placeholder": "Enter your comment...",
+            "comment.text.welcomeText": "Looks like there's no comments yet. Be the first one to comment!"
         },
         zh: {
             "header.drawers": "行动目标, 备注概览, 留言概览, 执行备忘, 设置",
@@ -77,7 +77,7 @@ const translationConfig = {
             "details.field.importance": "20%",
             "target.table.label": ` ,目标名称, 目标详情, 20%, 进展, 结束日期, 创建者`,
             "target.add.title": "创建新的目标",
-            "target.creation.message": "看起来还没有创立目标。 添加一个新的吧",
+            "target.creation.message": "看起来还没有目标创立。 添加一个新的吧",
             "sub_target.button.add": "记录行动要点...",
             "folder.field.folder_name": "文件夹",
             "folder.creation.message": "创建新的行动目标...",
@@ -94,8 +94,10 @@ const translationConfig = {
             "recent.title.events": "近期更新",
             "recent.title.comments": "近期留言",
             "recent.title.actions": "近期备忘",
-            "recent.text.recent_updates": " 添加一条, 行动要点, 记录一条,笔记",
-            "recent.text.recent_comments": " 发布一条 ,留言",
+            "recent.text.recentUpdates": ` 添加一条, 行动要点, 记录一条,笔记`,
+            "recent.text.recentComments": ` 发布一条 ,留言`,
+            "comment.text.placeholder": "输入你的留言...",
+            "comment.text.welcomeText": "还没有人留言。发表些观点吧！"
         }
     }
 };
@@ -105,7 +107,7 @@ class RootContainer extends Component {
         let { language, snackbarProp } = this.props.reduxState;
         let { toggleSnackbar } = this.props;
         return (
-            <IntlProvider locale={translationConfig.locale} messages={translationConfig.messages[language]}>
+            <IntlProvider locale={navigator.language} messages={translationConfig.messages[language]}>
                 <Fragment>
                     <CssBaseline />
                     <App toggleSnackbar={toggleSnackbar} snackbarProp={snackbarProp} />

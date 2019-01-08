@@ -9,7 +9,6 @@ import ListAltIcon from "@material-ui/icons/ListAlt";
 import InsertInvitationIcon from "@material-ui/icons/InsertInvitation";
 import getDate from "./_utils/getDate";
 import Divider from "@material-ui/core/Divider";
-import { FormattedMessage } from "react-intl";
 
 const styles = (theme) => ({
     content: {
@@ -48,55 +47,48 @@ class EventsList extends Component {
     };
 
     render() {
-        const { classes, data } = this.props;
+        const { classes, data, msgArr } = this.props;
         return (
-            <FormattedMessage id={"recent.text.recent_updates"}>
-                {(msg) => {
-                    let msgArr = msg.split(",");
+            <div className={classes.content}>
+                {data.map(({ sub_target, event, name, folder, id }, index) => {
                     return (
-                        <div className={classes.content}>
-                            {data.map(({ sub_target, event, name, folder, id }, index) => {
+                        <Fragment key={index}>
+                            <Directory folder={folder.name} target={name} />
+                            <Divider />
+                            {sub_target.reverse().map(({ name, create_date, created_by_id }) => {
                                 return (
-                                    <Fragment key={index}>
-                                        <Directory folder={folder.name} target={name} />
-                                        <Divider />
-                                        {sub_target.reverse().map(({ name, create_date, created_by_id }) => {
-                                            return (
-                                                <ListItem className={classes.listStyle} key={create_date}>
-                                                    <ListAltIcon fontSize="small" style={{ marginRight: "8px" }} />
-                                                    <p className={classes.pStyle}>
-                                                        {created_by_id.split(".").join(" ")}
-                                                        {msgArr[0]}
-                                                        <b>{msgArr[1]}</b>: "
-                                                        <span className={classes.linkStyle} onClick={() => this.handleOpenTargetRequest(id)}>
-                                                            {name}
-                                                        </span>
-                                                        " <span className={classes.dateStyle}>{getDate(create_date)}</span>
-                                                    </p>
-                                                </ListItem>
-                                            );
-                                        })}
-                                        {event.reverse().map(({ name, create_date, created_by_id, target, sub_target }) => {
-                                            return (
-                                                <ListItem className={classes.listStyle} key={create_date}>
-                                                    <InsertInvitationIcon fontSize="small" style={{ marginRight: "8px" }} />
-                                                    <p className={classes.pStyle}>
-                                                        {created_by_id.split(".").join(" ")} {msgArr[2]} <b>{msgArr[3]}</b>: "
-                                                        <span className={classes.linkStyle} onClick={() => this.handleOpenSubtargetRequest(sub_target, target)}>
-                                                            {name}
-                                                        </span>
-                                                        " <span className={classes.dateStyle}>{getDate(create_date)}</span>
-                                                    </p>
-                                                </ListItem>
-                                            );
-                                        })}
-                                    </Fragment>
+                                    <ListItem className={classes.listStyle} key={create_date}>
+                                        <ListAltIcon fontSize="small" style={{ marginRight: "8px" }} />
+                                        <p className={classes.pStyle}>
+                                            {created_by_id.split(".").join(" ")}
+                                            {msgArr[0]}
+                                            <b>{msgArr[1]}</b>: "
+                                            <span className={classes.linkStyle} onClick={() => this.handleOpenTargetRequest(id)}>
+                                                {name}
+                                            </span>
+                                            " <span className={classes.dateStyle}>{getDate(create_date)}</span>
+                                        </p>
+                                    </ListItem>
                                 );
                             })}
-                        </div>
+                            {event.reverse().map(({ name, create_date, created_by_id, target, sub_target }) => {
+                                return (
+                                    <ListItem className={classes.listStyle} key={create_date}>
+                                        <InsertInvitationIcon fontSize="small" style={{ marginRight: "8px" }} />
+                                        <p className={classes.pStyle}>
+                                            {created_by_id.split(".").join(" ")} {msgArr[2]} <b>{msgArr[3]}</b>: "
+                                            <span className={classes.linkStyle} onClick={() => this.handleOpenSubtargetRequest(sub_target, target)}>
+                                                {name}
+                                            </span>
+                                            " <span className={classes.dateStyle}>{getDate(create_date)}</span>
+                                        </p>
+                                    </ListItem>
+                                );
+                            })}
+                        </Fragment>
                     );
-                }}
-            </FormattedMessage>
+                })}
+            </div>
         );
     }
 }

@@ -8,6 +8,7 @@ import SingleInput from "../_common/SingleInput";
 import Avatar from "@material-ui/core/Avatar";
 import getDate from "../_utils/getDate";
 import Divider from "@material-ui/core/Divider";
+import { FormattedMessage } from "react-intl";
 
 const styles = (theme) => ({
     root: {
@@ -15,6 +16,9 @@ const styles = (theme) => ({
         flex: "1 1 100%",
         display: "flex",
         maxWidth: 360,
+        [theme.breakpoints.down("sm")]: {
+            maxWidth: "100%",
+        },
         backgroundColor: theme.palette.background.paper
     },
     helpText: {
@@ -159,11 +163,17 @@ class CommentList extends Component {
                                   <Fragment key={index}>
                                       <ListItem className={classes.liStyle}>
                                           <div className={classes.avatarWrapper}>
-                                              <Avatar className={classes.avatar}>{created_by_id.split('.').map((value) => value[0]).join('').toUpperCase()}</Avatar>
+                                              <Avatar className={classes.avatar}>
+                                                  {created_by_id
+                                                      .split(".")
+                                                      .map((value) => value[0])
+                                                      .join("")
+                                                      .toUpperCase()}
+                                              </Avatar>
                                           </div>
                                           <div className={classes.liContentWrapper}>
                                               <div className={classes.liTitleWrapper}>
-                                                  <div className={classes.nameTextStyle}>{created_by_id.split('.').join(" ")}</div>
+                                                  <div className={classes.nameTextStyle}>{created_by_id.split(".").join(" ")}</div>
                                                   <div className={classes.secondaryTextStyle}>{getDate(create_date)}</div>
                                               </div>
                                               <div className={classes.primaryTextStyle}>{message}</div>
@@ -180,7 +190,7 @@ class CommentList extends Component {
                               ))}
                     </List>
                 ) : (
-                    <div className={classes.helpText}>Looks like there's no comments yet. Be the first one to comment!</div>
+                    <FormattedMessage id="comment.text.welcomeText">{(msg) => <div className={classes.helpText}>{msg}</div>}</FormattedMessage>
                 )}
             </div>
         );

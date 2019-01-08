@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Slide from "@material-ui/core/Slide";
-import Snackbar from "./_common/Snackbar";
 import EventsList from "./EventsList";
 import WithLoadingScreen from "./_common/WithLoadingScreen";
 import axios from "axios";
@@ -65,7 +64,12 @@ class Events extends Component {
                 <div className={classes.content}>
                     <div className={classes.toolbar} />
                     <FormattedMessage id={"recent.title.events"}>{(msg) => <h2 style={{ margin: 0 }}>{msg}</h2>}</FormattedMessage>
-                    <EventListWithLoad history={history} data={this.state.data} emptyRecord={this.state.emptyRecord} openEventRequest={this.props.openEventRequest} />
+                    <FormattedMessage id={"recent.text.recentUpdates"}>
+                        {(msg) => {
+                            let msgArr = msg.split(",");
+                            return <EventListWithLoad msgArr={msgArr} history={history} data={this.state.data} emptyRecord={this.state.emptyRecord} openEventRequest={this.props.openEventRequest} />;
+                        }}
+                    </FormattedMessage>
                 </div>
             </Slide>
         );

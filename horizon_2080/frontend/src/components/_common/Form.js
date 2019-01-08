@@ -94,7 +94,7 @@ class Form extends React.Component {
                     onSubmit={(e) => {
                         e.preventDefault();
                         this.submitForm();
-                        // this.handleClose();
+                        toggle();
                     }}
                 >
                     <DialogContent className={classes.form}>

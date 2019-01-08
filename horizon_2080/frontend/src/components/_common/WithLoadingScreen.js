@@ -16,6 +16,7 @@ const styles = (theme) => ({
     }
 });
 
+// A wrapper component that displays a loading circle if data hasn't been fetched
 const WithLoadingScreen = (WrappedComponent) => {
     class LoadingScreen extends React.PureComponent {
         render() {
@@ -42,7 +43,7 @@ const WithLoadingScreen = (WrappedComponent) => {
             }
         }
     }
-    const withStyleLoadScreen = withStyles(styles)(LoadingScreen);
+    const withStyleLoadScreen = withStyles(styles)(LoadingScreen); // import all the styles
     return withStyleLoadScreen;
 };
 

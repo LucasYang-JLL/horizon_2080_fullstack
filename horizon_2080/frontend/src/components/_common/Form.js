@@ -67,15 +67,16 @@ class Form extends React.Component {
         if (folder_id) {
             fields.folder = folder_id;
         }
+        this.props.toggle();
         axios
             .post(endpoint, fields)
             .then((response) => {
                 // handle success
-                this.props.toggle();
                 if (dest) {
                     this.props.history.push(`${dest}${response.data.id}`);
                 }
                 if (toggleSnackbar) {
+                    this.props.fetchTarget();
                     toggleSnackbar(true, "success", "Submitted!");
                 }
             })
@@ -94,7 +95,7 @@ class Form extends React.Component {
                     onSubmit={(e) => {
                         e.preventDefault();
                         this.submitForm();
-                        toggle();
+                        // toggle();
                     }}
                 >
                     <DialogContent className={classes.form}>

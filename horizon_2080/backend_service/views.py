@@ -43,6 +43,19 @@ class FolderCreate(generics.CreateAPIView):
         self.perform_create(serializer)
         return Response(serializer.data)
 
+class FolderUpdate(generics.UpdateAPIView):
+    queryset = folder.objects.all()
+    serializer_class = FolderSerializer
+    
+    def update(self, request, *args, **kwargs):
+        # creates an instance of the model object from the requested id
+        instance = self.get_object()
+        # parse the model to be put into database
+        serializer = self.get_serializer(instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
 class UpdateTargetCountByFolder(generics.UpdateAPIView):
     queryset = folder.objects.all()
     serializer_class = FolderTargetCountSerializer

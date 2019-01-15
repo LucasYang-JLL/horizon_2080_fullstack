@@ -1,13 +1,15 @@
-import React from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
-import DeleteIcon from "@material-ui/icons/Delete";
-import FilterListIcon from "@material-ui/icons/FilterList";
 import { lighten } from "@material-ui/core/styles/colorManipulator";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
+import DeleteIcon from "@material-ui/icons/Delete";
+import FilterListIcon from "@material-ui/icons/FilterList";
+import EditIcon from "@material-ui/icons/Edit";
 import Tooltip from "@material-ui/core/Tooltip";
+import SingleInput from "../SingleInput";
 import classNames from "classnames";
 
 const toolbarStyles = (theme) => ({
@@ -32,12 +34,19 @@ const toolbarStyles = (theme) => ({
     },
     title: {
         flex: "0 0 auto"
+    },
+    editButtonStyle: {
+        display: "flex",
+        alignItems: "flex-start"
+    },
+    overRideIconStyle: {
+        padding: "3px",
+        margin: "0 3px"
     }
 });
 
 let EnhancedTableToolbar = (props) => {
-    const { numSelected, classes, folderTitle } = props;
-
+    const { numSelected, classes, folderTitle, editMode, handleKeypress, handleInput, toggleEditMode, inputValue, handleUpdateFolder } = props;
     return (
         <Toolbar
             className={classNames(classes.root, {
@@ -49,10 +58,17 @@ let EnhancedTableToolbar = (props) => {
                     <Typography color="inherit" variant="subheading">
                         {numSelected} selected
                     </Typography>
+                ) : editMode ? (
+                    <SingleInput toggleForm={toggleEditMode} inputValue={inputValue} handleInput={handleInput} handleKeypress={handleKeypress} submit={handleUpdateFolder} buttonName="Edit" />
                 ) : (
-                    <Typography variant="h6" id="tableTitle">
-                        {folderTitle}
-                    </Typography>
+                    <div className={classes.editButtonStyle}>
+                        <Typography variant="h6" id="tableTitle">
+                            {folderTitle}
+                        </Typography>
+                        <IconButton aria-label="Edit Button" onClick={toggleEditMode} classes={{ root: classes.overRideIconStyle }}>
+                            <EditIcon />
+                        </IconButton>
+                    </div>
                 )}
             </div>
             <div className={classes.spacer} />

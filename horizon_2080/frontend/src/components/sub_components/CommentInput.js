@@ -1,12 +1,14 @@
-import React from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import TextField from "@material-ui/core/TextField";
-import IconButton from "@material-ui/core/IconButton";
 import SendIcon from "@material-ui/icons/Send";
 import AlternateEmailIcon from "@material-ui/icons/AlternateEmail";
-import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 import { withStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 import { FormattedMessage } from "react-intl";
 
 const styles = (theme) => ({
@@ -55,7 +57,7 @@ const styles = (theme) => ({
         width: "100%",
         display: "flex",
         backgroundColor: "rgba(0, 0, 0, 0.12)",
-        justifyContent: "flex-end"
+        justifyContent: "space-between"
     },
     overrideOutline: {
         borderTop: "1px solid rgba(0, 0, 0, 0.23)",
@@ -68,7 +70,8 @@ const styles = (theme) => ({
 
 class CommentInput extends React.Component {
     render() {
-        const { classes, handleInput, inputValue, submit, buttonName } = this.props;
+        const { classes, handleInput, inputValue, submit, data, userID, setMentionUser, clearMentionUser, mentionUser } = this.props;
+        const userList = [...new Set(data.map(({ created_by_id }) => created_by_id))].filter((name) => name !== userID);
         return (
             <div className={classes.messageInputRoot}>
                 <FormattedMessage id="comment.text.placeholder">
@@ -93,18 +96,8 @@ class CommentInput extends React.Component {
                         />
                     )}
                 </FormattedMessage>
-
                 <div className={classes.commentToolbar}>
-                    {/* <Button variant="outlined" mini className={classes.buttonSmall} onClick={submit}>
-                        {buttonName}
-                    </Button> */}
-                    <IconButton
-                        onClick={() => {
-                            console.log("@ some fams");
-                        }}
-                    >
-                        <AlternateEmailIcon fontSize="small" />
-                    </IconButton>
+                    <MentionMenuWithStyle setMentionUser={setMentionUser} clearMentionUser={clearMentionUser} mentionUser={mentionUser} userList={userList} />
                     <IconButton onClick={submit}>
                         <SendIcon fontSize="small" />
                     </IconButton>
@@ -113,6 +106,66 @@ class CommentInput extends React.Component {
         );
     }
 }
+
+const mentionStyles = (theme) => ({
+    mentionUserStyle: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    closeButtonStyle: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+    }
+});
+
+class MentionMenu extends React.Component {
+    state = {
+        anchorEl: null
+    };
+
+    handleClick = (event) => {
+        this.setState({ anchorEl: event.currentTarget });
+    };
+
+    handleClose = (user) => {
+        console.log(user);
+        this.setState({ anchorEl: null });
+        if (user !== null) {
+            this.props.setMentionUser(user);
+        }
+    };
+
+    render() {
+        const { anchorEl } = this.state;
+        const { userList, mentionUser, classes, clearMentionUser } = this.props;
+        return (
+            <Fragment>
+                <div className={classes.mentionUserStyle}>
+                    <IconButton onClick={this.handleClick}>
+                        <AlternateEmailIcon fontSize="small" />
+                    </IconButton>
+                    {mentionUser ? (
+                        <div className={classes.closeButtonStyle}>
+                            {mentionUser.split(".").join(" ")}
+                            <CloseIcon onClick={clearMentionUser} style={{ color: "#808080", cursor: "pointer" }} />
+                        </div>
+                    ) : null}
+                </div>
+                <Menu id="simple-menu" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => this.handleClose(null)}>
+                    {userList.map((user) => (
+                        <MenuItem key={user} onClick={() => this.handleClose(user)}>
+                            {user.split(".").join(" ")}
+                        </MenuItem>
+                    ))}
+                </Menu>
+            </Fragment>
+        );
+    }
+}
+
+const MentionMenuWithStyle = withStyles(mentionStyles)(MentionMenu);
 
 CommentInput.propTypes = {
     handleInput: PropTypes.func.isRequired,

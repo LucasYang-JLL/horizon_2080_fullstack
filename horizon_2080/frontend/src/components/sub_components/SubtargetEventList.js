@@ -7,6 +7,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 import SingleInput from "../_common/SingleInput";
 import getDate from "../_utils/getDate";
 import Divider from "@material-ui/core/Divider";
+import IconButton from "@material-ui/core/IconButton";
+import EditIcon from "@material-ui/icons/Edit";
 
 const styles = (theme) => ({
     root: {
@@ -14,6 +16,14 @@ const styles = (theme) => ({
         flex: "1 1 100%",
         // maxWidth: 360,
         backgroundColor: theme.palette.background.paper
+    },
+    editButtonStyle: {
+        display: "flex",
+        alignItems: "flex-start"
+    },
+    overRideIconStyle: {
+        padding: "3px",
+        margin: "0 3px"
     }
 });
 
@@ -101,8 +111,16 @@ class EventList extends Component {
                                       </Fragment>
                                   ) : (
                                       <Fragment key={index}>
-                                          <ListItem onClick={() => this.handleEdit(index)}>
+                                          <ListItem>
                                               <ListItemText primary={event.name} secondary={getDate(event.create_date)} />
+                                              <IconButton
+                                                  style={{ alignSelf: "flex-start" }}
+                                                  aria-label="Edit Button"
+                                                  onClick={() => this.handleEdit(index)}
+                                                  classes={{ root: classes.overRideIconStyle }}
+                                              >
+                                                  <EditIcon />
+                                              </IconButton>
                                           </ListItem>
                                           <li>
                                               <Divider light />
@@ -117,8 +135,11 @@ class EventList extends Component {
                                               <Divider light />
                                           </li>
                                       ) : null}
-                                      <ListItem onClick={() => this.handleEdit(index)}>
+                                      <ListItem>
                                           <ListItemText primary={name} secondary={getDate(create_date)} />
+                                          <IconButton style={{ alignSelf: "flex-start" }} aria-label="Edit Button" onClick={() => this.handleEdit(index)} classes={{ root: classes.overRideIconStyle }}>
+                                              <EditIcon />
+                                          </IconButton>
                                       </ListItem>
                                       <li>
                                           <Divider light />

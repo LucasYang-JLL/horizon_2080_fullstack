@@ -24,7 +24,7 @@ const styles = (theme) => ({
     content: {
         // display: "flex",
         overflow: "auto",
-        width: "100%",
+        // width: "100%",
         flexDirection: "column",
         flexGrow: 1,
         backgroundColor: theme.palette.background.default,
@@ -137,7 +137,6 @@ class Folder extends Component {
         openModal: false,
         emptyRecord: false,
         newFolderTitle: "",
-        userList: [],
         Departments: [],
         Users: [
             // {
@@ -189,13 +188,10 @@ class Folder extends Component {
             .get("/api/user_subset_info/")
             .then((response) => {
                 // handle success
-                let userList = response.data.userList.map(({ name }) => name);
                 let Departments = response.data.userList.map(({ department }) => department);
                 let uniqueDepartments = [...new Set(Departments)].map((department) => ({ name: department, active: true }));
                 let Users = response.data.userList.map(({ name, department }) => ({ name, department, active: true, visible: true }));
-                // console.log(Users);
                 this.setState({
-                    userList,
                     Departments: uniqueDepartments,
                     Users
                 });
@@ -229,28 +225,38 @@ class Folder extends Component {
         });
     };
 
+    // handle filter list click logic
     filterItemClickHandler = (name, index) => {
-        this.setState((prevState) => {
-            let arr = [...prevState[name]];
-            arr[index].active = !arr[index].active;
-            return {
-                [name]: arr
-            };
-        });
-        if (name === "Departments") {
-            let userArr = [...this.state.Users];
-            userArr.map((user) => {
-                if (user.department === this.state.Departments[index].name) {
-                    user.visible = !user.visible;
-                    user.active = !user.active;
-                    return user;
+        this.setState(
+            (prevState) => {
+                let arr = [...prevState[name]];
+                arr[index].active = !arr[index].active;
+                return {
+                    [name]: arr
+                };
+            },
+            () => {
+                if (name === "Departments") { // when clicking on a department chip
+                    let userArr = [...this.state.Users];
+                    userArr.map((user) => {
+                        if (user.department === this.state.Departments[index].name) {
+                            if (this.state.Departments[index].active === false) {
+                                user.visible = false;
+                                user.active = false;
+                            } else {
+                                user.visible = true;
+                                user.active = true;
+                            }
+                            return user;
+                        }
+                        return user;
+                    });
+                    this.setState({
+                        Users: userArr
+                    });
                 }
-                return user;
-            });
-            this.setState({
-                Users: userArr
-            });
-        }
+            }
+        );
     };
 
     render() {

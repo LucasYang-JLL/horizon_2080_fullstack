@@ -24,7 +24,7 @@ const styles = (theme) => ({
         minWidth: 0 // So the Typography noWrap works
     },
     root: {
-        width: "100%",
+        // width: "100%",
         marginTop: theme.spacing.unit * 3,
         marginBottom: theme.spacing.unit * 3
     },
@@ -81,7 +81,9 @@ class EnhancedTable extends React.Component {
         selected: [],
         data: this.props.data,
         page: 0,
-        rowsPerPage: 5
+        rowsPerPage: 5,
+        editMode: false,
+        inputValue: null
     };
 
     static getDerivedStateFromProps(prop, state) {
@@ -128,16 +130,66 @@ class EnhancedTable extends React.Component {
 
     isSelected = (id) => this.state.selected.indexOf(id) !== -1;
 
+    handleKeypress = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            this.handleUpdateFolder();
+        }
+    };
+
+    handleInput = (name) => (event) => {
+        // not using the default name in the SingleInput module
+        this.setState({
+            inputValue: event.target.value
+        });
+    };
+
+    // open & close editing
+    toggleEditMode = () => {
+        this.setState((prevState) => ({
+            inputValue: this.props.folderTitle,
+            editMode: !prevState.editMode
+        }));
+    };
+
+    handleUpdateFolder = () => {
+        const folder_id = this.props.match.params.id;
+        axios
+            .put(`/api/update_horizon_folder_by_id/${folder_id}/`, { name: this.state.inputValue, created_by_id: this.props.reduxState.userID })
+            .then((response) => {
+                // handle success
+                this.props.updateFolderTitle(response.data.name);
+            })
+            .catch((error) => {
+                // handle error
+                console.log(error);
+            })
+            .then(() => {
+                // always executed
+            });
+        this.setState(() => ({
+            editMode: false
+        }));
+    };
+
     render() {
-        const { classes, folderTitle, emptyRecords } = this.props;
+        const { classes, folderTitle } = this.props;
         const { slideState } = this.props.reduxState;
-        const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
+        const { data, order, orderBy, selected, rowsPerPage, page, editMode } = this.state;
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
-        // console.log(this.props);
         return (
             <Slide direction={slideState} in mountOnEnter unmountOnExit>
                 <Paper className={classes.root}>
-                    <EnhancedTableToolbar folderTitle={folderTitle} numSelected={selected.length} />
+                    <EnhancedTableToolbar
+                        handleKeypress={this.handleKeypress}
+                        handleInput={this.handleInput}
+                        toggleEditMode={this.toggleEditMode}
+                        handleUpdateFolder={this.handleUpdateFolder}
+                        inputValue={this.state.inputValue}
+                        editMode={editMode}
+                        folderTitle={folderTitle}
+                        numSelected={selected.length}
+                    />
                     <div className={classes.tableWrapper}>
                         {data.length > 0 ? (
                             <Table className={classes.table} aria-labelledby="tableTitle">

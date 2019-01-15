@@ -31,7 +31,7 @@ const styles = (theme) => ({
     dockedRoot: {
         // position: "absolute",
         // right: 0,
-        width: "30%",
+        width: "20%",
         whiteSpace: "normal",
         height: "100%",
         alignSelf: "flex-end",
@@ -73,20 +73,17 @@ class Comments extends Component {
 
     componentDidMount() {
         this.fetchRecentSubtargetAndEvent();
+        this.fetchTargetActionAccess();
     }
 
     handleTabChange = (event, value) => {
-        this.setState({ activeTab: value }, () => {
-            // console.log(this.state.activeTab);
-        });
+        this.setState({ activeTab: value }, () => {});
     };
 
     fetchRecentSubtargetAndEvent = () => {
         axios
             .get("/api/fetch_recent_comments/")
             .then((response) => {
-                // handle success
-                // console.log(response.data);
                 // handle success
                 if (response.data.length === 0) {
                     this.setState({
@@ -107,15 +104,33 @@ class Comments extends Component {
             });
     };
 
+    fetchTargetActionAccess = () => {
+        axios
+            .get("/api/action_access/")
+            .then((response) => {
+                // handle success
+                const hasAccess = this.props.reduxState.project_details_data;
+                this.props.storeActionAccess(response.data.userList.map(({ name }) => name));
+            })
+            .catch((error) => {
+                // handle error
+                console.log(error);
+            })
+            .then(() => {
+                // always executed
+            });
+    };
+
     render() {
         const { classes, docked, history, match } = this.props;
-        const { slideState } = this.props.reduxState;
-        const { pathname } = this.props.location;
+        const { slideState, userID, myActionAccess, project_details_data } = this.props.reduxState;
+        const projectOwnerID = project_details_data["created_by_id"];
+        const hasAccess = myActionAccess.includes(projectOwnerID);
         return docked ? (
             isWidthUp("md", this.props.width) ? (
-                <DockedLeft history={history} match={match} classes={classes} handleTabChange={this.handleTabChange} activeTab={this.state.activeTab} />
+                <DockedLeft hasAccess={hasAccess} userID={userID} history={history} match={match} classes={classes} handleTabChange={this.handleTabChange} activeTab={this.state.activeTab} />
             ) : (
-                <DockedBottom history={history} match={match} classes={classes} handleTabChange={this.handleTabChange} activeTab={this.state.activeTab} />
+                <DockedBottom hasAccess={hasAccess} userID={userID} history={history} match={match} classes={classes} handleTabChange={this.handleTabChange} activeTab={this.state.activeTab} />
             )
         ) : (
             <Slide direction={slideState} in mountOnEnter unmountOnExit>
@@ -147,13 +162,13 @@ const CommentsListWithLoad = WithLoadingScreen(CommentsList);
 
 class DockedLeft extends Component {
     render() {
-        let { classes, handleTabChange, activeTab, history, match } = this.props;
+        let { classes, handleTabChange, activeTab, history, match, userID, hasAccess } = this.props;
         return (
             <Slide direction={"left"} in mountOnEnter unmountOnExit>
                 <Paper className={classNames(classes.dockedRoot, classes.dockedRootMd)}>
                     <div className={classNames(classes.toolbar, classes.toolbarMd)} />
-                    <Tabs activeTab={activeTab} handleTabChange={handleTabChange} msgID="tab.comments.title" />
-                    {activeTab === 0 && <CommentsField history={history} match={match} />}
+                    <Tabs hideTab={hasAccess ? 2 : 1} activeTab={activeTab} handleTabChange={handleTabChange} msgID="tab.comments.title" />
+                    {activeTab === 0 && <CommentsField userID={userID} history={history} match={match} />}
                     {activeTab === 1 && "Notes"}
                 </Paper>
             </Slide>
@@ -173,7 +188,7 @@ class DockedBottom extends Component {
     };
 
     render() {
-        const { classes, handleTabChange, activeTab, history, match } = this.props;
+        const { classes, handleTabChange, activeTab, history, match, userID, hasAccess } = this.props;
         return (
             <div className={classes.dockedBottomRoot}>
                 <IconButton className={classes.button} aria-label="Delete" onClick={this.toggleComment}>
@@ -181,6 +196,8 @@ class DockedBottom extends Component {
                 </IconButton>
                 <FullscreenComment
                     history={history}
+                    userID={userID}
+                    hasAccess={hasAccess}
                     match={match}
                     toggleComment={this.toggleComment}
                     isCommentActive={this.state.isCommentActive}
@@ -213,18 +230,17 @@ class FullscreenComment extends Component {
     };
 
     render() {
-        const { classes, activeTab, handleTabChange, isCommentActive, toggleComment, history, match } = this.props;
-        // console.log(isCommentActive);
+        const { classes, activeTab, handleTabChange, isCommentActive, toggleComment, history, match, userID, hasAccess } = this.props;
         return (
             <Dialog fullScreen open={isCommentActive} onClose={toggleComment} TransitionComponent={Transition}>
                 {/* <div className={classNames(classes.toolbar)} style={{opacity: 0}} /> */}
                 {/* <div> */}
-                    <Button mini variant="text" color="primary" style={{ position: "absolute", top: "5px", zIndex: 2 }} onClick={toggleComment}>
-                        <ClearIcon />
-                    </Button>
-                    <TabsContainer flexEnd={true} fullWidth={false} activeTab={activeTab} handleTabChange={handleTabChange} msgID="tab.comments.title" />
-                    {activeTab === 0 && <CommentsField history={history} match={match} />}
-                    {activeTab === 1 && "Notes"}
+                <Button mini variant="text" color="primary" style={{ position: "absolute", top: "5px", zIndex: 2 }} onClick={toggleComment}>
+                    <ClearIcon />
+                </Button>
+                <TabsContainer hideTab={hasAccess ? 2 : 1} flexEnd={true} fullWidth={false} activeTab={activeTab} handleTabChange={handleTabChange} msgID="tab.comments.title" />
+                {activeTab === 0 && <CommentsField userID={userID} history={history} match={match} />}
+                {activeTab === 1 && "Notes"}
                 {/* </div> */}
             </Dialog>
         );

@@ -2,11 +2,6 @@ import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import color from "../../MuiTheme/color";
 import { withStyles } from "@material-ui/core/styles";
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import Typography from "@material-ui/core/Typography";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Avatar from "@material-ui/core/Avatar";
 import CommentInput from "./CommentInput";
 import CommentList from "./CommentList";
@@ -75,7 +70,8 @@ class CommentsField extends Component {
     state = {
         inputValue: "",
         data: [],
-        emptyRecord: false
+        emptyRecord: false,
+        mentionUser: null
     };
 
     componentDidMount() {
@@ -86,7 +82,7 @@ class CommentsField extends Component {
         axios
             .get(`/api/fetch_comment_by_target/${this.props.match.params.id}/`)
             .then((response) => {
-                // handle success. 
+                // handle success.
                 if (response.data.length === 0) {
                     this.setState({
                         data: response.data,
@@ -108,18 +104,29 @@ class CommentsField extends Component {
     };
 
     handleCommentInput = (e) => {
-        // console.log(e.target.value);
         this.setState({
             inputValue: e.target.value
         });
     };
 
+    setMentionUser = (user) => {
+        this.setState({
+            mentionUser: user
+        });
+    };
+
+    clearMentionUser = () => {
+        console.log('clear')
+        this.setState({
+            mentionUser: null
+        });
+    };
+
     submitComment = () => {
-        // console.log(this.props);
         const endpoint = `/api/create_comment_by_target/${this.props.match.params.id}/`;
         // post to database
         axios
-            .post(endpoint, { message: this.state.inputValue, target: this.props.match.params.id })
+            .post(endpoint, { message: this.state.inputValue, target: this.props.match.params.id, mention_user_id: this.state.mentionUser })
             .then((response) => {
                 // set the record to state
                 this.setState({
@@ -136,11 +143,20 @@ class CommentsField extends Component {
     };
 
     render() {
-        const { classes } = this.props;
+        const { userID } = this.props;
         return (
             <Fragment>
                 <CommentListWithLoad data={this.state.data} emptyRecord={this.state.emptyRecord} />
-                <CommentInput handleInput={this.handleCommentInput} inputValue={this.state.inputValue} submit={this.submitComment} />
+                <CommentInput
+                    setMentionUser={this.setMentionUser}
+                    clearMentionUser={this.clearMentionUser}
+                    mentionUser={this.state.mentionUser}
+                    userID={userID}
+                    data={this.state.data}
+                    handleInput={this.handleCommentInput}
+                    inputValue={this.state.inputValue}
+                    submit={this.submitComment}
+                />
             </Fragment>
         );
     }

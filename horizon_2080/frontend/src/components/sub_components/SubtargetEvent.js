@@ -3,16 +3,16 @@ import PropTypes from "prop-types";
 import compose from "recompose/compose";
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import EditIcon from "@material-ui/icons/Edit";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import withMobileDialog from "@material-ui/core/withMobileDialog";
 import SingleInput from "../_common/SingleInput";
 import EventList from "./SubtargetEventList";
 import classNames from "classnames";
-import Divider from "@material-ui/core/Divider";
 import WithLoadingScreen from "../_common/WithLoadingScreen";
 import { FormattedMessage } from "react-intl";
 import getDate from "../_utils/getDate";
@@ -65,6 +65,14 @@ const styles = (theme) => ({
         alignItems: "center",
         fontStyle: "italic",
         color: "#404040"
+    },
+    editButtonStyle: {
+        display: "flex",
+        alignItems: "flex-start"
+    },
+    overRideIconStyle: {
+        padding: "3px",
+        margin: "0 3px"
     }
 });
 
@@ -279,10 +287,11 @@ class SubtargetEvent extends React.Component {
                     </div>
                 ) : (
                     <div className={classes.subTargetEventTitle}>
-                        <DialogTitle style={{ flex: 1 }} onClick={this.toggleEditMode}>
-                            {data.name}
-                        </DialogTitle>
-                        <div style={{ marginRight: "16px", marginTop: "8px" }}>
+                        <DialogTitle>{data.name}</DialogTitle>
+                        <IconButton aria-label="Edit Button" onClick={this.toggleEditMode} classes={{ root: classes.overRideIconStyle }}>
+                            <EditIcon />
+                        </IconButton>
+                        <div style={{ marginRight: "16px", marginTop: "8px", marginLeft: "auto" }}>
                             <span>{getDate(data.create_date)}</span>
                         </div>
                     </div>

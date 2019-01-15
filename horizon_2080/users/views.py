@@ -20,3 +20,10 @@ def UserAndSubsetQuery(request):
     for user in userArr:
         nameList.append({"name": user.name, "department": user.department})
     return JsonResponse({"userList": nameList})
+
+def ActionAccess(request):
+    actionAccessArr = request.user.action_access_permission.all()
+    nameList = []
+    for user in actionAccessArr:
+        nameList.append({"name": user.name, "department": user.department})
+    return JsonResponse({"userList": nameList})

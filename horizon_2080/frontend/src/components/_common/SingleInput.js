@@ -7,6 +7,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
+import { FormattedMessage } from "react-intl";
 
 const styles = (theme) => ({
     marginTop: {
@@ -52,7 +53,7 @@ const styles = (theme) => ({
 
 class SingleInput extends React.Component {
     render() {
-        const { classes, handleInput, handleKeypress, inputValue, toggleForm, submit, buttonName } = this.props;
+        const { classes, handleInput, handleKeypress, inputValue, toggleForm, submit } = this.props;
         return (
             <ClickAwayListener onClickAway={toggleForm}>
                 <div className={classes.messageInputRoot}>
@@ -68,9 +69,14 @@ class SingleInput extends React.Component {
                         onKeyPress={handleKeypress}
                         margin="normal"
                     />
-                    <Button variant="contained" size="small" className={classes.buttonSmall} onClick={submit}>
-                        {buttonName}
-                    </Button>
+                    <FormattedMessage id={"generic.button.add"}>
+                        {(msg) => (
+                            <Button variant="contained" size="small" className={classes.buttonSmall} onClick={submit}>
+                                {msg}
+                            </Button>
+                        )}
+                    </FormattedMessage>
+
                     <IconButton classes={{ label: classes.offsetIcon }} className={classNames(classes.iconButton, classes.rightIcon)} onClick={toggleForm}>
                         <CloseIcon />
                     </IconButton>
@@ -85,11 +91,7 @@ SingleInput.propTypes = {
     handleKeypress: PropTypes.func.isRequired,
     inputValue: PropTypes.string.isRequired,
     toggleForm: PropTypes.func.isRequired,
-    submit: PropTypes.func.isRequired,
-};
-
-SingleInput.defaultProps = {
-    buttonName: "Add"
+    submit: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(SingleInput);

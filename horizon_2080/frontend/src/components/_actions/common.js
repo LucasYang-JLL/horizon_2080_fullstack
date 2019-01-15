@@ -5,4 +5,9 @@ const toggleSnackbar = (snackbarOpen, variant, message) => ({
     message
 });
 
-export { toggleSnackbar };
+const storeActionAccess = (data) => ({
+    type: "STORE_ACTION_ACCESS",
+    data: data
+})
+
+export { toggleSnackbar, storeActionAccess };

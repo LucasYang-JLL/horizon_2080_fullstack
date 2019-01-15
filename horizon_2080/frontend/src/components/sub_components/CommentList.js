@@ -6,6 +6,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import SingleInput from "../_common/SingleInput";
 import Avatar from "@material-ui/core/Avatar";
+import ArrowRightIcon from "@material-ui/icons/ArrowRight";
 import getDate from "../_utils/getDate";
 import Divider from "@material-ui/core/Divider";
 import { FormattedMessage } from "react-intl";
@@ -17,7 +18,7 @@ const styles = (theme) => ({
         display: "flex",
         maxWidth: 360,
         [theme.breakpoints.down("sm")]: {
-            maxWidth: "100%",
+            maxWidth: "100%"
         },
         backgroundColor: theme.palette.background.paper
     },
@@ -159,7 +160,7 @@ class CommentList extends Component {
                                       </Fragment>
                                   )
                               )
-                            : comments.map(({ message, create_date, created_by_id }, index) => (
+                            : comments.map(({ message, create_date, created_by_id, mention_user_id }, index) => (
                                   <Fragment key={index}>
                                       <ListItem className={classes.liStyle}>
                                           <div className={classes.avatarWrapper}>
@@ -173,17 +174,14 @@ class CommentList extends Component {
                                           </div>
                                           <div className={classes.liContentWrapper}>
                                               <div className={classes.liTitleWrapper}>
-                                                  <div className={classes.nameTextStyle}>{created_by_id.split(".").join(" ")}</div>
+                                                  <div className={classes.nameTextStyle}>
+                                                      {created_by_id.split(".").join(" ")}
+                                                      {mention_user_id ? <span> <b style={{color: "#B0B1B3"}}>&#9656;</b> {mention_user_id.split(".").join(" ")}</span> : null}
+                                                  </div>
                                                   <div className={classes.secondaryTextStyle}>{getDate(create_date)}</div>
                                               </div>
                                               <div className={classes.primaryTextStyle}>{message}</div>
                                           </div>
-                                          {/* <ListItemText
-                                              onClick={() => this.handleEdit(index)}
-                                              classes={{ primary: classes.primaryTextStyle, secondary: classes.secondaryTextStyle }}
-                                              primary={message}
-                                              secondary={getDate(create_date)}
-                                          /> */}
                                       </ListItem>
                                       <Divider light />
                                   </Fragment>

@@ -3,6 +3,7 @@ from . import views
 urlpatterns = [
     path('api/horizon_folder/', views.FolderQuery.as_view() ),
     path('api/fetch_horizon_folder_by_id/<int:pk>/', views.FolderQueryByID.as_view() ),
+    path('api/update_horizon_folder_by_id/<int:pk>/', views.FolderUpdate.as_view() ),
     path('api/updateTargetCountByFolder/<int:pk>/', views.UpdateTargetCountByFolder.as_view() ),
     path('api/create_horizon_folder/', views.FolderCreate.as_view() ),
     path('api/horizon_target_individual/', views.TargetIndividualQuery.as_view() ),

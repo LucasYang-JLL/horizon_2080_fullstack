@@ -19,7 +19,8 @@ const WithWidth = toRenderProps(withWidth());
 
 const styles = (theme) => ({
     content: {
-        width: "100%",
+        // width: "100%",
+        flex: "1 1",
         display: "flex",
         padding: theme.spacing.unit * 3,
         paddingTop: 0,
@@ -81,11 +82,20 @@ class Details extends Component {
     };
 
     componentDidMount() {
+        this.storeTargetData();
+    }
+
+    componentWillUnmount() {
+        this.props.storeTargetData({}); // clears the store
+    }
+
+    storeTargetData = () => {
         axios
-            .get(`${this.props.endpoint}${this.props.match.params.id}/`)
+            .get(`/api/horizon_target_individual/${this.props.match.params.id}/`)
             .then((response) => {
                 // handle success
-                this.props.storeData(response.data[0]);
+                this.props.storeTargetData(response.data[0]);
+                this.storeProjectData(response.data[0].folder);
             })
             .catch((error) => {
                 // handle error
@@ -94,11 +104,23 @@ class Details extends Component {
             .then(() => {
                 // always executed
             });
-    }
+    };
 
-    componentWillUnmount() {
-        this.props.storeData({}); // clears the store
-    }
+    storeProjectData = (folder_id) => {
+        axios
+            .get(`/api/fetch_horizon_folder_by_id/${folder_id}/`)
+            .then((response) => {
+                // handle success
+                this.props.storeProjectData(response.data[0]);
+            })
+            .catch((error) => {
+                // handle error
+                console.log(error);
+            })
+            .then(() => {
+                // always executed
+            });
+    };
 
     handleTabChange = (event, value) => {
         this.setState({ activeTab: value }, () => {});
@@ -122,7 +144,6 @@ class Details extends Component {
     render() {
         const { classes, history } = this.props;
         const { slideState, editContent, target_details_data, targetUpdate } = this.props.reduxState;
-        // console.log(target_details_data);
         const { pathname } = this.props.location;
         let depth = pathname.split("/").filter((value) => value !== "").length;
         return (
@@ -161,7 +182,7 @@ class Details extends Component {
                             )}
                             {this.state.activeTab === 1 && (
                                 <div className={classes.detailsWrapper}>
-                                    <SubtargetField target_id={this.props.match.params.id} OpenEventID={this.props.reduxState.OpenEventID} ResetOpenEvent={this.props.ResetOpenEvent}/>
+                                    <SubtargetField target_id={this.props.match.params.id} OpenEventID={this.props.reduxState.OpenEventID} ResetOpenEvent={this.props.ResetOpenEvent} />
                                 </div>
                             )}
                         </Paper>

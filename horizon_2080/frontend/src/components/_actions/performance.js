@@ -4,8 +4,13 @@ const toggleEditButton = (value) => ({
 });
 
 // takes an action and map it to redux Store
-const storeData = (data) => ({
+const storeTargetData = (data) => ({
     type: "TARGET_DETAILS_DATA",
+    data: data,
+});
+
+const storeProjectData = (data) => ({
+    type: "PROJECT_DETAILS_DATA",
     data: data,
 });
 
@@ -20,4 +25,4 @@ const updateTarget = (value) => ({
     value: value
 });
 
-export { toggleEditButton, storeData, handleDataChange, updateTarget };
+export { toggleEditButton, storeTargetData, storeProjectData, handleDataChange, updateTarget };

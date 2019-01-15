@@ -21,6 +21,15 @@ const target_details_data = (state = {}, action) => {
     }
 };
 
+const project_details_data = (state = {}, action) => {
+    switch (action.type) {
+        case "PROJECT_DETAILS_DATA":
+            return action.data;
+        default:
+            return state;
+    }
+};
+
 const snackbarProp = (state = { snackbarOpen: false, variant: "info", message: "Input message here" }, action) => {
     switch (action.type) {
         case "TOGGLE_SNACKBAR":
@@ -45,4 +54,14 @@ const targetUpdate = (state=false, action) => {
     }
 };
 
-export { editContent, target_details_data, snackbarProp, targetUpdate };
+const myActionAccess = (state=[], action) => {
+    switch (action.type) {
+        case "STORE_ACTION_ACCESS":
+            state= action.data;
+            return state;
+        default: 
+            return state;
+    }
+}
+
+export { editContent, target_details_data, project_details_data, snackbarProp, targetUpdate, myActionAccess };

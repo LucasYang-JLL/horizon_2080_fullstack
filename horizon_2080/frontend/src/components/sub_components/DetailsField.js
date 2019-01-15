@@ -4,11 +4,10 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import { FormattedMessage } from "react-intl";
 import classNames from "classnames";
-import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import SaveIcon from "@material-ui/icons/Save";
-import StarBorder from "@material-ui/icons/StarBorder";
-import Star from "@material-ui/icons/Star";
+// import StarBorder from "@material-ui/icons/StarBorder";
+// import Star from "@material-ui/icons/Star";
 import Checkbox from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
@@ -134,32 +133,75 @@ class DetailsField extends Component {
     // loops through the field array and render them, toggle disable based on if editContent
     Fields = () => {
         const { classes, editContent } = this.props;
-        return inputFields.map(({ type, label, name, required, props, disabled }) => (
-            <FormattedMessage id={label} key={name}>
-                {(msg) => (
-                    <TextField
-                        type={type}
-                        required={required}
-                        className={classNames(classes.fieldInput, name === "start_date" ? classes.marginTop : null)}
-                        id="standard-read-only-input"
-                        label={msg}
-                        disabled={disabled || !editContent}
-                        value={this.state.fields[name] || ""}
-                        onChange={(e) => this.props.handleChange(name, e.target.value)}
-                        InputProps={{
-                            ...props,
-                            disableUnderline: !editContent,
-                            classes: {
-                                disabled: classes.disabledInput
-                            }
-                        }}
-                        InputLabelProps={{
-                            shrink: true
-                        }}
+        return inputFields.map(({ type, label, name, required, props, disabled }, index) =>
+            index === 1 ? (
+                <Fragment key={name}>
+                    <FormattedMessage id={label} key={name}>
+                        {(msg) => (
+                            <TextField
+                                type={type}
+                                required={required}
+                                className={classes.fieldInput}
+                                id="standard-read-only-input"
+                                label={msg}
+                                disabled={disabled || !editContent}
+                                value={this.state.fields[name] || ""}
+                                onChange={(e) => this.props.handleChange(name, e.target.value)}
+                                InputProps={{
+                                    ...props,
+                                    disableUnderline: !editContent,
+                                    classes: {
+                                        disabled: classes.disabledInput
+                                    }
+                                }}
+                                InputLabelProps={{
+                                    shrink: true
+                                }}
+                            />
+                        )}
+                    </FormattedMessage>
+                    <FormControlLabel
+                        className={classes.marginTop}
+                        control={
+                            <Checkbox
+                                classes={{ disabled: classes.disabledStarStyle }}
+                                // icon={<StarBorder />}
+                                // checkedIcon={<Star />}
+                                value="checked"
+                                checked={this.state.fields.critical_flag}
+                                onChange={(e) => (editContent ? this.props.handleChange("critical_flag", !this.state.fields.critical_flag) : null)}
+                            />
+                        }
+                        label="20%"
                     />
-                )}
-            </FormattedMessage>
-        ));
+                </Fragment>
+            ) : (
+                <FormattedMessage id={label} key={name}>
+                    {(msg) => (
+                        <TextField
+                            type={type}
+                            required={required}
+                            className={classes.fieldInput}
+                            id="standard-read-only-input"
+                            label={msg}
+                            disabled={disabled || !editContent}
+                            value={this.state.fields[name] || ""}
+                            onChange={(e) => this.props.handleChange(name, e.target.value)}
+                            InputProps={{
+                                ...props,
+                                disableUnderline: !editContent,
+                                classes: {
+                                    disabled: classes.disabledInput
+                                }
+                            }}
+                            InputLabelProps={{
+                                shrink: true
+                            }}
+                        />
+                    )}
+                </FormattedMessage>
+            )
+        );
     };
 
     render() {
@@ -174,19 +216,6 @@ class DetailsField extends Component {
                 }}
             >
                 <this.Fields />
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            classes={{ disabled: classes.disabledStarStyle }}
-                            icon={<StarBorder />}
-                            checkedIcon={<Star />}
-                            value="checked"
-                            checked={this.state.fields.critical_flag}
-                            onChange={(e) => (editContent ? this.props.handleChange("critical_flag", !this.state.fields.critical_flag) : null)}
-                        />
-                    }
-                    label="20%"
-                />
                 {editContent ? (
                     <Button type="submit" variant="contained" size="small" className={classes.button}>
                         <SaveIcon className={classNames(classes.leftIcon, classes.iconSmall)} />

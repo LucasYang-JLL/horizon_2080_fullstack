@@ -15,14 +15,14 @@ def UserQuery(request):
 
 def UserAndSubsetQuery(request):
     userID = request.user.name # my user id
-    userArr = request.user.user_set.all() # the users that report to me
+    userArr = request.user.report_to_me.all() # the users that report to me
     nameList = []
     for user in userArr:
         nameList.append({"name": user.name, "department": user.department})
     return JsonResponse({"userList": nameList})
 
 def ActionAccess(request):
-    actionAccessArr = request.user.action_access_permission.all()
+    actionAccessArr = request.user.own_action_from.all()
     nameList = []
     for user in actionAccessArr:
         nameList.append({"name": user.name, "department": user.department})

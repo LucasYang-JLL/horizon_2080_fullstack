@@ -16,7 +16,7 @@ class FolderQuery(generics.ListCreateAPIView):
     def get_queryset(self):
         userID = self.request.user.name # my user id
         print(self.request.user.report_to.all()) # the users that I report to
-        userArr = self.request.user.user_set.all() # the users that report to me
+        userArr = self.request.user.report_to_me.all() # the users that report to me
         nameList = [userID]
         for user in userArr:
             nameList.append(user.name)
@@ -87,7 +87,7 @@ class TargetIndividualDetailsQueryByFolder(generics.ListCreateAPIView):
     # queryset = horizon_target_individual.objects.all()
     def get_queryset(self):
         userID = self.request.user.name # my user id
-        userArr = self.request.user.user_set.all() # the users that report to me
+        userArr = self.request.user.report_to_me.all() # the users that report to me
         nameList = [userID]
         for user in userArr:
             nameList.append(user.name)
@@ -158,7 +158,7 @@ class QuerySubTargetIndividual(generics.ListCreateAPIView):
     # queryset = horizon_target_individual.objects.all()
     def get_queryset(self):
         userID = self.request.user.name # my user id
-        userArr = self.request.user.user_set.all() # the users that report to me
+        userArr = self.request.user.report_to_me.all() # the users that report to me
         nameList = [userID]
         for user in userArr:
             nameList.append(user.name)
@@ -223,7 +223,7 @@ class QueryEventBySubTarget(generics.ListCreateAPIView):
     # queryset = horizon_target_individual.objects.all()
     def get_queryset(self):
         userID = self.request.user.name # my user id
-        userArr = self.request.user.user_set.all() # the users that report to me
+        userArr = self.request.user.report_to_me.all() # the users that report to me
         nameList = [userID]
         for user in userArr:
             nameList.append(user.name)
@@ -264,7 +264,7 @@ class QuerySubTargetAndEventDateDesc(generics.ListCreateAPIView):
     serializer_class = EventAndSubTargetSerializer
     def get_queryset(self):
         userID = self.request.user.name # my user id
-        userArr = self.request.user.user_set.all() # the users that report to me
+        userArr = self.request.user.report_to_me.all() # the users that report to me
         nameList = [userID]
         for user in userArr:
             nameList.append(user.name)
@@ -278,7 +278,7 @@ class QueryEventDateDesc(generics.ListCreateAPIView):
     serializer_class = CombinedCommentSerializer
     def get_queryset(self):
         userID = self.request.user.name # my user id
-        userArr = self.request.user.user_set.all() # the users that report to me
+        userArr = self.request.user.report_to_me.all() # the users that report to me
         nameList = [userID]
         for user in userArr:
             nameList.append(user.name)

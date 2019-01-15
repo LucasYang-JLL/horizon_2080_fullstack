@@ -67,8 +67,8 @@ class User(AbstractUser):
     status = models.BooleanField(default=True)
     emailable = models.BooleanField(default=True)
     city = models.CharField(max_length=255, default=None, null=True)
-    report_to = models.ManyToManyField("self", symmetrical=False, blank=True)
-    action_access_permission = models.ManyToManyField("self", symmetrical=False, blank=True, related_name='action_access')
+    report_to = models.ManyToManyField("self", symmetrical=False, blank=True, related_name="report_to_me")
+    give_action_to = models.ManyToManyField("self", symmetrical=False, blank=True, related_name='own_action_from')
     class Meta(AbstractUser.Meta):
         swappable = 'AUTH_USER_MODEL'
     

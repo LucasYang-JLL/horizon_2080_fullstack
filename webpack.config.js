@@ -1,4 +1,5 @@
 module.exports = {
+    entry: ['babel-polyfill', "./horizon_2080/frontend/src/index.js"],
     module: {
         rules: [
             {

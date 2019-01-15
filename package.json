@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack --mode development ./horizon_2080/frontend/src/index.js --output ./horizon_2080/frontend/static/frontend/main.js",
-    "build": "webpack --mode production ./horizon_2080/frontend/src/index.js --output ./horizon_2080/frontend/static/frontend/main.js",
+    "build": "webpack --mode production ./horizon_2080/frontend/src/index.js --output ./dist/main.js",
     "flush": "python3 ./horizon_2080/manage.py flush --no-input",
     "e2e": "cypress open --project ./horizon_2080/frontend/"
   },
@@ -37,13 +37,15 @@
     "@material-ui/core": "^3.2.2",
     "@material-ui/icons": "^3.0.1",
     "axios": "^0.18.0",
+    "babel-polyfill": "^6.26.0",
+    "merge": ">=1.2.1",
+    "react-app-polyfill": "^0.2.0",
     "react-intl": "^2.7.1",
     "react-redux": "^5.0.7",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "recompose": "^0.30.0",
     "redux": "^4.0.1",
-    "redux-persist": "^5.10.0",
-    "merge": ">=1.2.1"
+    "redux-persist": "^5.10.0"
   }
 }

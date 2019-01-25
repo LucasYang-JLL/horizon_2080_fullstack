@@ -18,9 +18,12 @@ urlpatterns = [
     path('api/update_event_count/<int:pk>', views.UpdateEventCountBySubTarget.as_view() ),
     path('api/fetch_comment_by_target/<int:target_id_individual>/', views.QueryCommentByTarget.as_view() ),
     path('api/create_comment_by_target/<int:target_id_individual>/', views.CreateCommentByTarget.as_view() ),
+    path('api/fetch_action_by_target/<int:target_id_individual>/', views.QueryActionByTarget.as_view() ),
+    path('api/create_action_by_target/<int:target_id_individual>/', views.CreateActionByTarget.as_view() ),
     path('api/fetch_event_by_sub_target/<int:sub_target_id>/', views.QueryEventBySubTarget.as_view() ),
     path('api/create_event_by_sub_target/<int:sub_target_id>/', views.CreateEventBySubTarget.as_view() ),
     path('api/update_event_by_sub_target/<int:pk>/', views.UpdateEventBySubTarget.as_view() ),
     path('api/fetch_recent_sub_target_and_event/', views.QuerySubTargetAndEventDateDesc.as_view() ),
     path('api/fetch_recent_comments/', views.QueryEventDateDesc.as_view() ),
+    path('api/fetch_recent_actions/', views.QueryActionDateDesc.as_view() ),
 ]

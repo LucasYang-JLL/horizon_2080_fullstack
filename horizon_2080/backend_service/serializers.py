@@ -37,6 +37,11 @@ class CommentSerializer(serializers.ModelSerializer):
         model = comment
         fields = '__all__'
 
+class ActionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = action
+        fields = '__all__'
+
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = event
@@ -60,3 +65,11 @@ class CombinedCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = horizon_target_individual
         fields = ['comment', 'name', 'folder', 'id']
+
+class CombinedActionSerializer(serializers.ModelSerializer):
+    # serializing event. nested JSON
+    action = ActionSerializer(many = True, read_only=True, source='action_set')
+    folder = FolderSerializer()
+    class Meta:
+        model = horizon_target_individual
+        fields = ['action', 'name', 'folder', 'id']

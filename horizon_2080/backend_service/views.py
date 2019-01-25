@@ -213,6 +213,30 @@ class CreateCommentByTarget(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         return Response(serializer.data)
+
+#
+# Action Views
+#
+
+class QueryActionByTarget(generics.ListCreateAPIView):
+    serializer_class = ActionSerializer
+    # queryset = horizon_target_individual.objects.all()
+    def get_queryset(self):
+        return action.objects.filter(target_id=self.kwargs['target_id_individual'])
+
+class CreateActionByTarget(generics.CreateAPIView):
+    queryset = action.objects.all()
+    serializer_class = ActionSerializer
+
+    def create(self, request, *args, **kwargs):
+        # parse the model to be put into database
+        # don't put the instance in here!! that causes the model to be ran on an existing row!!
+        entry = request.data
+        entry['created_by_id'] = request.user.name
+        serializer = self.get_serializer(data=entry)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(serializer.data)
         
 #
 # Event Views
@@ -284,6 +308,20 @@ class QueryEventDateDesc(generics.ListCreateAPIView):
             nameList.append(user.name)
 
         horizon_target_individual_Annotated = horizon_target_individual.objects.annotate(latest_id = Max('comment__id')) # annotated with sub target's newest id
+        filtered_list = horizon_target_individual_Annotated.all().filter(created_by_id__in = nameList).exclude(comment__isnull=True).order_by('-latest_id') # order the list by the newest sub target at the front
+        limited_filter_list = filtered_list[:5]
+        return limited_filter_list
+
+class QueryActionDateDesc(generics.ListCreateAPIView):
+    serializer_class = CombinedActionSerializer
+    def get_queryset(self):
+        userID = self.request.user.name # my user id
+        userArr = self.request.user.report_to_me.all() # the users that report to me
+        nameList = [userID]
+        for user in userArr:
+            nameList.append(user.name)
+
+        horizon_target_individual_Annotated = horizon_target_individual.objects.annotate(latest_id = Max('action__id')) # annotated with sub target's newest id
         filtered_list = horizon_target_individual_Annotated.all().filter(created_by_id__in = nameList).exclude(comment__isnull=True).order_by('-latest_id') # order the list by the newest sub target at the front
         limited_filter_list = filtered_list[:5]
         return limited_filter_list

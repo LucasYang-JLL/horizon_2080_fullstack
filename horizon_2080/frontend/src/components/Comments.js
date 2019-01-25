@@ -12,6 +12,7 @@ import Slide from "@material-ui/core/Slide";
 import CommentsList from "./CommentsList";
 import WithLoadingScreen from "./_common/WithLoadingScreen";
 import CommentsField from "./sub_components/CommentsField";
+import ActionsField from "./sub_components/ActionsField";
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
 import ClearIcon from "@material-ui/icons/Clear";
@@ -169,7 +170,7 @@ class DockedLeft extends Component {
                     <div className={classNames(classes.toolbar, classes.toolbarMd)} />
                     <Tabs hideTab={hasAccess ? 2 : 1} activeTab={activeTab} handleTabChange={handleTabChange} msgID="tab.comments.title" />
                     {activeTab === 0 && <CommentsField userID={userID} history={history} match={match} />}
-                    {activeTab === 1 && "Notes"}
+                    {activeTab === 1 && <ActionsField userID={userID} history={history} match={match} />}
                 </Paper>
             </Slide>
         );
@@ -240,7 +241,7 @@ class FullscreenComment extends Component {
                 </Button>
                 <TabsContainer hideTab={hasAccess ? 2 : 1} flexEnd={true} fullWidth={false} activeTab={activeTab} handleTabChange={handleTabChange} msgID="tab.comments.title" />
                 {activeTab === 0 && <CommentsField userID={userID} history={history} match={match} />}
-                {activeTab === 1 && "Notes"}
+                {activeTab === 1 && <ActionsField userID={userID} history={history} match={match} />}
                 {/* </div> */}
             </Dialog>
         );

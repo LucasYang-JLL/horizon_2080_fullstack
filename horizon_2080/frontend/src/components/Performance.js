@@ -209,7 +209,6 @@ class Performance extends Component {
                                         toggleSnackbar={this.props.toggleSnackbar}
                                         open={this.state.openForm}
                                         toggle={this.addPerformance}
-                                        fetchTarget={this.fetchIndividualTargets}
                                         inputFields={inputFields}
                                         endpoint={`/api/create_horizon_target_individual/${this.props.match.params.id}/`}
                                         folder_id={this.props.match.params.id}

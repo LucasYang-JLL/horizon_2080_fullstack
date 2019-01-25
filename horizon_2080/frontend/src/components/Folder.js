@@ -2,15 +2,21 @@ import React, { Component, Fragment } from "react";
 import Slide from "@material-ui/core/Slide";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import WithLoadingScreen from "./_common/WithLoadingScreen";
+import IconButton from "@material-ui/core/IconButton";
 import ListIcon from "@material-ui/icons/List";
+import MoreIcon from "@material-ui/icons/MoreVert";
+import DeleteIcon from "@material-ui/icons/Delete";
 import DoneIcon from "@material-ui/icons/Done";
 import DoneAllIcon from "@material-ui/icons/DoneAll";
 import Form from "./_common/Form";
+import Warning from "./_common/Warning";
 import { compose } from "redux";
 import FilterBar from "./_common/FilterBar";
 import Divider from "@material-ui/core/Divider";
@@ -32,6 +38,11 @@ const styles = (theme) => ({
         [theme.breakpoints.up("md")]: {},
         [theme.breakpoints.down("sm")]: {},
         minWidth: 0 // So the Typography noWrap works
+    },
+    titleBar: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
     },
     toolbar: theme.mixins.toolbar,
     CardContainer: {
@@ -138,20 +149,10 @@ class Folder extends Component {
         emptyRecord: false,
         newFolderTitle: "",
         Departments: [],
-        Users: [
-            // {
-            //     name: "Lucas.Yang",
-            //     department: "TDIM",
-            //     active: true,
-            //     visible: true
-            // },
-            // {
-            //     name: "Tammy.Yu",
-            //     department: "Markets",
-            //     active: false,
-            //     visible: true
-            // }
-        ]
+        Users: [],
+        anchorEl: null,
+        action: null,
+        warning: false
     };
 
     componentDidMount() {
@@ -205,10 +206,44 @@ class Folder extends Component {
             });
     };
 
+    deleteFolderRequest = () => {
+        axios
+            .delete("/api/user_subset_info/")
+            .then((response) => {
+                // handle success
+            })
+            .catch((error) => {
+                // handle error
+                console.log(error);
+            })
+            .then(() => {
+                // always executed
+            });
+    };
+
     handleCardClick = (id) => {
         // this.props.push()
         this.props.history.push(`/performance/${id}`);
         this.props.slideDirection("left");
+    };
+
+    handleDeleteClick = (e, projectID) => {
+        e.stopPropagation();
+        console.log("hi");
+        this.setState({
+            warning: true
+        });
+    };
+
+    toggleWarning = (e) => {
+        e.stopPropagation();
+        this.setState((prevState) => {
+            return { warning: !prevState.warning };
+        });
+    };
+
+    confirmDeleteClick = () => {
+        console.log("execute delete");
     };
 
     toggleNewFolderModal = () => {
@@ -236,7 +271,8 @@ class Folder extends Component {
                 };
             },
             () => {
-                if (name === "Departments") { // when clicking on a department chip
+                if (name === "Departments") {
+                    // when clicking on a department chip
                     let userArr = [...this.state.Users];
                     userArr.map((user) => {
                         if (user.department === this.state.Departments[index].name) {
@@ -259,22 +295,48 @@ class Folder extends Component {
         );
     };
 
+    handleMoreActionClick = (event) => {
+        this.setState({ anchorEl: event.currentTarget });
+    };
+
+    handleMenuClose = () => {
+        this.setState({ anchorEl: null });
+    };
+
+    handleMenuClick = (action) => {
+        this.setState({
+            action: action,
+            anchorEl: null
+        });
+    };
+
     render() {
         const { classes } = this.props;
         const { slideState, userID } = this.props.reduxState;
+        const open = Boolean(this.state.anchorEl);
         return (
             <Slide direction={slideState} in mountOnEnter unmountOnExit>
                 <div className={classes.content}>
                     <div className={classes.toolbar} />
+                    <Warning title={""} open={this.state.warning} toggle={this.toggleWarning} endpoint="api/create_horizon_folder/" dest="/performance/" history={history} />
                     <FilterBar filterItemClickHandler={this.filterItemClickHandler} Departments={this.state.Departments} Users={this.state.Users} />
-                    {/* <h2 style={{ marginTop: 0 }}>Campaigns</h2> */}
-
-                    <FormattedMessage id={"folder.title.self"}>{(msg) => <h3>{msg}</h3>}</FormattedMessage>
+                    <div className={classes.titleBar}>
+                        <FormattedMessage id={"folder.title.self"}>{(msg) => <h3>{msg}</h3>}</FormattedMessage>
+                        <div className={classes.spacer} />
+                        <IconButton aria-label="More" aria-owns={open ? "long-menu" : undefined} aria-haspopup="true" onClick={this.handleMoreActionClick}>
+                            <MoreIcon />
+                        </IconButton>
+                        <Menu id="long-menu" anchorEl={this.state.anchorEl} open={open} onClose={this.handleMenuClose}>
+                            <MenuItem onClick={() => this.handleMenuClick("delete")}>Delete Project</MenuItem>
+                        </Menu>
+                    </div>
                     <Divider />
                     <CardWithLoad
                         toggleNewFolderModal={this.toggleNewFolderModal}
                         handleCardClick={this.handleCardClick}
+                        handleDeleteClick={this.handleDeleteClick}
                         hover={this.state.hover}
+                        action={this.state.action}
                         setHover={this.setHover}
                         openModal={this.state.openModal}
                         data={this.state.cards.filter(({ created_by_id }) => created_by_id === userID)}
@@ -357,6 +419,9 @@ const styleCard = (theme) => ({
         "&:last-child": {
             padding: theme.spacing.unit
         }
+    },
+    lessPadding: {
+        padding: "3px"
     }
 });
 
@@ -366,7 +431,7 @@ const CardWithLoad = compose(
 )(CardContainer);
 
 function CardContainer(props) {
-    const { classes, data, setHover, hover, handleCardClick, toggleNewFolderModal, openModal, history, creatable } = props;
+    const { classes, data, setHover, hover, handleCardClick, handleDeleteClick, toggleNewFolderModal, openModal, history, creatable, action } = props;
     return (
         <div className={classes.CardContainer}>
             {data.map(({ id, name, completed_target, total_target }) => (
@@ -375,6 +440,11 @@ function CardContainer(props) {
                         <h4 className={classes.folderTitle}>{name.length > 20 ? `${name.slice(0, 17)}...` : name}</h4>
                         <div className={classes.spacer} />
                         <div className={classes.labelWrapper}>
+                            {action === "delete" ? (
+                                <IconButton aria-label="More" className={classes.lessPadding}>
+                                    <DeleteIcon fontSize="small" onClick={(e) => handleDeleteClick(e, id)} />
+                                </IconButton>
+                            ) : null}
                             <div className={classes.spacer} />
                             {completed_target / total_target === 1 ? (
                                 <div className={classes.cardLabel} style={{ color: "#4CAF50" }}>

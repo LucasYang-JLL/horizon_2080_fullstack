@@ -15,19 +15,30 @@ class FolderQuery(generics.ListCreateAPIView):
     serializer_class = FolderSerializer
     def get_queryset(self):
         userID = self.request.user.name # my user id
-        print(self.request.user.report_to.all()) # the users that I report to
         userArr = self.request.user.report_to_me.all() # the users that report to me
         nameList = [userID]
         for user in userArr:
             nameList.append(user.name)
-        print(nameList)
-        return folder.objects.filter(created_by_id__in = nameList)
+        return folder.objects.filter(created_by_id__in = nameList, active = True)
 
 class FolderQueryByID(generics.ListCreateAPIView):
     serializer_class = FolderSerializer
     # queryset = horizon_target_individual.objects.all()
     def get_queryset(self):
         return folder.objects.filter(id=self.kwargs['pk'])
+
+class DeactivateFolder(generics.UpdateAPIView):
+    queryset = folder.objects.all()
+    serializer_class = FolderActiveSerializer
+    
+    def update(self, request, *args, **kwargs):
+        # creates an instance of the model object from the requested id
+        instance = self.get_object()
+        # parse the model to be put into database
+        serializer = self.get_serializer(instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
 
 class FolderCreate(generics.CreateAPIView):
     queryset = folder.objects.all()
@@ -294,7 +305,8 @@ class QuerySubTargetAndEventDateDesc(generics.ListCreateAPIView):
             nameList.append(user.name)
 
         horizon_target_individual_Annotated = horizon_target_individual.objects.annotate(latest_id = Max('sub_target_individual__id')) # annotated with sub target's newest id
-        filtered_list = horizon_target_individual_Annotated.all().filter(created_by_id__in = nameList).exclude(event__isnull=True, sub_target_individual__isnull=True).order_by('-latest_id') # order the list by the newest sub target at the front
+        print(horizon_target_individual_Annotated)
+        filtered_list = horizon_target_individual_Annotated.all().filter(created_by_id__in = nameList, folder__active = True).exclude(event__isnull=True, sub_target_individual__isnull=True).order_by('-latest_id') # order the list by the newest sub target at the front
         limited_filter_list = filtered_list[:5]
         return limited_filter_list
 
@@ -308,7 +320,7 @@ class QueryEventDateDesc(generics.ListCreateAPIView):
             nameList.append(user.name)
 
         horizon_target_individual_Annotated = horizon_target_individual.objects.annotate(latest_id = Max('comment__id')) # annotated with sub target's newest id
-        filtered_list = horizon_target_individual_Annotated.all().filter(created_by_id__in = nameList).exclude(comment__isnull=True).order_by('-latest_id') # order the list by the newest sub target at the front
+        filtered_list = horizon_target_individual_Annotated.all().filter(created_by_id__in = nameList, folder__active = True).exclude(comment__isnull=True).order_by('-latest_id') # order the list by the newest sub target at the front
         limited_filter_list = filtered_list[:5]
         return limited_filter_list
 
@@ -322,6 +334,6 @@ class QueryActionDateDesc(generics.ListCreateAPIView):
             nameList.append(user.name)
 
         horizon_target_individual_Annotated = horizon_target_individual.objects.annotate(latest_id = Max('action__id')) # annotated with sub target's newest id
-        filtered_list = horizon_target_individual_Annotated.all().filter(created_by_id__in = nameList).exclude(comment__isnull=True).order_by('-latest_id') # order the list by the newest sub target at the front
+        filtered_list = horizon_target_individual_Annotated.all().filter(created_by_id__in = nameList, folder__active = True).exclude(comment__isnull=True).order_by('-latest_id') # order the list by the newest sub target at the front
         limited_filter_list = filtered_list[:5]
         return limited_filter_list

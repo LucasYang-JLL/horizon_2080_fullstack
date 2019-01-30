@@ -6,6 +6,11 @@ class FolderSerializer(serializers.ModelSerializer):
         model = folder
         fields = '__all__'
 
+class FolderActiveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = folder
+        fields = ['active']
+
 class FolderTargetCountSerializer(serializers.ModelSerializer):
     class Meta:
         model = folder

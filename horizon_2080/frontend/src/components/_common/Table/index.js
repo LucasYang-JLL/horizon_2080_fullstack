@@ -12,6 +12,7 @@ import EnhancedTableToolbar from "./TableToolbar";
 import Slide from "@material-ui/core/Slide";
 import FiberManualRecord from "@material-ui/icons/FiberManualRecord";
 import Tooltip from "@material-ui/core/Tooltip";
+import FlagIcon from "@material-ui/icons/Flag";
 import { FormattedMessage } from "react-intl";
 import Checkbox from "@material-ui/core/Checkbox";
 import axios from "axios";
@@ -234,7 +235,7 @@ class EnhancedTable extends React.Component {
                                                         {n.name}
                                                     </TableCell>
                                                     <TableCell className={classes.tableCellLarge}>{n.description}</TableCell>
-                                                    <TableCell className={classes.tableCell}>{n.critical_flag.toString()}</TableCell>
+                                                    <TableCell className={classes.tableCell}>{n.critical_flag ? <FlagIcon color="secondary"/> : null}</TableCell>
                                                     {/* <TableCell className={classes.tableCell}>20/40</TableCell> */}
                                                     <TableCell className={classes.tableCell}>{n.progress}%</TableCell>
                                                     {/* <TableCell className={classes.tableCell}>{n.countable_flag.toString()}</TableCell> */}

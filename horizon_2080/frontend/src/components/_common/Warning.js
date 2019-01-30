@@ -36,40 +36,37 @@ class Warning extends React.Component {
     };
 
     submitForm = () => {
-        let { toggleSnackbar, endpoint, dest, folder_id } = this.props;
-        let fields = Object.assign(this.state.fields);
-        if (folder_id) {
-            fields.folder = folder_id;
-        }
-        this.props.toggle();
-        axios
-            .delete(endpoint, fields)
-            .then((response) => {
-                // handle success
-                // if (dest) {
-                //     this.props.history.push(`${dest}${response.data.id}`);
-                // }
-                // if (toggleSnackbar) {
-                //     this.props.fetchTarget();
-                //     toggleSnackbar(true, "success", "Submitted!");
-                // }
-            })
-            .catch((error) => {
-                // handle error
-                console.log(error);
-            });
+        let { deleteProject } = this.props;
+        deleteProject();
+        // this.props.toggle();
+        // axios
+        //     .delete(endpoint, fields)
+        //     .then((response) => {
+        //         // handle success
+        //         // if (dest) {
+        //         //     this.props.history.push(`${dest}${response.data.id}`);
+        //         // }
+        //         // if (toggleSnackbar) {
+        //         //     this.props.fetchTarget();
+        //         //     toggleSnackbar(true, "success", "Submitted!");
+        //         // }
+        //     })
+        //     .catch((error) => {
+        //         // handle error
+        //         console.log(error);
+        //     });
     };
 
     render() {
-        let { open, toggle, classes, title } = this.props;
+        let { open, toggle, classes, title, deleteProject } = this.props;
         return (
-            <Dialog disableBackdropClick open={open} onClose={toggle} aria-labelledby="form-dialog-title">
+            <Dialog disableBackdropClick open={open} onClose={(e) =>toggle(e)} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">{title}</DialogTitle>
                 <form
                     onSubmit={(e) => {
                         e.preventDefault();
                         this.submitForm();
-                        // toggle();
+                        toggle(e);
                     }}
                 >
                     <DialogContent className={classes.form}>

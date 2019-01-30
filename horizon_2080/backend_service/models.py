@@ -10,6 +10,7 @@ class folder(models.Model):
     total_target = models.PositiveIntegerField(default=0)
     create_date = models.DateTimeField(default=datetime.datetime.now)
     created_by_id = models.CharField(max_length=100)
+    active = models.BooleanField(blank=True, default=True)
     def __str__(self):
         return self.name
 

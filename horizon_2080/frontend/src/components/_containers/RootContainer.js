@@ -61,6 +61,7 @@ const translationConfig = {
             "recent.title.actions": "Recent Actions",
             "recent.text.recentUpdates": ` added, Task, added, Activity`,
             "recent.text.recentComments": ` added, Comment`,
+            "recent.text.recentActions": ` added, Action`,
             "comment.text.placeholder": "Enter your comment...",
             "comment.text.welcomeText": "Looks like there's no comments yet. Be the first one to comment!"
         },

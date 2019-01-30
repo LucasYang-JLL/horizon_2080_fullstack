@@ -166,6 +166,7 @@ class Folder extends Component {
             .then((response) => {
                 // handle success
                 if (response.data.length === 0) {
+                    console.log("empty la");
                     this.setState({
                         emptyRecord: true
                     });
@@ -206,44 +207,10 @@ class Folder extends Component {
             });
     };
 
-    deleteFolderRequest = () => {
-        axios
-            .delete("/api/user_subset_info/")
-            .then((response) => {
-                // handle success
-            })
-            .catch((error) => {
-                // handle error
-                console.log(error);
-            })
-            .then(() => {
-                // always executed
-            });
-    };
-
     handleCardClick = (id) => {
         // this.props.push()
         this.props.history.push(`/performance/${id}`);
         this.props.slideDirection("left");
-    };
-
-    handleDeleteClick = (e, projectID) => {
-        e.stopPropagation();
-        console.log("hi");
-        this.setState({
-            warning: true
-        });
-    };
-
-    toggleWarning = (e) => {
-        e.stopPropagation();
-        this.setState((prevState) => {
-            return { warning: !prevState.warning };
-        });
-    };
-
-    confirmDeleteClick = () => {
-        console.log("execute delete");
     };
 
     toggleNewFolderModal = () => {
@@ -299,6 +266,10 @@ class Folder extends Component {
         this.setState({ anchorEl: event.currentTarget });
     };
 
+    finishAction = () => {
+        this.setState({ action: null });
+    };
+
     handleMenuClose = () => {
         this.setState({ anchorEl: null });
     };
@@ -310,6 +281,50 @@ class Folder extends Component {
         });
     };
 
+    handleDeleteClick = (e, projectID) => {
+        e.stopPropagation();
+        this.setState(
+            {
+                warning: true,
+                prjToDelete: projectID
+            },
+            () => {
+                console.log(this.state.prjToDelete);
+            }
+        );
+    };
+
+    toggleWarning = (e) => {
+        e.stopPropagation();
+        this.setState((prevState) => {
+            return { warning: !prevState.warning };
+        });
+    };
+
+    confirmDeleteClick = () => {
+        console.log("execute delete");
+        this.deleteFolderRequest();
+    };
+
+    deleteFolderRequest = () => {
+        axios
+            .put(`/api/deactivate_folder/${this.state.prjToDelete}/`, { active: false })
+            .then((response) => {
+                // handle success
+                console.log(this.state.cards);
+                let newCards = this.state.cards;
+                let toRemove = this.state.cards.findIndex(({ id }) => id === this.state.prjToDelete);
+                newCards.splice(toRemove, 1);
+                this.setState({
+                    cards: newCards
+                });
+            })
+            .catch((error) => {
+                // handle error
+                console.log(error);
+            });
+    };
+
     render() {
         const { classes } = this.props;
         const { slideState, userID } = this.props.reduxState;
@@ -318,7 +333,15 @@ class Folder extends Component {
             <Slide direction={slideState} in mountOnEnter unmountOnExit>
                 <div className={classes.content}>
                     <div className={classes.toolbar} />
-                    <Warning title={""} open={this.state.warning} toggle={this.toggleWarning} endpoint="api/create_horizon_folder/" dest="/performance/" history={history} />
+                    <Warning
+                        title={""}
+                        open={this.state.warning}
+                        toggle={this.toggleWarning}
+                        deleteProject={this.confirmDeleteClick}
+                        endpoint="api/create_horizon_folder/"
+                        dest="/performance/"
+                        history={history}
+                    />
                     <FilterBar filterItemClickHandler={this.filterItemClickHandler} Departments={this.state.Departments} Users={this.state.Users} />
                     <div className={classes.titleBar}>
                         <FormattedMessage id={"folder.title.self"}>{(msg) => <h3>{msg}</h3>}</FormattedMessage>
@@ -331,7 +354,7 @@ class Folder extends Component {
                         </Menu>
                     </div>
                     <Divider />
-                    <CardWithLoad
+                    <CardWithStyle
                         toggleNewFolderModal={this.toggleNewFolderModal}
                         handleCardClick={this.handleCardClick}
                         handleDeleteClick={this.handleDeleteClick}
@@ -344,6 +367,12 @@ class Folder extends Component {
                         history={this.props.history}
                         creatable={true}
                     />
+                    {this.state.action ? (
+                        <Button variant="outlined" style={{ margin: "0 24px" }} onClick={this.finishAction}>
+                            Done
+                        </Button>
+                    ) : null}
+
                     {this.state.Users.map((user) =>
                         this.state.cards.filter(({ created_by_id }) => created_by_id === user.name).length !== 0 ? (
                             user.active ? (
@@ -357,7 +386,7 @@ class Folder extends Component {
                                         )}
                                     </FormattedMessage>
                                     <Divider />
-                                    <CardWithLoad
+                                    <CardWithStyle
                                         toggleNewFolderModal={this.toggleNewFolderModal}
                                         handleCardClick={this.handleCardClick}
                                         hover={this.state.hover}
@@ -425,10 +454,7 @@ const styleCard = (theme) => ({
     }
 });
 
-const CardWithLoad = compose(
-    WithLoadingScreen,
-    withStyles(styleCard)
-)(CardContainer);
+const CardWithStyle = compose(withStyles(styleCard))(CardContainer);
 
 function CardContainer(props) {
     const { classes, data, setHover, hover, handleCardClick, handleDeleteClick, toggleNewFolderModal, openModal, history, creatable, action } = props;

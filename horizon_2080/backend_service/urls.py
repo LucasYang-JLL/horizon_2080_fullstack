@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 urlpatterns = [
     path('api/horizon_folder/', views.FolderQuery.as_view() ),
+    path('api/deactivate_folder/<int:pk>/', views.DeactivateFolder.as_view() ),
     path('api/fetch_horizon_folder_by_id/<int:pk>/', views.FolderQueryByID.as_view() ),
     path('api/update_horizon_folder_by_id/<int:pk>/', views.FolderUpdate.as_view() ),
     path('api/updateTargetCountByFolder/<int:pk>/', views.UpdateTargetCountByFolder.as_view() ),

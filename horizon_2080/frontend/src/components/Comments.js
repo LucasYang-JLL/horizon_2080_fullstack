@@ -27,7 +27,8 @@ const styles = (theme) => ({
         flexGrow: 1,
         backgroundColor: theme.palette.background.default,
         padding: theme.spacing.unit * 3,
-        minWidth: 0 // So the Typography noWrap works
+        minWidth: 0, // So the Typography noWrap works
+        overflow: "auto"
     },
     dockedRoot: {
         // position: "absolute",

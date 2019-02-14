@@ -20,6 +20,7 @@ import EqualizerIcon from "@material-ui/icons/Equalizer";
 import EventIcon from "@material-ui/icons/Event";
 import CommentIcon from "@material-ui/icons/Comment";
 import SendIcon from "@material-ui/icons/Send";
+import AssignmentIcon from "@material-ui/icons/Assignment";
 import SettingsIcon from "@material-ui/icons/Settings";
 import Hidden from "@material-ui/core/Hidden";
 import Drawer from "@material-ui/core/Drawer";
@@ -43,10 +44,8 @@ const styles = (theme) => ({
     flex: {
         display: "flex"
     },
-    drawerList: {
-        "& div:last-child": {
-            marginTop: "auto"
-        }
+    stickBottom: {
+        marginTop: "auto"
     },
     drawerUl: {
         display: "flex",
@@ -99,6 +98,7 @@ let drawerConfig = [
     { link: "/events", icon: <EventIcon /> },
     { link: "/comments", icon: <CommentIcon /> },
     { link: "/actions", icon: <SendIcon /> },
+    { link: "/monthly-goal", icon: <AssignmentIcon /> },
     { link: "/settings", icon: <SettingsIcon /> }
 ];
 
@@ -195,9 +195,15 @@ class Header extends Component {
                 <div className={classes.toolbar} />
                 <FormattedMessage id={`header.drawers`}>
                     {(msg) => (
-                        <List className={classNames(classes.drawerUl, classes.drawerList)} onClick={this.handleDrawerToggle}>
+                        <List className={classes.drawerUl} onClick={this.handleDrawerToggle}>
                             {msg.split(",").map((value, index) => (
-                                <ListItem selected={this.state.activeDrawer === index} onClick={(e) => this.handleDrawerClick(e, "activeDrawer", value, index)} key={value} button>
+                                <ListItem
+                                    className={drawerConfig[index].link === "/monthly-goal" ? classes.stickBottom : null}
+                                    selected={this.state.activeDrawer === index}
+                                    onClick={(e) => this.handleDrawerClick(e, "activeDrawer", value, index)}
+                                    key={value}
+                                    button
+                                >
                                     <ListItemIcon>{drawerConfig[index].icon}</ListItemIcon>
                                     <ListItemText disableTypography primary={value} />
                                 </ListItem>

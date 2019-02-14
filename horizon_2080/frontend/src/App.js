@@ -12,6 +12,7 @@ import DetailsContainer from "./components/_containers/DetailsContainer";
 import EventsContainer from "./components/_containers/EventsContainer";
 import CommentsContainer from "./components/_containers/CommentsContainer";
 import ActionsContainer from "./components/_containers/ActionsContainer";
+import MonthlyGoalContainer from "./components/_containers/MonthlyGoalContainer";
 import SettingsContainer from "./components/_containers/SettingsContainer";
 import Snackbar from "./components/_common/Snackbar";
 
@@ -63,6 +64,7 @@ class App extends Component {
                         <Route path="/events" component={EventsContainer} />
                         <Route path="/comments" component={CommentsContainer} />
                         <Route path="/actions" component={ActionsContainer} />
+                        <Route path="/monthly-goal" component={MonthlyGoalContainer} />
                         <Route path="/settings" component={SettingsContainer} />
                         <Snackbar toggleSnackbar={toggleSnackbar} snackbarProp={snackbarProp} />
                     </div>

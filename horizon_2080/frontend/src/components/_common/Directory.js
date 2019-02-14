@@ -3,10 +3,10 @@ import React, { Component } from "react";
 const Directory = (props) => {
     const { folder, target } = props;
     return (
-        <div>
-            <h4>
-                {folder} / {target}
-            </h4>
+        <div style={{ margin: "16px 0", fontWeight: "bold" }}>
+            <span>
+                {folder} {target ? `/ ${target}` : null}
+            </span>
         </div>
     );
 };

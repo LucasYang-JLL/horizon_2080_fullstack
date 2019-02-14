@@ -48,8 +48,8 @@ INSTALLED_APPS = [
 AUTH_USER_MODEL = 'users.User'
 
 CRONJOBS = [
-    # ('*/1 * * * *', 'backend_service.crontab.my_scheduled_job'),
-    ('*/1 * * * *', 'backend_service.crontab.target_urgency')
+    ('*/1 * * * *', 'backend_service.crontab_local.my_scheduled_job'),
+    # ('*/1 * * * *', 'backend_service.crontab.target_urgency')
 ]
 
 CRON_CLASSES = [

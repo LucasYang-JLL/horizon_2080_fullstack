@@ -2,8 +2,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Chip from "@material-ui/core/Chip";
+import Switch from "@material-ui/core/Switch";
 import color from "../../MuiTheme/color";
 import classNames from "classnames";
+import Tooltip from "@material-ui/core/Tooltip";
 import { FormattedMessage } from "react-intl";
 
 const styles = (theme) => ({
@@ -30,10 +32,13 @@ const styles = (theme) => ({
 
 class FilterBar extends React.Component {
     render() {
-        const { classes, filterObj, filterItemClickHandler, Departments, Users } = this.props;
+        const { classes, filterObj, filterItemClickHandler, handleChange, Departments, Users, checkedDpt, checkedMember } = this.props;
         return (
             <div className={classes.root}>
                 <div className={classes.filterRow}>
+                    <Tooltip title={checkedDpt ? "Select All" : "Select None"} aria-label="toggle" placement="left">
+                        <Switch checked={checkedDpt} onChange={handleChange("checkedDpt")} value="checkedDpt" color="default" />
+                    </Tooltip>
                     <FormattedMessage id={"filterBar.option.department"}>
                         {(msg) => (
                             <div className={classes.filterRow} style={{ marginRight: "4px" }}>
@@ -56,6 +61,9 @@ class FilterBar extends React.Component {
                     </div>
                 </div>
                 <div className={classes.filterRow}>
+                    <Tooltip title={checkedMember ? "Select All" : "Select None"} aria-label="toggle" placement="left">
+                        <Switch checked={checkedMember} onChange={handleChange("checkedMember")} value="checkedMember" color="default" />
+                    </Tooltip>
                     <FormattedMessage id={"filterBar.option.user"}>
                         {(msg) => (
                             <div className={classes.filterRow} style={{ marginRight: "4px" }}>

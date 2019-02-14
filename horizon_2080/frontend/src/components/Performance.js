@@ -184,7 +184,7 @@ class Performance extends Component {
         this.setState({
             folderTitle: newTitle
         });
-    }
+    };
 
     render() {
         const { classes, ...otherProps } = this.props;
@@ -201,7 +201,13 @@ class Performance extends Component {
                         <div className={classes.toolbar} />
                         <Navigation buttonType={"add"} depth={depth} history={this.props.history} slideFunc={this.props.slideDirection} buttonMethod={this.addPerformance} component="performance" />
                         <Fragment>
-                            <TableWithLoad emptyRecord={this.state.emptyRecord} folderTitle={this.state.folderTitle} updateFolderTitle={this.updateFolderTitle} data={this.state.tableData} {...otherProps} />
+                            <TableWithLoad
+                                emptyRecord={this.state.emptyRecord}
+                                folderTitle={this.state.folderTitle}
+                                updateFolderTitle={this.updateFolderTitle}
+                                data={this.state.tableData}
+                                {...otherProps}
+                            />
                             <FormattedMessage id={"target.add.title"}>
                                 {(msg) => (
                                     <Form
@@ -212,6 +218,7 @@ class Performance extends Component {
                                         inputFields={inputFields}
                                         endpoint={`/api/create_horizon_target_individual/${this.props.match.params.id}/`}
                                         folder_id={this.props.match.params.id}
+                                        fetchTarget={this.fetchIndividualTargets}
                                     />
                                 )}
                             </FormattedMessage>

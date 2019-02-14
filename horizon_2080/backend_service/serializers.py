@@ -22,6 +22,12 @@ class TargetIndividualSerializer(serializers.ModelSerializer):
         model = horizon_target_individual
         fields = '__all__'
 
+class TargetYearRangeSerializer(serializers.ModelSerializer):
+    year_range = serializers.ReadOnlyField(source='target_year_range')
+    class Meta:
+        model = horizon_target_individual
+        fields = ['year_range']
+
 class TargetIndividualProgressSerializer(serializers.ModelSerializer):
     class Meta:
         model = horizon_target_individual
@@ -78,3 +84,16 @@ class CombinedActionSerializer(serializers.ModelSerializer):
     class Meta:
         model = horizon_target_individual
         fields = ['action', 'name', 'folder', 'id']
+
+class CombinedTargetSerializer(serializers.ModelSerializer):
+    # serializing target count using model property
+    complete_count = serializers.ReadOnlyField(source='target_completion_by_folder')
+    # serializing targets using SerializerMethodField
+    target = serializers.SerializerMethodField('get_target_by_date_asec') 
+    def get_target_by_date_asec(self, instance): # every instances related to the respective folder object
+        sorted_target = instance.horizon_target_individual_set.all()\
+            .order_by('-expire_date')
+        return TargetIndividualSerializer(sorted_target, many = True, context=self.context).data
+    class Meta:
+        model = folder
+        fields = ['target', 'name', 'id', 'complete_count']

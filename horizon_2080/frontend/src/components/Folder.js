@@ -152,7 +152,9 @@ class Folder extends Component {
         Users: [],
         anchorEl: null,
         action: null,
-        warning: false
+        warning: false,
+        checkedDpt: true,
+        checkedMember: true
     };
 
     componentDidMount() {
@@ -262,6 +264,34 @@ class Folder extends Component {
         );
     };
 
+    handleFilterSwitch = (name) => (event) => {
+        console.log(event, this.state.Departments, this.state.Users);
+        const dptArr = [...this.state.Departments];
+        const userArr = [...this.state.Users];
+        switch (name) {
+            case "checkedDpt":
+                dptArr.map((dpt) => {
+                    dpt.active = event.target.checked;
+                });
+                userArr.map((user) => {
+                    user.visible = event.target.checked;
+                    user.active = event.target.checked;
+                });
+                break;
+            case "checkedMember":
+                userArr.map((user) => {
+                    // user.visible = event.target.checked;
+                    user.active = event.target.checked;
+                });
+                break;
+        }
+        this.setState({
+            [name]: event.target.checked,
+            Departments: dptArr,
+            Users: userArr
+        });
+    };
+    // --------------------
     handleMoreActionClick = (event) => {
         this.setState({ anchorEl: event.currentTarget });
     };
@@ -342,7 +372,14 @@ class Folder extends Component {
                         dest="/performance/"
                         history={history}
                     />
-                    <FilterBar filterItemClickHandler={this.filterItemClickHandler} Departments={this.state.Departments} Users={this.state.Users} />
+                    <FilterBar
+                        checkedDpt={this.state.checkedDpt}
+                        checkedMember={this.state.checkedMember}
+                        handleChange={this.handleFilterSwitch}
+                        filterItemClickHandler={this.filterItemClickHandler}
+                        Departments={this.state.Departments}
+                        Users={this.state.Users}
+                    />
                     <div className={classes.titleBar}>
                         <FormattedMessage id={"folder.title.self"}>{(msg) => <h3>{msg}</h3>}</FormattedMessage>
                         <div className={classes.spacer} />

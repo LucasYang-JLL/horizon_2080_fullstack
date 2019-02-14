@@ -28,7 +28,8 @@ const translationConfig = {
     locale: "en-US",
     messages: {
         en: {
-            "header.drawers": `Performance, Activity, Recent Comments, Actions, Settings`,
+            "date.months": `January, February, March, April, May, June, July, August, September, October, November, December`,
+            "header.drawers": `Performance, Activity, Recent Comments, Actions, Monthly Goals, Settings`,
             "navigation.performance.title": `Target, Details`,
             "navigation.comments.title": `Recent Comments`,
             "tab.comments.title": "Comments, Actions",
@@ -59,14 +60,17 @@ const translationConfig = {
             "recent.title.events": "Recent Updates",
             "recent.title.comments": "Recent Comments",
             "recent.title.actions": "Recent Actions",
+            "recent.title.monthly_goal": "Monthly Goals",
             "recent.text.recentUpdates": ` added, Task, added, Activity`,
             "recent.text.recentComments": ` added, Comment`,
             "recent.text.recentActions": ` added, Action`,
+            "recent.text.monthly_goal": ` Haven't Started, Due`,
             "comment.text.placeholder": "Enter your comment...",
             "comment.text.welcomeText": "Looks like there's no comments yet. Be the first one to comment!"
         },
         zh: {
-            "header.drawers": "行动目标, 行动概览, 留言概览, 执行备忘, 设置",
+            "date.months": `一月, 二月, 三月, 四月, 五月, 六月, 七月, 八月, 九月, 十月, 十一月, 十二月`,
+            "header.drawers": "行动目标, 行动概览, 留言概览, 执行备忘, 每月进度, 设置",
             "navigation.performance.title": `目标细分, 目标详情`,
             "navigation.comments.title": `我的留言`,
             "tab.comments.title": "留言, 备忘",
@@ -97,8 +101,11 @@ const translationConfig = {
             "recent.title.events": "行动概览",
             "recent.title.comments": "留言概览",
             "recent.title.actions": "执行备忘",
+            "recent.title.monthly_goal": "每月进度",
             "recent.text.recentUpdates": ` 添加一条, 行动要点, 添加一条,备注`,
             "recent.text.recentComments": ` 添加一条 ,留言`,
+            "recent.text.recentActions": ` 添加一条, 执行备忘`,
+            "recent.text.monthly_goal": ` 未开始, 截止`,
             "comment.text.placeholder": "输入你的留言...",
             "comment.text.welcomeText": "还没有人留言。发表些观点吧！"
         }

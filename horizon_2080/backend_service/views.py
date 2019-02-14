@@ -3,6 +3,8 @@ from rest_framework.response import Response
 from django.http import JsonResponse
 from django.db.models import Max
 from rest_framework import generics
+from rest_framework.views import APIView
+from rest_framework import authentication, permissions
 from backend_service.models import *
 from backend_service.serializers import *
 
@@ -337,3 +339,24 @@ class QueryActionDateDesc(generics.ListCreateAPIView):
         filtered_list = horizon_target_individual_Annotated.all().filter(created_by_id__in = nameList, folder__active = True).exclude(comment__isnull=True).order_by('-latest_id') # order the list by the newest sub target at the front
         limited_filter_list = filtered_list[:5]
         return limited_filter_list
+
+class QueryTargetByMonth(generics.ListCreateAPIView):
+    serializer_class = CombinedTargetSerializer
+    def get_queryset(self):
+        userID = self.request.user.name # my user id
+        userArr = self.request.user.report_to_me.all() # the users that report to me
+        nameList = [userID]
+        for user in userArr:
+            nameList.append(user.name)
+        # return the folder object that contains all targets related to it. filtered by Active, Created By User, expire month and year
+        return folder.objects.filter(created_by_id__in = nameList, active = True, horizon_target_individual__expire_date__year = self.kwargs['year'], horizon_target_individual__expire_date__month = self.kwargs['month']+1)\
+                                .annotate(expire_date = Max('horizon_target_individual__id'))\
+                                .exclude(horizon_target_individual__isnull=True).order_by('expire_date') # order the list by the newest sub target at the front
+
+class QueryAvailableYear(APIView):
+    serializer_class = TargetYearRangeSerializer
+    def get(self, request):
+        latest_date = horizon_target_individual.objects.latest('expire_date').expire_date.year
+        earliest_date = horizon_target_individual.objects.earliest('expire_date').expire_date.year
+        content = {'year_range': [earliest_date, latest_date]}
+        return Response(content)

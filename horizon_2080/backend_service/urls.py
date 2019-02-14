@@ -27,4 +27,6 @@ urlpatterns = [
     path('api/fetch_recent_sub_target_and_event/', views.QuerySubTargetAndEventDateDesc.as_view() ),
     path('api/fetch_recent_comments/', views.QueryEventDateDesc.as_view() ),
     path('api/fetch_recent_actions/', views.QueryActionDateDesc.as_view() ),
+    path('api/fetch_target_by_month/<int:year>/<int:month>/', views.QueryTargetByMonth.as_view() ),
+    path('api/fetch_available_year/', views.QueryAvailableYear.as_view() ),
 ]

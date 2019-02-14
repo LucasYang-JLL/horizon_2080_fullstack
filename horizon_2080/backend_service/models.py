@@ -14,6 +14,13 @@ class folder(models.Model):
     def __str__(self):
         return self.name
 
+    # get the completion count
+    @property
+    def target_completion_by_folder(self):
+        complete_count = self.horizon_target_individual_set.all().filter(progress=100).count()
+        return complete_count
+    
+
 class horizon_target_individual(models.Model):
     folder = models.ForeignKey(folder, on_delete=models.CASCADE, default=-1)
     name = models.CharField(max_length=100, null=True, blank=True)
@@ -31,8 +38,15 @@ class horizon_target_individual(models.Model):
     city = models.CharField(max_length=100, null=True, blank=True)
     created_by_id = models.CharField(max_length=100)
     urgent = models.BooleanField(blank=True, default=False)
+
     def __str__(self):
         return self.name
+
+    @property
+    def target_year_range(self):
+        oldest_year = self.objects.count()
+        print(oldest_year)
+        return 12
 
 class sub_target_individual(models.Model):
     target = models.ForeignKey(horizon_target_individual, on_delete=models.CASCADE, default=-1)

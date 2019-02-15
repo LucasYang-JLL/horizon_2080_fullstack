@@ -42,8 +42,6 @@ def my_scheduled_job():
             ["lucas.yang@ap.jll.com"],
             html_message=email_template
         )
-    # list of folders
-    # folder_list = list(folder.objects.filter(id__in=folder_ids).values("name", "id"))
     pass
 
 def target_urgency():

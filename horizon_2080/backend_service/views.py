@@ -344,19 +344,15 @@ class QueryTargetByMonth(generics.ListCreateAPIView):
     serializer_class = CombinedTargetSerializer
     def get_queryset(self):
         userID = self.request.user.name # my user id
-        userArr = self.request.user.report_to_me.all() # the users that report to me
-        nameList = [userID]
-        for user in userArr:
-            nameList.append(user.name)
         # return the folder object that contains all targets related to it. filtered by Active, Created By User, expire month and year
-        return folder.objects.filter(created_by_id__in = nameList, active = True, horizon_target_individual__expire_date__year = self.kwargs['year'], horizon_target_individual__expire_date__month = self.kwargs['month']+1)\
+        return folder.objects.filter(created_by_id = userID, active = True, horizon_target_individual__expire_date__year = self.kwargs['year'], horizon_target_individual__expire_date__month = self.kwargs['month']+1)\
                                 .annotate(expire_date = Max('horizon_target_individual__id'))\
                                 .exclude(horizon_target_individual__isnull=True).order_by('expire_date') # order the list by the newest sub target at the front
 
 class QueryAvailableYear(APIView):
     serializer_class = TargetYearRangeSerializer
     def get(self, request):
-        latest_date = horizon_target_individual.objects.latest('expire_date').expire_date.year
         earliest_date = horizon_target_individual.objects.earliest('expire_date').expire_date.year
+        latest_date = horizon_target_individual.objects.latest('expire_date').expire_date.year
         content = {'year_range': [earliest_date, latest_date]}
         return Response(content)

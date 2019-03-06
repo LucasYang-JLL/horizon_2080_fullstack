@@ -14,13 +14,6 @@ class folder(models.Model):
     def __str__(self):
         return self.name
 
-    # get the completion count
-    @property
-    def target_completion_by_folder(self):
-        complete_count = self.horizon_target_individual_set.all().filter(progress=100).count()
-        return complete_count
-    
-
 class horizon_target_individual(models.Model):
     folder = models.ForeignKey(folder, on_delete=models.CASCADE, default=-1)
     name = models.CharField(max_length=100, null=True, blank=True)
@@ -29,14 +22,14 @@ class horizon_target_individual(models.Model):
     countable_flag = models.BooleanField(blank=True, default=False)
     completed_flag = models.BooleanField(blank=True, default=False)
     create_date = models.DateTimeField(default=datetime.datetime.now)
-    start_date = models.DateField()
-    expire_date = models.DateField()
+    start_date = models.DateField(blank=True)
+    expire_date = models.DateField(blank=True)
     remind_date = models.DateField(null=True, blank=True)
     status = models.CharField(max_length=300, null=True, blank=True, default="Active")
     progress = models.PositiveIntegerField(default=0)
     user_role_id = models.PositiveIntegerField(default=0)
     city = models.CharField(max_length=100, null=True, blank=True)
-    created_by_id = models.CharField(max_length=100)
+    created_by_id = models.CharField(blank=True, max_length=100)
     urgent = models.BooleanField(blank=True, default=False)
 
     def __str__(self):

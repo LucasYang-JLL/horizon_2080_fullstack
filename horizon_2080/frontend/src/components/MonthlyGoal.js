@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Slide from "@material-ui/core/Slide";
@@ -6,6 +6,11 @@ import MonthlyGoalList from "./MonthlyGoalList";
 import WithLoadingScreen from "./_common/WithLoadingScreen";
 import YearPicker from "./_common/YearPicker";
 import MonthPicker from "./_common/MonthPicker";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
 import { FormattedMessage } from "react-intl";
 import axios from "axios";
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
@@ -30,6 +35,10 @@ const styles = (theme) => ({
     },
     spacer: {
         flex: 1
+    },
+    optionFilter: {
+        minWidth: 80,
+        margin: "0 16px"
     }
 });
 
@@ -38,20 +47,74 @@ class MonthlyGoal extends Component {
         emptyRecord: false,
         data: [],
         yearArr: [],
+        filterType: "MonthYear",
         year: new Date().getFullYear(), // set default to current year
         month: new Date().getMonth() // set default to current month
     };
 
     componentDidMount() {
-        this.fetchRecentActions();
+        this.fetchTargetByMonthYear();
         this.fetchYearRange();
     }
 
-    fetchRecentActions = () => {
+    fetchTargetByMonthYear = () => {
         axios
             .get(`/api/fetch_target_by_month/${this.state.year}/${this.state.month}/`)
             .then((response) => {
                 // handle success
+                console.log(response.data);
+                if (response.data.length === 0) {
+                    this.setState({
+                        emptyRecord: true,
+                        data: response.data
+                    });
+                } else {
+                    this.setState({
+                        data: response.data
+                    });
+                }
+            })
+            .catch((error) => {
+                // handle error
+                console.log(error);
+            })
+            .then(() => {
+                // always executed
+            });
+    };
+
+    fetchTargetByOverdue = () => {
+        axios
+            .get(`/api/fetch_target_by_overdue/`)
+            .then((response) => {
+                // handle success
+                console.log(response.data);
+                if (response.data.length === 0) {
+                    this.setState({
+                        emptyRecord: true,
+                        data: response.data
+                    });
+                } else {
+                    this.setState({
+                        data: response.data
+                    });
+                }
+            })
+            .catch((error) => {
+                // handle error
+                console.log(error);
+            })
+            .then(() => {
+                // always executed
+            });
+    };
+
+    fetchTargetByBehindSchedule = () => {
+        axios
+            .get(`/api/fetch_target_by_behind_schedule/`)
+            .then((response) => {
+                // handle success
+                console.log(response.data);
                 if (response.data.length === 0) {
                     this.setState({
                         emptyRecord: true,
@@ -99,15 +162,32 @@ class MonthlyGoal extends Component {
             });
     };
 
+    handleFilterTypeChange = (event) => {
+        this.setState({ filterType: event.target.value }, () => {
+            // this.fetchTargetByMonthYear();
+            switch (this.state.filterType) {
+                case "MonthYear":
+                    this.fetchTargetByMonthYear();
+                    break;
+                case "overdue":
+                    this.fetchTargetByOverdue();
+                    break;
+                case "behindProgress":
+                    this.fetchTargetByBehindSchedule();
+                    break;
+            }
+        });
+    };
+
     handleYearChange = (event) => {
         this.setState({ year: event.target.value }, () => {
-            this.fetchRecentActions();
+            this.fetchTargetByMonthYear();
         });
     };
 
     handleMonthChange = (event) => {
         this.setState({ month: event.target.value }, () => {
-            this.fetchRecentActions();
+            this.fetchTargetByMonthYear();
         });
     };
 
@@ -119,12 +199,33 @@ class MonthlyGoal extends Component {
                 <div className={classes.content}>
                     <div className={classes.toolbar} />
                     <div className={classes.headerWrapper}>
-                        <FormattedMessage id={"recent.title.monthly_goal"}>{(msg) => <h2 style={{ margin: 0 }}>{msg}</h2>}</FormattedMessage>
+                        <FormattedMessage id={"recent.title.target_progress"}>{(msg) => <h2 style={{ margin: 0 }}>{msg}</h2>}</FormattedMessage>
                         <div className={classes.spacer} />
-                        <YearPicker year={this.state.year} handleYearChange={this.handleYearChange} yearArr={this.state.yearArr} />
-                        <MonthPicker month={this.state.month} handleMonthChange={this.handleMonthChange} />
+
+                        {this.state.filterType === "MonthYear" ? (
+                            <Fragment>
+                                <YearPicker year={this.state.year} handleYearChange={this.handleYearChange} yearArr={this.state.yearArr} />
+                                <MonthPicker month={this.state.month} handleMonthChange={this.handleMonthChange} />
+                            </Fragment>
+                        ) : null}
+                        <form className={classes.optionFilter}>
+                            <FormControl>
+                                <Select
+                                    value={this.state.filterType}
+                                    onChange={this.handleFilterTypeChange}
+                                    inputProps={{
+                                        name: "age",
+                                        id: "age-simple"
+                                    }}
+                                >
+                                    <MenuItem value={"MonthYear"}>Targets due by month</MenuItem>
+                                    {/* <MenuItem value={"behindProgress"}>Behind Schedule</MenuItem> */}
+                                    <MenuItem value={"overdue"}>Overdue</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </form>
                     </div>
-                    <FormattedMessage id={"recent.text.monthly_goal"}>
+                    <FormattedMessage id={"recent.text.target_progress"}>
                         {(msg) => {
                             let msgArr = msg.split(",");
                             return (

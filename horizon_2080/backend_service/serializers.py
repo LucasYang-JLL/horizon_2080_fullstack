@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from backend_service.models import *
+import datetime
 
 class FolderSerializer(serializers.ModelSerializer):
     class Meta:
@@ -85,14 +86,57 @@ class CombinedActionSerializer(serializers.ModelSerializer):
         model = horizon_target_individual
         fields = ['action', 'name', 'folder', 'id']
 
-class CombinedTargetSerializer(serializers.ModelSerializer):
+class TargetByMonthYearSerializer(serializers.ModelSerializer):
+    # serializing target count using model property
+    complete_count = serializers.SerializerMethodField('target_completed_count_by_month_year') 
+    # serializing targets using SerializerMethodField
+    target = serializers.SerializerMethodField('get_target_by_month_year') 
+    def get_target_by_month_year(self, instance): # every instances related to the respective folder object
+        year = self.context.get('request').parser_context['kwargs']['year']
+        month = self.context.get('request').parser_context['kwargs']['month']+1
+        sorted_target = instance.horizon_target_individual_set.filter(expire_date__year = year, expire_date__month = month)\
+            .order_by('-expire_date')
+        return TargetIndividualSerializer(sorted_target, many = True, context=self.context).data
+
+    def target_completed_count_by_month_year(self, instance):
+        year = self.context.get('request').parser_context['kwargs']['year']
+        month = self.context.get('request').parser_context['kwargs']['month']+1
+        complete_count = instance.horizon_target_individual_set.filter(expire_date__year = year, expire_date__month = month, progress=100).count()
+        return complete_count 
+
+    class Meta:
+        model = folder
+        fields = ['target', 'name', 'id', 'complete_count']
+
+class TargetByOverdueSerializer(serializers.ModelSerializer):
+    # serializing target count using model property
+    complete_count = serializers.SerializerMethodField('target_completed_count_by_overdue') 
+    # serializing targets using SerializerMethodField
+    target = serializers.SerializerMethodField('get_target_by_overdue') 
+    def get_target_by_overdue(self, instance): # every instances related to the respective folder object
+        today = datetime.datetime.today()
+        sorted_target = instance.horizon_target_individual_set.filter(expire_date__lt = today, progress__lt = 100)\
+            .order_by('expire_date')
+        return TargetIndividualSerializer(sorted_target, many = True, context=self.context).data
+
+    def target_completed_count_by_overdue(self, instance):
+        # dummy function 
+        # only return 0 since the overdue only shows progress that's not completed
+        # so it doens't make sense to show completed count
+        return 0
+
+    class Meta:
+        model = folder
+        fields = ['target', 'name', 'id', 'complete_count']
+
+class TargetByBehindScheduleSerializer(serializers.ModelSerializer):
     # serializing target count using model property
     complete_count = serializers.ReadOnlyField(source='target_completion_by_folder')
     # serializing targets using SerializerMethodField
-    target = serializers.SerializerMethodField('get_target_by_date_asec') 
-    def get_target_by_date_asec(self, instance): # every instances related to the respective folder object
+    target = serializers.SerializerMethodField('get_target_by_overdue') 
+    def get_target_by_overdue(self, instance): # every instances related to the respective folder object
         sorted_target = instance.horizon_target_individual_set.all()\
-            .order_by('-expire_date')
+            .order_by('expire_date')
         return TargetIndividualSerializer(sorted_target, many = True, context=self.context).data
     class Meta:
         model = folder

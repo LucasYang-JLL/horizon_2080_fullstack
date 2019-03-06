@@ -2,11 +2,14 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
 from django.http import JsonResponse
 from django.db.models import Max
+from django.db.models import F
+from django.db.models import Q
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework import authentication, permissions
 from backend_service.models import *
 from backend_service.serializers import *
+import datetime
 
 #
 # Folder Views
@@ -121,13 +124,27 @@ class UpdateTargetIndividualDetails(generics.UpdateAPIView):
 
 class UpdateTargetIndividualProgress(generics.UpdateAPIView):
     queryset = horizon_target_individual.objects.all()
-    serializer_class = TargetIndividualProgressSerializer
+    serializer_class = TargetIndividualSerializer
     
     def update(self, request, *args, **kwargs):
         # creates an instance of the model object from the requested id
         instance = self.get_object()
         # parse the model to be put into database
-        serializer = self.get_serializer(instance, data=request.data)
+        target_id = self.kwargs['pk']
+        target = horizon_target_individual.objects.filter(pk=target_id).values()[0]
+        total_time = (target['expire_date'] - target['start_date']).total_seconds()
+        time_till_now = (datetime.date.today() - target['start_date']).total_seconds()
+        time_progress = time_till_now/total_time * 100 # time progression in percentage
+        request_data = request.data
+        print(time_progress)
+        # urgent when time > target progress
+        if(time_progress < target['progress'] or time_progress > 100):
+            print('urgent false')
+            request_data['urgent'] = False
+        else:
+            print('urgent true')
+            request_data['urgent'] = True
+        serializer = self.get_serializer(instance, data=request_data)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         return Response(serializer.data)
@@ -307,7 +324,6 @@ class QuerySubTargetAndEventDateDesc(generics.ListCreateAPIView):
             nameList.append(user.name)
 
         horizon_target_individual_Annotated = horizon_target_individual.objects.annotate(latest_id = Max('sub_target_individual__id')) # annotated with sub target's newest id
-        print(horizon_target_individual_Annotated)
         filtered_list = horizon_target_individual_Annotated.all().filter(created_by_id__in = nameList, folder__active = True).exclude(event__isnull=True, sub_target_individual__isnull=True).order_by('-latest_id') # order the list by the newest sub target at the front
         limited_filter_list = filtered_list[:5]
         return limited_filter_list
@@ -341,11 +357,34 @@ class QueryActionDateDesc(generics.ListCreateAPIView):
         return limited_filter_list
 
 class QueryTargetByMonth(generics.ListCreateAPIView):
-    serializer_class = CombinedTargetSerializer
+    serializer_class = TargetByMonthYearSerializer
     def get_queryset(self):
         userID = self.request.user.name # my user id
         # return the folder object that contains all targets related to it. filtered by Active, Created By User, expire month and year
-        return folder.objects.filter(created_by_id = userID, active = True, horizon_target_individual__expire_date__year = self.kwargs['year'], horizon_target_individual__expire_date__month = self.kwargs['month']+1)\
+        obj = folder.objects.filter(created_by_id = userID, active = True)\
+                                .annotate(expire_date = Max('horizon_target_individual__id'))\
+                                .exclude(horizon_target_individual__isnull=True).order_by('-expire_date') # order the list by the newest sub target at the front
+        return obj
+
+class QueryTargetByOverdue(generics.ListCreateAPIView):
+    serializer_class = TargetByOverdueSerializer
+    def get_queryset(self):
+        userID = self.request.user.name # my user id
+        today = datetime.datetime.today()
+        # return the folder object that contains all targets related to it. filtered by Active, Created By User, expire month and year
+        return folder.objects.filter(created_by_id = userID, active = True)\
+                                .annotate(expire_date = Max('horizon_target_individual__id'))\
+                                .exclude(horizon_target_individual__isnull=True).order_by('expire_date') # order the list by the newest sub target at the front
+
+class QueryTargetByBehindSchedule(generics.ListCreateAPIView):
+    serializer_class = TargetByBehindScheduleSerializer
+    def get_queryset(self):
+        userID = self.request.user.name # my user id
+        total_duration = (element['expire_date'] - element['start_date']).total_seconds()
+        upTillNow = (datetime.date.today() - element['start_date']).total_seconds()
+        today = datetime.datetime.today()
+        # return the folder object that contains all targets related to it. filtered by Active, Created By User, expire month and year
+        return folder.objects.filter(created_by_id = userID, active = True)\
                                 .annotate(expire_date = Max('horizon_target_individual__id'))\
                                 .exclude(horizon_target_individual__isnull=True).order_by('expire_date') # order the list by the newest sub target at the front
 
@@ -355,4 +394,4 @@ class QueryAvailableYear(APIView):
         earliest_date = horizon_target_individual.objects.earliest('expire_date').expire_date.year
         latest_date = horizon_target_individual.objects.latest('expire_date').expire_date.year
         content = {'year_range': [earliest_date, latest_date]}
-        return Response(content)
+        return Response(content)                           

@@ -31,7 +31,7 @@ import Paper from "@material-ui/core/Paper";
 import Popper from "@material-ui/core/Popper";
 import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
-import Badge from '@material-ui/core/Badge';
+import Badge from "@material-ui/core/Badge";
 import axios from "axios";
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
@@ -65,7 +65,7 @@ const styles = (theme) => ({
             overflowX: "hidden",
             width: theme.spacing.unit * 7,
             [theme.breakpoints.up("sm")]: {
-                width: theme.spacing.unit * 9
+                width: theme.spacing.unit * 7
             },
             height: "100%"
         }
@@ -92,14 +92,18 @@ const styles = (theme) => ({
     icon: {
         margin: theme.spacing.unit,
         fontSize: 22
+    },
+    margin: {
+        margin: theme.spacing.unit * 2,
+        marginRight: theme.spacing.unit * 3
     }
 });
 
 let drawerConfig = [
     { link: "/performance", icon: <EqualizerIcon /> },
-    { link: "/events", icon: <EventIcon /> },
-    { link: "/comments", icon: <CommentIcon /> },
-    { link: "/actions", icon: <SendIcon /> },
+    { link: "/events", icon: <EventIcon />, badge: true },
+    { link: "/comments", icon: <CommentIcon />, badge: true },
+    { link: "/actions", icon: <SendIcon />, badge: true },
     { link: "/analysis", icon: <PieChartIcon /> },
     { link: "/monthly-goal", icon: <AssignmentIcon /> },
     { link: "/settings", icon: <SettingsIcon /> }
@@ -207,7 +211,15 @@ class Header extends Component {
                                     key={value}
                                     button
                                 >
-                                    <ListItemIcon>{drawerConfig[index].icon}</ListItemIcon>
+                                    <ListItemIcon>
+                                        {drawerConfig[index].badge ? (
+                                            <Badge color="secondary" variant="dot" invisible={true}>
+                                                {drawerConfig[index].icon}
+                                            </Badge>
+                                        ) : (
+                                            drawerConfig[index].icon
+                                        )}
+                                    </ListItemIcon>
                                     <ListItemText disableTypography primary={value} />
                                 </ListItem>
                             ))}

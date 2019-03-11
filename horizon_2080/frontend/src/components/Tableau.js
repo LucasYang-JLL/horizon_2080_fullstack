@@ -20,7 +20,7 @@ class Tableau extends Component {
     }
 
     initViz() {
-        const vizUrl = "https://public.tableau.com/views/Book1_15522724411580/Sheet1?:embed=y&:display_count=no";
+        const vizUrl = "https://public.tableau.com/views/Book1_15522724411580/Benson_chen2";
         const vizContainer = this.vizContainer;
         let viz = new window.tableau.Viz(vizContainer, vizUrl);
     }

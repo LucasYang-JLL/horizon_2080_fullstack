@@ -35,12 +35,6 @@ class horizon_target_individual(models.Model):
     def __str__(self):
         return self.name
 
-    @property
-    def target_year_range(self):
-        oldest_year = self.objects.count()
-        print(oldest_year)
-        return 12
-
 class sub_target_individual(models.Model):
     target = models.ForeignKey(horizon_target_individual, on_delete=models.CASCADE, default=-1)
     name = models.CharField(max_length=100)

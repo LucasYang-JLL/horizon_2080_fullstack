@@ -358,13 +358,27 @@ class QueryActionDateDesc(generics.ListCreateAPIView):
 
 class QueryTargetByMonth(generics.ListCreateAPIView):
     serializer_class = TargetByMonthYearSerializer
+
     def get_queryset(self):
         userID = self.request.user.name # my user id
         # return the folder object that contains all targets related to it. filtered by Active, Created By User, expire month and year
         obj = folder.objects.filter(created_by_id = userID, active = True)\
-                                .annotate(expire_date = Max('horizon_target_individual__id'))\
-                                .exclude(horizon_target_individual__isnull=True).order_by('-expire_date') # order the list by the newest sub target at the front
+                                .annotate(exp_date = Max('horizon_target_individual__expire_date'))\
+                                .exclude(horizon_target_individual__isnull=True).order_by('exp_date') # order the list by the newest sub target at the front
         return obj
+    
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        # pass the year and month context to the serializer
+        context = {'year': kwargs['year'], 'month': kwargs['month']}
+        serializer = TargetByMonthYearSerializer(queryset, many=True, context=context)
+        serializer_data = serializer.data 
+        none_empty_data = serializer.data
+        # iterate through the dict and remove any empty target from the dict
+        for item in serializer_data:
+            if len(item['target']) == 0:
+                none_empty_data.remove(item)
+        return Response(none_empty_data)
 
 class QueryTargetByOverdue(generics.ListCreateAPIView):
     serializer_class = TargetByOverdueSerializer
@@ -389,7 +403,6 @@ class QueryTargetByBehindSchedule(generics.ListCreateAPIView):
                                 .exclude(horizon_target_individual__isnull=True).order_by('expire_date') # order the list by the newest sub target at the front
 
 class QueryAvailableYear(APIView):
-    serializer_class = TargetYearRangeSerializer
     def get(self, request):
         earliest_date = horizon_target_individual.objects.earliest('expire_date').expire_date.year
         latest_date = horizon_target_individual.objects.latest('expire_date').expire_date.year

@@ -23,12 +23,6 @@ class TargetIndividualSerializer(serializers.ModelSerializer):
         model = horizon_target_individual
         fields = '__all__'
 
-class TargetYearRangeSerializer(serializers.ModelSerializer):
-    year_range = serializers.ReadOnlyField(source='target_year_range')
-    class Meta:
-        model = horizon_target_individual
-        fields = ['year_range']
-
 class TargetIndividualProgressSerializer(serializers.ModelSerializer):
     class Meta:
         model = horizon_target_individual
@@ -87,20 +81,22 @@ class CombinedActionSerializer(serializers.ModelSerializer):
         fields = ['action', 'name', 'folder', 'id']
 
 class TargetByMonthYearSerializer(serializers.ModelSerializer):
+
     # serializing target count using model property
     complete_count = serializers.SerializerMethodField('target_completed_count_by_month_year') 
+
     # serializing targets using SerializerMethodField
     target = serializers.SerializerMethodField('get_target_by_month_year') 
+
     def get_target_by_month_year(self, instance): # every instances related to the respective folder object
-        year = self.context.get('request').parser_context['kwargs']['year']
-        month = self.context.get('request').parser_context['kwargs']['month']+1
-        sorted_target = instance.horizon_target_individual_set.filter(expire_date__year = year, expire_date__month = month)\
-            .order_by('-expire_date')
+        year = self.context['year']
+        month = self.context['month']+1
+        sorted_target = instance.horizon_target_individual_set.filter(expire_date__month = month, expire_date__year = year).order_by('-expire_date')
         return TargetIndividualSerializer(sorted_target, many = True, context=self.context).data
 
     def target_completed_count_by_month_year(self, instance):
-        year = self.context.get('request').parser_context['kwargs']['year']
-        month = self.context.get('request').parser_context['kwargs']['month']+1
+        year = self.context['year']
+        month = self.context['month']+1
         complete_count = instance.horizon_target_individual_set.filter(expire_date__year = year, expire_date__month = month, progress=100).count()
         return complete_count 
 

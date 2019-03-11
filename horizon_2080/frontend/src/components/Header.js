@@ -20,6 +20,7 @@ import EqualizerIcon from "@material-ui/icons/Equalizer";
 import EventIcon from "@material-ui/icons/Event";
 import CommentIcon from "@material-ui/icons/Comment";
 import SendIcon from "@material-ui/icons/Send";
+import PieChartIcon from "@material-ui/icons/PieChart";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import SettingsIcon from "@material-ui/icons/Settings";
 import Hidden from "@material-ui/core/Hidden";
@@ -30,6 +31,7 @@ import Paper from "@material-ui/core/Paper";
 import Popper from "@material-ui/core/Popper";
 import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
+import Badge from '@material-ui/core/Badge';
 import axios from "axios";
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
@@ -98,6 +100,7 @@ let drawerConfig = [
     { link: "/events", icon: <EventIcon /> },
     { link: "/comments", icon: <CommentIcon /> },
     { link: "/actions", icon: <SendIcon /> },
+    { link: "/analysis", icon: <PieChartIcon /> },
     { link: "/monthly-goal", icon: <AssignmentIcon /> },
     { link: "/settings", icon: <SettingsIcon /> }
 ];
@@ -198,7 +201,7 @@ class Header extends Component {
                         <List className={classes.drawerUl} onClick={this.handleDrawerToggle}>
                             {msg.split(",").map((value, index) => (
                                 <ListItem
-                                    className={drawerConfig[index].link === "/monthly-goal" ? classes.stickBottom : null}
+                                    className={drawerConfig[index].link === "/analysis" ? classes.stickBottom : null}
                                     selected={this.state.activeDrawer === index}
                                     onClick={(e) => this.handleDrawerClick(e, "activeDrawer", value, index)}
                                     key={value}

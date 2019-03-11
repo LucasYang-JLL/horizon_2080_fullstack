@@ -90,6 +90,7 @@ class MonthlyGoalList extends Component {
         const { classes, data, msgArr } = this.props;
         const progress_msg = msgArr[0];
         const due_msg = msgArr[1];
+        console.log(data);
         return data.length === 0 ? (
             <div className={classes.greeting}>There are no targets due this month</div>
         ) : (

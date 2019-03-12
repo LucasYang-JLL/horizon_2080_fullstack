@@ -36,20 +36,22 @@ class horizon_target_individual(models.Model):
         return self.name
 
 class sub_target_individual(models.Model):
-    target = models.ForeignKey(horizon_target_individual, on_delete=models.CASCADE, default=-1)
+    target = models.ForeignKey(horizon_target_individual, related_name='sub_target', on_delete=models.CASCADE, default=-1)
     name = models.CharField(max_length=100)
     create_date = models.DateTimeField(default=datetime.datetime.now)
     modify_date = models.DateTimeField(auto_now=True)
     completed_flag = models.BooleanField(default=False)
     event_count = models.PositiveIntegerField(default=0)
+    viewed = models.BooleanField(default=False)
     created_by_id = models.CharField(max_length=100)
 
 class event(models.Model):
+    target = models.ForeignKey(horizon_target_individual, related_name='event', on_delete=models.CASCADE, default=-1)
     name = models.CharField(max_length=200)
-    target = models.ForeignKey(horizon_target_individual, on_delete=models.CASCADE, default=-1)
     sub_target = models.ForeignKey(sub_target_individual, on_delete=models.CASCADE, default=-1)
     create_date = models.DateTimeField(default=datetime.datetime.now)
     modify_date = models.DateTimeField(auto_now=True)
+    viewed = models.BooleanField(default=False)
     created_by_id = models.CharField(max_length=100)
     
 class comment(models.Model):

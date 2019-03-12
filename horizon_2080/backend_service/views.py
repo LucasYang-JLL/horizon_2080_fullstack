@@ -136,13 +136,10 @@ class UpdateTargetIndividualProgress(generics.UpdateAPIView):
         time_till_now = (datetime.date.today() - target['start_date']).total_seconds()
         time_progress = time_till_now/total_time * 100 # time progression in percentage
         request_data = request.data
-        print(time_progress)
         # urgent when time > target progress
         if(time_progress < target['progress'] or time_progress > 100):
-            print('urgent false')
             request_data['urgent'] = False
         else:
-            print('urgent true')
             request_data['urgent'] = True
         serializer = self.get_serializer(instance, data=request_data)
         serializer.is_valid(raise_exception=True)
@@ -317,16 +314,31 @@ class UpdateEventBySubTarget(generics.UpdateAPIView):
 class QuerySubTargetAndEventDateDesc(generics.ListCreateAPIView):
     serializer_class = EventAndSubTargetSerializer
     def get_queryset(self):
-        userID = self.request.user.name # my user id
-        userArr = self.request.user.report_to_me.all() # the users that report to me
-        nameList = [userID]
-        for user in userArr:
-            nameList.append(user.name)
-
-        horizon_target_individual_Annotated = horizon_target_individual.objects.annotate(latest_id = Max('sub_target_individual__id')) # annotated with sub target's newest id
-        filtered_list = horizon_target_individual_Annotated.all().filter(created_by_id__in = nameList, folder__active = True).exclude(event__isnull=True, sub_target_individual__isnull=True).order_by('-latest_id') # order the list by the newest sub target at the front
+        filtered_list = horizon_target_individual.objects\
+            .filter(folder__active = True)\
+            .order_by('-create_date') # order the list by the newest sub target at the front
         limited_filter_list = filtered_list[:5]
         return limited_filter_list
+    
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        userID = self.request.user.name # my user id
+        userArr = self.request.user.report_to_me.all() # the users that report to me
+        nameList = []
+        for user in userArr:
+            nameList.append(user.name)
+        # pass the context to the serializer
+        context = {'nameList': nameList}
+        serializer = EventAndSubTargetSerializer(queryset, many=True, context=context)
+        # for iteration
+        serializer_data = serializer.data 
+        # for storing non-empty data
+        none_empty_data = serializer.data
+        # iterate through the dict and remove any empty target from the dict
+        for item in serializer_data:
+            if len(item['sub_target']) == 0 and len(item['event']) == 0:
+                none_empty_data.remove(item)
+        return Response(none_empty_data) 
 
 class QueryEventDateDesc(generics.ListCreateAPIView):
     serializer_class = CombinedCommentSerializer
@@ -336,9 +348,9 @@ class QueryEventDateDesc(generics.ListCreateAPIView):
         nameList = [userID]
         for user in userArr:
             nameList.append(user.name)
-
-        horizon_target_individual_Annotated = horizon_target_individual.objects.annotate(latest_id = Max('comment__id')) # annotated with sub target's newest id
-        filtered_list = horizon_target_individual_Annotated.all().filter(created_by_id__in = nameList, folder__active = True).exclude(comment__isnull=True).order_by('-latest_id') # order the list by the newest sub target at the front
+        filtered_list = horizon_target_individual.objects.annotate(latest_id = Max('comment__id'))\
+            .filter(created_by_id__in = nameList, folder__active = True).exclude(comment__isnull=True)\
+            .order_by('-latest_id') # order the list by the newest sub target at the front
         limited_filter_list = filtered_list[:5]
         return limited_filter_list
 
@@ -347,10 +359,9 @@ class QueryActionDateDesc(generics.ListCreateAPIView):
     def get_queryset(self):
         userID = self.request.user.name # my user id
         userArr = self.request.user.report_to_me.all() # the users that report to me
-        nameList = [userID]
+        nameList = []
         for user in userArr:
             nameList.append(user.name)
-
         horizon_target_individual_Annotated = horizon_target_individual.objects.annotate(latest_id = Max('action__id')) # annotated with sub target's newest id
         filtered_list = horizon_target_individual_Annotated.all().filter(created_by_id__in = nameList, folder__active = True).exclude(comment__isnull=True).order_by('-latest_id') # order the list by the newest sub target at the front
         limited_filter_list = filtered_list[:5]
@@ -372,7 +383,9 @@ class QueryTargetByMonth(generics.ListCreateAPIView):
         # pass the year and month context to the serializer
         context = {'year': kwargs['year'], 'month': kwargs['month']}
         serializer = TargetByMonthYearSerializer(queryset, many=True, context=context)
+        # for iteration
         serializer_data = serializer.data 
+        # for storing non-empty data
         none_empty_data = serializer.data
         # iterate through the dict and remove any empty target from the dict
         for item in serializer_data:
@@ -407,4 +420,30 @@ class QueryAvailableYear(APIView):
         earliest_date = horizon_target_individual.objects.earliest('expire_date').expire_date.year
         latest_date = horizon_target_individual.objects.latest('expire_date').expire_date.year
         content = {'year_range': [earliest_date, latest_date]}
-        return Response(content)                           
+        return Response(content)   
+
+class UpdateViewedSubTarget(generics.UpdateAPIView):
+    queryset = sub_target_individual.objects.all()
+    serializer_class = SubTargetIndividualViewedSerializer
+    
+    def update(self, request, *args, **kwargs):
+        # creates an instance of the model object from the requested id
+        instance = self.get_object()
+        # parse the model to be put into database
+        serializer = self.get_serializer(instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
+class UpdateViewedEvent(generics.UpdateAPIView):
+    queryset = event.objects.all()
+    serializer_class = EventSerializer
+    
+    def update(self, request, *args, **kwargs):
+        # creates an instance of the model object from the requested id
+        instance = self.get_object()
+        # parse the model to be put into database
+        serializer = self.get_serializer(instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)                          

@@ -31,4 +31,6 @@ urlpatterns = [
     path('api/fetch_target_by_behind_schedule/', views.QueryTargetByBehindSchedule.as_view() ),
     path('api/fetch_target_by_month/<int:year>/<int:month>/', views.QueryTargetByMonth.as_view() ),
     path('api/fetch_available_year/', views.QueryAvailableYear.as_view() ),
+    path('api/update_viewed_sub_target/<int:pk>/', views.UpdateViewedSubTarget.as_view() ),
+    path('api/update_viewed_event/<int:pk>/', views.UpdateViewedEvent.as_view() ),
 ]

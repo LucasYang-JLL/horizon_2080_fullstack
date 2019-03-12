@@ -33,6 +33,11 @@ class SubTargetIndividualSerializer(serializers.ModelSerializer):
         model = sub_target_individual
         fields = '__all__'
 
+class SubTargetIndividualViewedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = sub_target_individual
+        fields = ['viewed']
+
 class SubTargetEventCountSerializer(serializers.ModelSerializer):
     class Meta:
         model = sub_target_individual
@@ -55,14 +60,23 @@ class EventSerializer(serializers.ModelSerializer):
 
 class EventAndSubTargetSerializer(serializers.ModelSerializer):
     # serializing event. nested JSON
-    # event = EventSerializer(many = True, read_only=True, source='event_set')
-    sub_target = SubTargetIndividualSerializer(many = True, read_only=True, source='sub_target_individual_set')
-    event = EventSerializer(many = True, read_only=True, source='event_set')
+    sub_target = serializers.SerializerMethodField('get_sub_target_by_users_id')
+    event = serializers.SerializerMethodField('get_event_by_users_id')
     folder = FolderSerializer()
+
+    def get_sub_target_by_users_id(self, instance): # every instances related to the respective folder object
+        nameList = self.context['nameList']
+        sub_target = instance.sub_target.filter(created_by_id__in = nameList).order_by('-id')
+        return SubTargetIndividualSerializer(sub_target, many = True).data
+
+    def get_event_by_users_id(self, instance): # every instances related to the respective folder object
+        nameList = self.context['nameList']
+        event = instance.event.filter(created_by_id__in = nameList).order_by('-id')
+        return EventSerializer(event, many = True, context=self.context).data
+
     class Meta:
         model = horizon_target_individual
         fields = ['sub_target', 'event', 'name', 'folder', 'id']
-
 
 class CombinedCommentSerializer(serializers.ModelSerializer):
     # serializing event. nested JSON

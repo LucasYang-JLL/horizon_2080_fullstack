@@ -47,7 +47,7 @@ class ActionsList extends Component {
                         <Fragment key={index}>
                             <Directory folder={folder.name} target={name} />
                             <Divider />
-                            {action.reverse().map(({ message, create_date, created_by_id }) => {
+                            {action.map(({ message, create_date, created_by_id }) => {
                                 return (
                                     <ListItem key={create_date}>
                                         <ChatBubbleOutlineIcon fontSize="small" style={{ marginRight: "8px" }} />

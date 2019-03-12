@@ -96,7 +96,7 @@ const styles = (theme) => ({
     margin: {
         margin: theme.spacing.unit * 2,
         marginRight: theme.spacing.unit * 3
-    }
+    },
 });
 
 let drawerConfig = [
@@ -213,7 +213,7 @@ class Header extends Component {
                                 >
                                     <ListItemIcon>
                                         {drawerConfig[index].badge ? (
-                                            <Badge color="secondary" variant="dot" invisible={true}>
+                                            <Badge color="secondary" badgeContent={1}>
                                                 {drawerConfig[index].icon}
                                             </Badge>
                                         ) : (

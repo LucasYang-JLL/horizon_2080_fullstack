@@ -55,7 +55,7 @@ class EventsList extends Component {
                         <Fragment key={index}>
                             <Directory folder={folder.name} target={name} />
                             <Divider />
-                            {sub_target.reverse().map(({ name, create_date, created_by_id }) => {
+                            {sub_target.map(({ name, create_date, created_by_id }) => {
                                 return (
                                     <ListItem className={classes.listStyle} key={create_date}>
                                         <ListAltIcon fontSize="small" style={{ marginRight: "8px" }} />
@@ -71,7 +71,7 @@ class EventsList extends Component {
                                     </ListItem>
                                 );
                             })}
-                            {event.reverse().map(({ name, create_date, created_by_id, target, sub_target }) => {
+                            {event.map(({ name, create_date, created_by_id, target, sub_target }) => {
                                 return (
                                     <ListItem className={classes.listStyle} key={create_date}>
                                         <InsertInvitationIcon fontSize="small" style={{ marginRight: "8px" }} />

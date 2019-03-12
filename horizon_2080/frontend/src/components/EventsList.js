@@ -7,6 +7,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListAltIcon from "@material-ui/icons/ListAlt";
 import InsertInvitationIcon from "@material-ui/icons/InsertInvitation";
+import Badge from "@material-ui/core/Badge";
 import getDate from "./_utils/getDate";
 import Divider from "@material-ui/core/Divider";
 
@@ -20,6 +21,7 @@ const styles = (theme) => ({
     toolbar: theme.mixins.toolbar,
     pStyle: {
         margin: 0,
+        marginLeft: "16px",
         color: "#404040"
     },
     dateStyle: {
@@ -33,6 +35,10 @@ const styles = (theme) => ({
     },
     listStyle: {
         alignItems: "flex-start"
+    },
+    badge: {
+        fontSize: "11px",
+        height: "15px"
     }
 });
 
@@ -55,10 +61,12 @@ class EventsList extends Component {
                         <Fragment key={index}>
                             <Directory folder={folder.name} target={name} />
                             <Divider />
-                            {sub_target.map(({ name, create_date, created_by_id }) => {
+                            {sub_target.map(({ name, create_date, created_by_id, viewed }) => {
                                 return (
                                     <ListItem className={classes.listStyle} key={create_date}>
-                                        <ListAltIcon fontSize="small" style={{ marginRight: "8px" }} />
+                                        <Badge classes={{ badge: classes.badge }} color="secondary" badgeContent={viewed ? 0 : "new"}>
+                                            <ListAltIcon fontSize="small" />
+                                        </Badge>
                                         <p className={classes.pStyle}>
                                             {created_by_id.split(".").join(" ")}
                                             {msgArr[0]}
@@ -71,10 +79,12 @@ class EventsList extends Component {
                                     </ListItem>
                                 );
                             })}
-                            {event.map(({ name, create_date, created_by_id, target, sub_target }) => {
+                            {event.map(({ name, create_date, created_by_id, target, sub_target, viewed }) => {
                                 return (
                                     <ListItem className={classes.listStyle} key={create_date}>
-                                        <InsertInvitationIcon fontSize="small" style={{ marginRight: "8px" }} />
+                                        <Badge color="secondary" badgeContent={viewed ? 0 : "new"}>
+                                            <InsertInvitationIcon fontSize="small" style={{ marginRight: "8px" }} />
+                                        </Badge>
                                         <p className={classes.pStyle}>
                                             {created_by_id.split(".").join(" ")} {msgArr[2]} <b>{msgArr[3]}</b>: "
                                             <span className={classes.linkStyle} onClick={() => this.handleOpenSubtargetRequest(sub_target, target)}>

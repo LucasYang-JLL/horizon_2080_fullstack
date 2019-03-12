@@ -96,14 +96,14 @@ const styles = (theme) => ({
     margin: {
         margin: theme.spacing.unit * 2,
         marginRight: theme.spacing.unit * 3
-    },
+    }
 });
 
 let drawerConfig = [
     { link: "/performance", icon: <EqualizerIcon /> },
-    { link: "/events", icon: <EventIcon />, badge: true },
-    { link: "/comments", icon: <CommentIcon />, badge: true },
-    { link: "/actions", icon: <SendIcon />, badge: true },
+    { link: "/events", icon: <EventIcon />, badge: "activityBadgeCount" },
+    { link: "/comments", icon: <CommentIcon />, badge: "commentBadgeCount" },
+    { link: "/actions", icon: <SendIcon />, badge: "actionBadgeCount" },
     { link: "/analysis", icon: <PieChartIcon /> },
     { link: "/monthly-goal", icon: <AssignmentIcon /> },
     { link: "/settings", icon: <SettingsIcon /> }
@@ -137,6 +137,7 @@ class Header extends Component {
                 activeDrawer: drawerIndex
             });
         }
+        this.fetchBadgeCount();
     }
 
     fetchUserInfo = () => {
@@ -153,6 +154,44 @@ class Header extends Component {
             .catch((error) => {
                 // handle error
                 console.log(error);
+            });
+    };
+
+    fetchBadgeCount = () => {
+        axios
+            .get("/api/fetch_recent_sub_target_and_event/")
+            .then((response) => {
+                // handle success
+                let activity = response.data;
+                // get the sub-targets that are being viewed the first time
+                let subTargets = activity.map(({ sub_target }) => {
+                    return sub_target
+                        .map(({ viewed, id }) => {
+                            if (viewed === false) {
+                                return id;
+                            } else return null;
+                        })
+                        .filter((e) => e !== null);
+                });
+                // get the events that are being viewed the first time
+                let events = activity.map(({ event }) => {
+                    return event.map(({ viewed, id }) => {
+                        if (viewed === false) {
+                            return id;
+                        }
+                    });
+                });
+                // flatten the array
+                let viewedSubTargetsCount = [].concat.apply([], subTargets).length;
+                let viewedEventsCount = [].concat.apply([], events).length;
+                this.props.updateActivityBadgeCount(viewedSubTargetsCount + viewedEventsCount);
+            })
+            .catch((error) => {
+                // handle error
+                console.log(error);
+            })
+            .then(() => {
+                // always executed
             });
     };
 
@@ -213,7 +252,7 @@ class Header extends Component {
                                 >
                                     <ListItemIcon>
                                         {drawerConfig[index].badge ? (
-                                            <Badge color="secondary" badgeContent={1}>
+                                            <Badge color="secondary" badgeContent={this.props.reduxState[drawerConfig[index].badge]}>
                                                 {drawerConfig[index].icon}
                                             </Badge>
                                         ) : (

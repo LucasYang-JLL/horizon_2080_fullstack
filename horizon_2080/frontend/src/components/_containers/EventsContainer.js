@@ -1,5 +1,6 @@
 import { connect } from "react-redux";
 import { openEventRequest } from "../_actions/event";
+import { updateActivityBadgeCount } from "../_actions/header";
 import Events from "../Events";
 
 // redux provided wrapper to map state to props
@@ -17,6 +18,9 @@ const mapDispatchToProps = (dispatch) => {
         // },
         openEventRequest: (id) => {
             dispatch(openEventRequest(id))
+        },
+        updateActivityBadgeCount: (count) => {
+            dispatch(updateActivityBadgeCount(count))
         }
     };
 };

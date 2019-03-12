@@ -14,4 +14,19 @@ const saveUserID = (id) => ({
     id: id,
 });
 
-export { selectLanguage, slideDirection, saveUserID };
+const updateActivityBadgeCount = (count) => ({
+    type: "ACTIVITY_BADGE_COUNT",
+    count: count,
+});
+
+const updateCommentBadgeCount = (count) => ({
+    type: "COMMENT_BADGE_COUNT",
+    count: count,
+});
+
+const updateActionBadgeCount = (count) => ({
+    type: "ACTION_BADGE_COUNT",
+    count: count,
+});
+
+export { selectLanguage, slideDirection, saveUserID, updateActivityBadgeCount, updateCommentBadgeCount, updateActionBadgeCount };

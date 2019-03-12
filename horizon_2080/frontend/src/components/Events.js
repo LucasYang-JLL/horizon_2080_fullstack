@@ -35,16 +35,42 @@ class Events extends Component {
             .get("/api/fetch_recent_sub_target_and_event/")
             .then((response) => {
                 // handle success
-                // console.log(response.data);
-                // handle success
+                let activity = response.data;
                 if (response.data.length === 0) {
                     this.setState({
                         emptyRecord: true
                     });
                 } else {
-                    this.setState({
-                        data: response.data
+                    // get the sub-targets that are being viewed the first time
+                    let subTargets = activity.map(({ sub_target }) => {
+                        return sub_target
+                            .map(({ viewed, id }) => {
+                                if (viewed === false) {
+                                    return id;
+                                } else return null;
+                            })
+                            .filter((e) => e !== null);
                     });
+                    // get the events that are being viewed the first time
+                    let events = activity.map(({ event }) => {
+                        return event.map(({ viewed, id }) => {
+                            if (viewed === false) {
+                                return id;
+                            }
+                        });
+                    });
+                    // flatten the array
+                    let viewedSubTargets = [].concat.apply([], subTargets);
+                    let viewedEvents = [].concat.apply([], events);
+                    this.setState(
+                        {
+                            data: activity
+                        },
+                        () => {
+                            this.props.updateActivityBadgeCount(0);
+                            this.updateViewedStatus(viewedSubTargets, viewedEvents);
+                        }
+                    );
                 }
             })
             .catch((error) => {
@@ -54,6 +80,15 @@ class Events extends Component {
             .then(() => {
                 // always executed
             });
+    };
+
+    updateViewedStatus = (targets, events) => {
+        targets.forEach((id) => {
+            axios.put(`/api/update_viewed_sub_target/${id}/`, { viewed: true });
+        });
+        events.forEach((id) => {
+            axios.put(`/api/update_viewed_event/${id}/`, { viewed: true });
+        });
     };
 
     render() {

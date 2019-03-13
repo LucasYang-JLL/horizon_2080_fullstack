@@ -7,12 +7,14 @@ import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
 import Icon from "@material-ui/core/Icon";
 import AddIcon from "@material-ui/icons/Add";
 import EditIcon from "@material-ui/icons/Edit";
+import Fab from "@material-ui/core/Fab";
 import { withStyles } from "@material-ui/core/styles";
 
 const styles = (theme) => ({
     button: {
         margin: "0px",
         width: "40px",
+        height: "40px",
         minWidth: "40px"
     },
     extendedIcon: {
@@ -65,9 +67,9 @@ class Navigation extends Component {
                     }}
                 </FormattedMessage>
                 {buttonType ? (
-                    <Button mini variant="fab" color="secondary" className={classNames(classes.button, classes.alignRight)} onClick={buttonMethod}>
+                    <Fab mini="true" color="secondary" className={classNames(classes.button, classes.alignRight)} onClick={buttonMethod}>
                         {button[buttonType]}
-                    </Button>
+                    </Fab>
                 ) : null}
             </div>
         );

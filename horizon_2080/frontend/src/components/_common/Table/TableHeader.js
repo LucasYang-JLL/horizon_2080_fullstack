@@ -9,15 +9,13 @@ import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Tooltip from "@material-ui/core/Tooltip";
 
 const rows = [
-    { id: "urgent", numeric: false, disablePadding: true, label: "urgency" },
-    { id: "name", numeric: false, disablePadding: true, label: "Target Name" },
-    { id: "description", numeric: false, disablePadding: true, label: "Target Description" },
-    { id: "critical_flag", numeric: false, disablePadding: true, label: "20%" },
-    // { id: "event_count", numeric: false, disablePadding: true, label: "Event(Completed/Total)" },
-    { id: "completion_status", numeric: false, disablePadding: true, label: "Completion Status" },
-    // { id: "countable", numeric: false, disablePadding: true, label: "Countable" },
-    { id: "expire_date", numeric: false, disablePadding: true, label: "Expire Date" },
-    { id: "created_by", numeric: false, disablePadding: true, label: "Created By" }
+    { id: "urgent", align: "left", disablePadding: true, label: "urgency" },
+    { id: "name", align: "left", disablePadding: true, label: "Target Name" },
+    { id: "description", align: "left", disablePadding: true, label: "Target Description" },
+    { id: "critical_flag", align: "left", disablePadding: true, label: "20%" },
+    { id: "completion_status", align: "left", disablePadding: true, label: "Completion Status" },
+    { id: "expire_date", align: "left", disablePadding: true, label: "Expire Date" },
+    { id: "created_by", align: "left", disablePadding: true, label: "Created By" }
 ];
 
 const styles = {
@@ -35,16 +33,13 @@ class EnhancedTableHead extends React.Component {
         return (
             <TableHead>
                 <TableRow>
-                    {/* <TableCell padding="checkbox">
-                        <Checkbox indeterminate={numSelected > 0 && numSelected < rowCount} checked={numSelected === rowCount} onChange={onSelectAllClick} />
-                    </TableCell> */}
                     <FormattedMessage id={`${this.props.title}.table.label`}>
                         {(title) => {
                             let titleArr = title.split(",");
                             return titleArr.map((title, index) => {
                                 return (
-                                    <TableCell classes={{ head: classes.head }} key={rows[index].id} numeric={rows[index].numeric} sortDirection={orderBy === rows[index].id ? order : false}>
-                                        <Tooltip title="Sort" placement={rows[index].numeric ? "bottom-end" : "bottom-start"} enterDelay={300}>
+                                    <TableCell classes={{ head: classes.head }} key={rows[index].id} align={rows[index].align} sortDirection={orderBy === rows[index].id ? order : false}>
+                                        <Tooltip title="Sort" placement={rows[index].align ? "bottom-end" : "bottom-start"} enterDelay={300}>
                                             <TableSortLabel active={orderBy === rows[index].id} direction={order} onClick={this.createSortHandler(rows[index].id)}>
                                                 {title}
                                             </TableSortLabel>
@@ -54,17 +49,6 @@ class EnhancedTableHead extends React.Component {
                             });
                         }}
                     </FormattedMessage>
-                    {/* {rows.map((row) => {
-                        return (
-                            <TableCell key={row.id} numeric={row.numeric} sortDirection={orderBy === row.id ? order : false}>
-                                <Tooltip title="Sort" placement={row.numeric ? "bottom-end" : "bottom-start"} enterDelay={300}>
-                                    <TableSortLabel active={orderBy === row.id} direction={order} onClick={this.createSortHandler(row.id)}>
-                                        {row.label}
-                                    </TableSortLabel>
-                                </Tooltip>
-                            </TableCell>
-                        );
-                    }, this)} */}
                 </TableRow>
             </TableHead>
         );

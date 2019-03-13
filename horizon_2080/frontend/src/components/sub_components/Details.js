@@ -160,7 +160,7 @@ class Details extends Component {
                                         activeTab={this.state.activeTab}
                                         handleTabChange={this.handleTabChange}
                                         msgID="tab.details.title"
-                                        fullWidth={false}
+                                        variant="standard"
                                     />
                                 )}
                             </WithWidth>

@@ -169,7 +169,7 @@ class DockedLeft extends Component {
             <Slide direction={"left"} in mountOnEnter unmountOnExit>
                 <Paper className={classNames(classes.dockedRoot, classes.dockedRootMd)}>
                     <div className={classNames(classes.toolbar, classes.toolbarMd)} />
-                    <Tabs hideTab={hasAccess ? 2 : 1} activeTab={activeTab} handleTabChange={handleTabChange} msgID="tab.comments.title" />
+                    <Tabs hideTab={hasAccess ? 2 : 1} variant="fullWidth" activeTab={activeTab} handleTabChange={handleTabChange} msgID="tab.comments.title" />
                     {activeTab === 0 && <CommentsField userID={userID} history={history} match={match} />}
                     {activeTab === 1 && <ActionsField userID={userID} history={history} match={match} />}
                 </Paper>
@@ -240,7 +240,7 @@ class FullscreenComment extends Component {
                 <Button mini variant="text" color="primary" style={{ position: "absolute", top: "5px", zIndex: 2 }} onClick={toggleComment}>
                     <ClearIcon />
                 </Button>
-                <TabsContainer hideTab={hasAccess ? 2 : 1} flexEnd={true} fullWidth={false} activeTab={activeTab} handleTabChange={handleTabChange} msgID="tab.comments.title" />
+                <TabsContainer hideTab={hasAccess ? 2 : 1} flexEnd={true} variant="standard" activeTab={activeTab} handleTabChange={handleTabChange} msgID="tab.comments.title" />
                 {activeTab === 0 && <CommentsField userID={userID} history={history} match={match} />}
                 {activeTab === 1 && <ActionsField userID={userID} history={history} match={match} />}
                 {/* </div> */}

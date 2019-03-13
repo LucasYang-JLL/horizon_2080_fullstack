@@ -27,13 +27,13 @@ class SimpleTabs extends React.Component {
     };
 
     render() {
-        const { classes, msgID, fullWidth, handleTabChange, activeTab, flexEnd } = this.props;
+        const { classes, msgID, variant, handleTabChange, activeTab, flexEnd } = this.props;
         return (
             <div className={classes.root}>
                 {/* <AppBar position="static"> */}
                 <FormattedMessage id={msgID}>
                     {(tabName) => (
-                        <Tabs classes={{ flexContainer: flexEnd ? classes.flexContainer : null }} fullWidth={fullWidth} value={activeTab} onChange={handleTabChange}>
+                        <Tabs classes={{ flexContainer: flexEnd ? classes.flexContainer : null }} variant={variant} value={activeTab} onChange={handleTabChange}>
                             {tabName
                                 .split(",")
                                 .map((name, index) => {
@@ -52,7 +52,7 @@ class SimpleTabs extends React.Component {
 SimpleTabs.propTypes = {
     classes: PropTypes.object.isRequired,
     msgID: PropTypes.string.isRequired,
-    fullWidth: PropTypes.bool.isRequired,
+    variant: PropTypes.string.isRequired,
     activeTab: PropTypes.number.isRequired,
     handleTabChange: PropTypes.func.isRequired,
     // hideTab: PropTypes.number.isRequired
@@ -60,7 +60,7 @@ SimpleTabs.propTypes = {
 
 SimpleTabs.defaultProps = {
     msgID: "",
-    fullWidth: true,
+    variant: "standard",
     flexEnd: false,
     // hideTab: 0
 };

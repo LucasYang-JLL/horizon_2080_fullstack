@@ -25,7 +25,7 @@ urlpatterns = [
     path('api/create_event_by_sub_target/<int:sub_target_id>/', views.CreateEventBySubTarget.as_view() ),
     path('api/update_event_by_sub_target/<int:pk>/', views.UpdateEventBySubTarget.as_view() ),
     path('api/fetch_recent_sub_target_and_event/', views.QuerySubTargetAndEventDateDesc.as_view() ),
-    path('api/fetch_recent_comments/', views.QueryEventDateDesc.as_view() ),
+    path('api/fetch_recent_comments/', views.QueryCommentDateDesc.as_view() ),
     path('api/fetch_recent_actions/', views.QueryActionDateDesc.as_view() ),
     path('api/fetch_target_by_overdue/', views.QueryTargetByOverdue.as_view() ),
     path('api/fetch_target_by_behind_schedule/', views.QueryTargetByBehindSchedule.as_view() ),
@@ -33,4 +33,7 @@ urlpatterns = [
     path('api/fetch_available_year/', views.QueryAvailableYear.as_view() ),
     path('api/update_viewed_sub_target/<int:pk>/', views.UpdateViewedSubTarget.as_view() ),
     path('api/update_viewed_event/<int:pk>/', views.UpdateViewedEvent.as_view() ),
+    path('api/update_viewed_comment/<int:pk>/', views.UpdateViewedComment.as_view() ),
+    path('api/update_viewed_action/<int:pk>/', views.UpdateViewedAction.as_view() ),
+    path('api/fetch_badge_count/', views.QueryBadgeCount.as_view() ),
 ]

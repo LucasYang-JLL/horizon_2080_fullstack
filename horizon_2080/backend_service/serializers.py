@@ -48,15 +48,30 @@ class CommentSerializer(serializers.ModelSerializer):
         model = comment
         fields = '__all__'
 
+class CommentViewedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = comment
+        fields = ['viewed']
+
 class ActionSerializer(serializers.ModelSerializer):
     class Meta:
         model = action
         fields = '__all__'
 
+class ActionViewedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = action
+        fields = ['viewed']
+
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = event
         fields = '__all__'
+
+class EventViewedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = event
+        fields = ['viewed']
 
 class EventAndSubTargetSerializer(serializers.ModelSerializer):
     # serializing event. nested JSON
@@ -80,16 +95,28 @@ class EventAndSubTargetSerializer(serializers.ModelSerializer):
 
 class CombinedCommentSerializer(serializers.ModelSerializer):
     # serializing event. nested JSON
-    comment = CommentSerializer(many = True, read_only=True, source='comment_set')
+    comment = serializers.SerializerMethodField('get_comments_by_users_id')
     folder = FolderSerializer()
+
+    def get_comments_by_users_id(self, instance):
+        nameList = self.context['nameList']
+        comment = instance.comment.filter(created_by_id__in = nameList).order_by('-id')
+        return CommentSerializer(comment, many = True, context=self.context).data
+
     class Meta:
         model = horizon_target_individual
         fields = ['comment', 'name', 'folder', 'id']
 
 class CombinedActionSerializer(serializers.ModelSerializer):
     # serializing event. nested JSON
-    action = ActionSerializer(many = True, read_only=True, source='action_set')
+    action = serializers.SerializerMethodField('get_actions_by_users_id')
     folder = FolderSerializer()
+
+    def get_actions_by_users_id(self, instance):
+        nameList = self.context['nameList']
+        action = instance.action.filter(created_by_id__in = nameList).order_by('-id')
+        return ActionSerializer(action, many = True, context=self.context).data
+
     class Meta:
         model = horizon_target_individual
         fields = ['action', 'name', 'folder', 'id']
@@ -151,3 +178,34 @@ class TargetByBehindScheduleSerializer(serializers.ModelSerializer):
     class Meta:
         model = folder
         fields = ['target', 'name', 'id', 'complete_count']
+
+class BadgeCountSerializer(serializers.ModelSerializer):
+
+    activityBadgeCount = serializers.SerializerMethodField('get_unviewed_activities') 
+    commentBadgeCount = serializers.SerializerMethodField('get_unviewed_comments') 
+    actionBadgeCount = serializers.SerializerMethodField('get_unviewed_actions')
+
+    def get_unviewed_activities(self, instance):
+        nameList = self.context['nameList']
+        event_count = instance.event\
+                    .filter(created_by_id__in = nameList, viewed=False).count()
+        sub_target_count = instance.sub_target.all()\
+                    .filter(created_by_id__in = nameList, viewed=False).count()
+        activity_count = event_count + sub_target_count
+        return activity_count
+    
+    def get_unviewed_comments(self, instance):
+        nameList = self.context['nameList']
+        comment_count = instance.comment\
+                    .filter(created_by_id__in = nameList, viewed=False).count()
+        return comment_count
+
+    def get_unviewed_actions(self, instance):
+        nameList = self.context['nameList']
+        action_count = instance.action\
+                    .filter(created_by_id__in = nameList, viewed=False).count()
+        return action_count
+
+    class Meta:
+        model = horizon_target_individual
+        fields = ['activityBadgeCount', 'commentBadgeCount', 'actionBadgeCount']

@@ -323,7 +323,7 @@ class QuerySubTargetAndEventDateDesc(generics.ListCreateAPIView):
             .filter(folder__active = True, created_by_id__in = nameList)\
             .exclude(sub_target__isnull = True, event__isnull = True)\
             .order_by('-create_date') # order the list by the newest sub target at the front
-        return filtered_list[:6]
+        return filtered_list
     
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
@@ -356,7 +356,7 @@ class QueryCommentDateDesc(generics.ListCreateAPIView):
         filtered_list = horizon_target_individual.objects.annotate(latest_id = Max('comment__id'))\
             .filter(created_by_id__in = nameList, folder__active = True).exclude(comment__isnull=True)\
             .order_by('-latest_id') # order the list by the newest sub target at the front
-        return filtered_list[:10]
+        return filtered_list
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
@@ -390,7 +390,7 @@ class QueryActionDateDesc(generics.ListCreateAPIView):
         filtered_list = horizon_target_individual.objects.annotate(latest_id = Max('action__id'))\
             .filter(created_by_id__in = nameList, folder__active = True).exclude(action__isnull=True)\
             .order_by('-latest_id')
-        limited_filter_list = filtered_list[:10]
+        limited_filter_list = filtered_list
         return limited_filter_list
     
     def list(self, request, *args, **kwargs):
@@ -524,9 +524,13 @@ class QueryBadgeCount(generics.ListCreateAPIView):
     queryset = horizon_target_individual.objects.all()
     serializer_class = BadgeCountSerializer
     def get_queryset(self):
-        
-        # return the folder object that contains all targets related to it. filtered by Active, Created By User, expire month and year
-        return horizon_target_individual.objects.all()
+        userID = self.request.user.name # my user id
+        userArr = self.request.user.report_to_me.all() # the users that report to me
+        nameList = []
+        for user in userArr:
+            nameList.append(user.name)
+        return horizon_target_individual.objects.filter(folder__active = True, created_by_id__in = nameList)\
+                .exclude(sub_target__isnull = True, event__isnull = True, comment__isnull=True, action__isnull = True)
     
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()

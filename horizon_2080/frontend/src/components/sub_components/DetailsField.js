@@ -20,6 +20,9 @@ const styles = (theme) => ({
         padding: theme.spacing.unit * 2,
         flex: "1 1 100%",
         maxWidth: "300px",
+        [theme.breakpoints.down("sm")]: {
+            maxWidth: "100%"
+        },
         flexDirection: "column"
     },
     editMode: {

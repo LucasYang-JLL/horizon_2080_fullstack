@@ -16,6 +16,7 @@ const styles = (theme) => ({
         width: "100%",
         flex: "1 1 100%",
         display: "flex",
+        justifyContent: "center",
         maxWidth: 360,
         [theme.breakpoints.down("sm")]: {
             maxWidth: "100%"

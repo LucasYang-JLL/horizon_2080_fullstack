@@ -36,7 +36,7 @@ import axios from "axios";
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
 
-const drawerWidth = 240;
+const drawerWidth = 200;
 
 // write down all the styles into an object
 const styles = (theme) => ({
@@ -101,7 +101,7 @@ const styles = (theme) => ({
 
 let drawerConfig = [
     { link: "/performance", icon: <EqualizerIcon /> },
-    { link: "/events", icon: <EventIcon />, badge: "activityBadgeCount" },
+    { link: "/activities", icon: <EventIcon />, badge: "activityBadgeCount" },
     { link: "/comments", icon: <CommentIcon />, badge: "commentBadgeCount" },
     { link: "/actions", icon: <SendIcon />, badge: "actionBadgeCount" },
     { link: "/analysis", icon: <PieChartIcon /> },

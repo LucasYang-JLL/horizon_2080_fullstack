@@ -9,7 +9,7 @@ import HeaderContainer from "./components/_containers/HeaderContainer";
 import FolderContainer from "./components/_containers/FolderContainer";
 import PerformanceContainer from "./components/_containers/PerformanceContainer";
 import DetailsContainer from "./components/_containers/DetailsContainer";
-import EventsContainer from "./components/_containers/EventsContainer";
+import ActivityContainer from "./components/_containers/ActivityContainer";
 import CommentsContainer from "./components/_containers/CommentsContainer";
 import ActionsContainer from "./components/_containers/ActionsContainer";
 import TableauContainer from "./components/_containers/TableauContainer";
@@ -62,7 +62,7 @@ class App extends Component {
                         <Route exact path="/performance" component={FolderContainer} />
                         <Route exact path="/performance/:id" component={PerformanceContainer} />
                         <Route exact path="/performance/project/:id" component={DetailsContainer} />
-                        <Route path="/events" component={EventsContainer} />
+                        <Route path="/activities" component={ActivityContainer} />
                         <Route path="/comments" component={CommentsContainer} />
                         <Route path="/actions" component={ActionsContainer} />
                         <Route path="/analysis" component={TableauContainer} />

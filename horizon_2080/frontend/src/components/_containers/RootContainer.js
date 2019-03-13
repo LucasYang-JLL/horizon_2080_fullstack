@@ -29,7 +29,7 @@ const translationConfig = {
     messages: {
         en: {
             "date.months": `January, February, March, April, May, June, July, August, September, October, November, December`,
-            "header.drawers": `Performance, Activity, Recent Comments, Actions, Analysis, Target Progress, Settings`,
+            "header.drawers": `Performance, Activity, Comments, Actions, Analysis, Target Progress, Settings`,
             "navigation.performance.title": `Target, Details`,
             "navigation.comments.title": `Recent Comments`,
             "tab.comments.title": "Comments, Actions",

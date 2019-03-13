@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Slide from "@material-ui/core/Slide";
-import EventsList from "./EventsList";
+import ActivityList from "./ActivityList";
 import WithLoadingScreen from "./_common/WithLoadingScreen";
 import axios from "axios";
 import { FormattedMessage } from "react-intl";
@@ -20,7 +20,7 @@ const styles = (theme) => ({
     toolbar: theme.mixins.toolbar
 });
 
-class Events extends Component {
+class Activity extends Component {
     state = {
         emptyRecord: false,
         data: []
@@ -111,10 +111,10 @@ class Events extends Component {
     }
 }
 
-Events.propTypes = {
+Activity.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-const EventListWithLoad = WithLoadingScreen(EventsList);
+const EventListWithLoad = WithLoadingScreen(ActivityList);
 
-export default withStyles(styles)(Events);
+export default withStyles(styles)(Activity);

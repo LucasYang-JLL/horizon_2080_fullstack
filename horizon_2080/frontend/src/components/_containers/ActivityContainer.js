@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import { openEventRequest } from "../_actions/event";
 import { updateActivityBadgeCount } from "../_actions/header";
-import Events from "../Events";
+import Activity from "../Activity";
 
 // redux provided wrapper to map state to props
 const mapStateToProps = (state) => {
@@ -28,4 +28,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(Events);
+)(Activity);

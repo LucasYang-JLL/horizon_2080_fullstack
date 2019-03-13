@@ -1,5 +1,6 @@
 import { connect } from "react-redux";
 import Comments from "../Comments";
+import { updateCommentBadgeCount } from "../_actions/header";
 import { toggleSnackbar, storeActionAccess } from "../_actions/common";
 
 // redux provided wrapper to map state to props
@@ -20,6 +21,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         storeActionAccess: (data) => {
             dispatch(storeActionAccess(data))
+        },
+        updateCommentBadgeCount: (count) => {
+            dispatch(updateCommentBadgeCount(count))
         }
     };
 };

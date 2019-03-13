@@ -87,14 +87,33 @@ class Comments extends Component {
             .get("/api/fetch_recent_comments/")
             .then((response) => {
                 // handle success
+                let comment = response.data;
                 if (response.data.length === 0) {
                     this.setState({
                         emptyRecord: true
                     });
                 } else {
-                    this.setState({
-                        data: response.data
+                    // get the id of sub-targets that are being viewed the first time
+                    let commentsID = comment.map(({ comment }) => {
+                        return comment
+                            .map(({ viewed, id }) => {
+                                if (viewed === false) {
+                                    return id;
+                                } else return null;
+                            })
+                            .filter((e) => e !== null);
                     });
+                    // flatten the array
+                    let viewedCommentsID = [].concat.apply([], commentsID);
+                    this.setState(
+                        {
+                            data: comment
+                        },
+                        () => {
+                            this.props.updateCommentBadgeCount(0);
+                            this.updateViewedStatus(viewedCommentsID);
+                        }
+                    );
                 }
             })
             .catch((error) => {
@@ -121,6 +140,12 @@ class Comments extends Component {
             .then(() => {
                 // always executed
             });
+    };
+
+    updateViewedStatus = (comments) => {
+        comments.forEach((id) => {
+            axios.put(`/api/update_viewed_comment/${id}/`, { viewed: true });
+        });
     };
 
     render() {

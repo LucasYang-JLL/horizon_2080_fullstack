@@ -138,6 +138,7 @@ class Header extends Component {
             });
         }
         this.fetchBadgeCount();
+        console.log("update header");
     }
 
     fetchUserInfo = () => {
@@ -159,32 +160,21 @@ class Header extends Component {
 
     fetchBadgeCount = () => {
         axios
-            .get("/api/fetch_recent_sub_target_and_event/")
+            .get("/api/fetch_badge_count/")
             .then((response) => {
                 // handle success
-                let activity = response.data;
-                // get the sub-targets that are being viewed the first time
-                let subTargets = activity.map(({ sub_target }) => {
-                    return sub_target
-                        .map(({ viewed, id }) => {
-                            if (viewed === false) {
-                                return id;
-                            } else return null;
-                        })
-                        .filter((e) => e !== null);
-                });
-                // get the events that are being viewed the first time
-                let events = activity.map(({ event }) => {
-                    return event.map(({ viewed, id }) => {
-                        if (viewed === false) {
-                            return id;
+                let badges = response.data;
+                // loop through all the badges, and update the header if count isn't 0
+                for (let key in badges) {
+                    if (badges.hasOwnProperty(key)) {
+                        let badgeCount = badges[key];
+                        if (badgeCount !== 0) {
+                            let updateBadgeCount = `update${key.replace(key[0], key[0].toUpperCase())}`;
+                            // update badge count
+                            this.props[updateBadgeCount](badgeCount);
                         }
-                    });
-                });
-                // flatten the array
-                let viewedSubTargetsCount = [].concat.apply([], subTargets).length;
-                let viewedEventsCount = [].concat.apply([], events).length;
-                this.props.updateActivityBadgeCount(viewedSubTargetsCount + viewedEventsCount);
+                    }
+                }
             })
             .catch((error) => {
                 // handle error

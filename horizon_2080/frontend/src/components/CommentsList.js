@@ -6,6 +6,7 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
+import Badge from "@material-ui/core/Badge";
 import getDate from "./_utils/getDate";
 import Divider from "@material-ui/core/Divider";
 
@@ -19,6 +20,7 @@ const styles = (theme) => ({
     toolbar: theme.mixins.toolbar,
     pStyle: {
         margin: 0,
+        marginLeft: "16px",
         color: "#404040"
     },
     dateStyle: {
@@ -46,10 +48,12 @@ class CommentsList extends Component {
                         <Fragment key={index}>
                             <Directory folder={folder.name} target={name} />
                             <Divider />
-                            {comment.map(({ message, create_date, created_by_id }) => {
+                            {comment.map(({ message, create_date, created_by_id, viewed }) => {
                                 return (
                                     <ListItem key={create_date}>
-                                        <ChatBubbleOutlineIcon fontSize="small" style={{ marginRight: "8px" }} />
+                                        <Badge color="secondary" badgeContent={viewed ? 0 : "new"}>
+                                            <ChatBubbleOutlineIcon fontSize="small" style={{ marginRight: "8px" }} />
+                                        </Badge>
                                         <p className={classes.pStyle}>
                                             {created_by_id} {msgArr[0]} <b>{msgArr[1]}</b>: "
                                             <span className={classes.linkStyle} onClick={() => this.handleOpenTargetRequest(id)}>

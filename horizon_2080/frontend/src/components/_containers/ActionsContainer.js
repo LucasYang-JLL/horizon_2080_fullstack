@@ -1,4 +1,5 @@
 import { connect } from "react-redux";
+import { updateActionBadgeCount } from "../_actions/header";
 import Actions from "../Actions";
 
 // redux provided wrapper to map state to props
@@ -14,6 +15,9 @@ const mapDispatchToProps = (dispatch) => {
         // selectLanguage: (value) => {
         //     dispatch(selectLanguage(value));
         // },
+        updateActionBadgeCount: (count) => {
+            dispatch(updateActionBadgeCount(count))
+        }
     };
 };
 

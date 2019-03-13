@@ -42,7 +42,7 @@ const styles = (theme) => ({
     }
 });
 
-class EventsList extends Component {
+class ActivityList extends Component {
     handleOpenSubtargetRequest = (sub_target_id, target_id) => {
         this.props.openEventRequest(sub_target_id);
         this.props.history.push(`/performance/project/${target_id}`);
@@ -103,8 +103,8 @@ class EventsList extends Component {
     }
 }
 
-EventsList.propTypes = {
+ActivityList.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(EventsList);
+export default withStyles(styles)(ActivityList);

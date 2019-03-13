@@ -41,8 +41,8 @@ class Activity extends Component {
                         emptyRecord: true
                     });
                 } else {
-                    // get the sub-targets that are being viewed the first time
-                    let subTargets = activity.map(({ sub_target }) => {
+                    // get the id of sub-targets that are being viewed the first time
+                    let subTargetsID = activity.map(({ sub_target }) => {
                         return sub_target
                             .map(({ viewed, id }) => {
                                 if (viewed === false) {
@@ -51,8 +51,8 @@ class Activity extends Component {
                             })
                             .filter((e) => e !== null);
                     });
-                    // get the events that are being viewed the first time
-                    let events = activity.map(({ event }) => {
+                    // get the id of events that are being viewed the first time
+                    let eventsID = activity.map(({ event }) => {
                         return event.map(({ viewed, id }) => {
                             if (viewed === false) {
                                 return id;
@@ -60,15 +60,15 @@ class Activity extends Component {
                         });
                     });
                     // flatten the array
-                    let viewedSubTargets = [].concat.apply([], subTargets);
-                    let viewedEvents = [].concat.apply([], events);
+                    let viewedSubTargetsID = [].concat.apply([], subTargetsID);
+                    let viewedEventsID = [].concat.apply([], eventsID);
                     this.setState(
                         {
                             data: activity
                         },
                         () => {
                             this.props.updateActivityBadgeCount(0);
-                            this.updateViewedStatus(viewedSubTargets, viewedEvents);
+                            this.updateViewedStatus(viewedSubTargetsID, viewedEventsID);
                         }
                     );
                 }

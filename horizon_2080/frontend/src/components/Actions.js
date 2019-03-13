@@ -35,16 +35,33 @@ class Actions extends Component {
             .get("/api/fetch_recent_actions/")
             .then((response) => {
                 // handle success
-                // console.log(response.data);
-                // handle success
+                let action = response.data;
                 if (response.data.length === 0) {
                     this.setState({
                         emptyRecord: true
                     });
                 } else {
-                    this.setState({
-                        data: response.data
+                    // get the id of sub-targets that are being viewed the first time
+                    let actionsID = action.map(({ action }) => {
+                        return action
+                            .map(({ viewed, id }) => {
+                                if (viewed === false) {
+                                    return id;
+                                } else return null;
+                            })
+                            .filter((e) => e !== null);
                     });
+                    // flatten the array
+                    let viewedActionsID = [].concat.apply([], actionsID);
+                    this.setState(
+                        {
+                            data: action
+                        },
+                        () => {
+                            this.props.updateActionBadgeCount(0);
+                            this.updateViewedStatus(viewedActionsID);
+                        }
+                    );
                 }
             })
             .catch((error) => {
@@ -54,6 +71,12 @@ class Actions extends Component {
             .then(() => {
                 // always executed
             });
+    };
+
+    updateViewedStatus = (actions) => {
+        actions.forEach((id) => {
+            axios.put(`/api/update_viewed_action/${id}/`, { viewed: true });
+        });
     };
 
     render() {

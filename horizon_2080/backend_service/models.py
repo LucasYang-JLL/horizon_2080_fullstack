@@ -56,21 +56,23 @@ class event(models.Model):
     
 class comment(models.Model):
     message = models.CharField(max_length=200)
-    target = models.ForeignKey(horizon_target_individual, on_delete=models.CASCADE, default=-1)
+    target = models.ForeignKey(horizon_target_individual, related_name='comment', on_delete=models.CASCADE, default=-1)
     reply_comment_id = models.PositiveIntegerField(default=0)
     mention_user_id = models.CharField(max_length=100, null=True)
     private = models.BooleanField(default=False)
     create_date = models.DateTimeField(default=datetime.datetime.now)
     modify_date = models.DateTimeField(default=datetime.datetime.now)
+    viewed = models.BooleanField(default=False)
     created_by_id = models.CharField(max_length=100)
 
 class action(models.Model):
     message = models.CharField(max_length=200)
-    target = models.ForeignKey(horizon_target_individual, on_delete=models.CASCADE, default=-1)
+    target = models.ForeignKey(horizon_target_individual, related_name='action', on_delete=models.CASCADE, default=-1)
     reply_comment_id = models.PositiveIntegerField(default=0)
     mention_user_id = models.CharField(max_length=100, null=True)
     private = models.BooleanField(default=False)
     create_date = models.DateTimeField(default=datetime.datetime.now)
     modify_date = models.DateTimeField(default=datetime.datetime.now)
+    viewed = models.BooleanField(default=False)
     created_by_id = models.CharField(max_length=100)
 

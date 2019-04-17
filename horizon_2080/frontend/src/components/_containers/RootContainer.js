@@ -29,7 +29,7 @@ const translationConfig = {
     messages: {
         en: {
             "date.months": `January, February, March, April, May, June, July, August, September, October, November, December`,
-            "header.drawers": `Performance, Activity, Comments, Actions, Analysis, Target Progress, Settings`,
+            "header.drawers": `Performance, Activity, Comments, Actions, Target Progress, Settings`,
             "navigation.performance.title": `Target, Details`,
             "navigation.comments.title": `Recent Comments`,
             "tab.comments.title": "Comments, Actions",
@@ -70,7 +70,7 @@ const translationConfig = {
         },
         zh: {
             "date.months": `一月, 二月, 三月, 四月, 五月, 六月, 七月, 八月, 九月, 十月, 十一月, 十二月`,
-            "header.drawers": "行动目标, 行动概览, 留言概览, 执行备忘, 分析, 目标进度, 设置",
+            "header.drawers": "行动目标, 行动概览, 留言概览, 执行备忘, 目标进度, 设置",
             "navigation.performance.title": `目标细分, 目标详情`,
             "navigation.comments.title": `我的留言`,
             "tab.comments.title": "留言, 备忘",

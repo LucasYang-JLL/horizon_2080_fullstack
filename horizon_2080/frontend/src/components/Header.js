@@ -104,7 +104,7 @@ let drawerConfig = [
     { link: "/activities", icon: <EventIcon />, badge: "activityBadgeCount" },
     { link: "/comments", icon: <CommentIcon />, badge: "commentBadgeCount" },
     { link: "/actions", icon: <SendIcon />, badge: "actionBadgeCount" },
-    { link: "/analysis", icon: <PieChartIcon /> },
+    // { link: "/analysis", icon: <PieChartIcon /> },
     { link: "/monthly-goal", icon: <AssignmentIcon /> },
     { link: "/settings", icon: <SettingsIcon /> }
 ];
@@ -234,7 +234,7 @@ class Header extends Component {
                         <List className={classes.drawerUl} onClick={this.handleDrawerToggle}>
                             {msg.split(",").map((value, index) => (
                                 <ListItem
-                                    className={drawerConfig[index].link === "/analysis" ? classes.stickBottom : null}
+                                    className={drawerConfig[index].link === "/monthly-goal" ? classes.stickBottom : null}
                                     selected={this.state.activeDrawer === index}
                                     onClick={(e) => this.handleDrawerClick(e, "activeDrawer", value, index)}
                                     key={value}

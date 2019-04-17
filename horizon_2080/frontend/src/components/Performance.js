@@ -136,7 +136,7 @@ class Performance extends Component {
             .then(() => {
                 // update folder item counts
                 // console.log(this.state.tableData.length);
-                if (this.state.tableData.length === 0) return;
+                // if (this.state.tableData.length === 0) return;
                 this.fetchFolderInfo().then((folder_info) => {
                     // console.log(this.state.tableData[0]);
                     const db_total_count = folder_info.total_target;

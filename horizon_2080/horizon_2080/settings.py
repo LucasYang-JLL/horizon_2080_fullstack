@@ -158,7 +158,15 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
 STATIC_URL = '/static/'
+REACT_APP_DIR = os.path.join(BASE_DIR)
+STATIC_ROOT = "/var/www/"
 MEDIA_URL = "/Media/"
 MEDIA_PATH = "Media"
 CSRF_COOKIE_NAME = "csrftoken"
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]

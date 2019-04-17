@@ -1,11 +1,14 @@
 const path = require("path");
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
-module.exports = {
+var config = {
     entry: ["babel-polyfill", "./horizon_2080/frontend/src/index.js"],
-    output: {
-        path: path.resolve(__dirname, "dist"),
-        filename: "[name].[contenthash].js"
-    },
+    output: {},
+    // optimization: {
+    //     splitChunks: {
+    //         chunks: "all"
+    //     }
+    // },
     optimization: {
         runtimeChunk: "single",
         splitChunks: {
@@ -30,7 +33,7 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.js$/,
+                test: /\.jsx?$/,
                 exclude: /node_modules/,
                 use: {
                     loader: "babel-loader"
@@ -55,4 +58,38 @@ module.exports = {
             }
         ]
     }
+}
+const HtmlWebpackPluginConfigLocal = new HtmlWebpackPlugin({
+    template: "./public/index_local.ejs",
+    filename: 'index.html',
+    inject: false,
+})
+
+const HtmlWebpackPluginConfigProd = new HtmlWebpackPlugin({
+    template: "./public/index_prod.ejs",
+    filename: 'index.html',
+    inject: false,
+})
+
+const outputDev = {
+    path: path.resolve(__dirname, "./horizon_2080/static/dev"),
+    filename: "[name].js"
+}
+
+const outputProd = {
+    path: path.resolve(__dirname, "./horizon_2080/static/prod"),
+    filename: "[name].[contenthash].js"
+}
+
+module.exports = (env, argv) => {
+    if (argv.mode === "development") {
+        config.output = outputDev;
+        config.plugins= [HtmlWebpackPluginConfigLocal];
+    }
+
+    if (argv.mode === "production") {
+        config.output = outputProd;
+        config.plugins= [HtmlWebpackPluginConfigProd];
+    }
+    return config;
 };

@@ -141,7 +141,7 @@ class Performance extends Component {
                     // console.log(this.state.tableData[0]);
                     const db_total_count = folder_info.total_target;
                     const db_completed_count = folder_info.completed_target;
-                    const folder_id = this.state.tableData[0].folder;
+                    const folder_id = this.props.match.params.id;
                     const total_target = this.state.tableData.length;
                     const completed_target = this.state.tableData.filter(({ progress }) => progress === 100).length;
                     if (db_total_count !== total_target || db_completed_count !== completed_target) {

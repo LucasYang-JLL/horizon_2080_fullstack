@@ -167,6 +167,3 @@ STATIC_ROOT = "/var/www/"
 MEDIA_URL = "/Media/"
 MEDIA_PATH = "Media"
 CSRF_COOKIE_NAME = "csrftoken"
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-]

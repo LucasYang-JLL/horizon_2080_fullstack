@@ -1,0 +1,146 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name="theme-color" content="#000000"><style>html,
+            body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                width: 100%;
+            }
+            .ipl-progress-indicator.available {
+                opacity: 0;
+            }
+            .ipl-progress-indicator {
+                background-color: #f5f5f5;
+                width: 100%;
+                height: 100%;
+                position: fixed;
+                opacity: 1;
+                pointer-events: none;
+                -webkit-transition: opacity cubic-bezier(0.4, 0, 0.2, 1) 436ms;
+                -moz-transition: opacity cubic-bezier(0.4, 0, 0.2, 1) 436ms;
+                transition: opacity cubic-bezier(0.4, 0, 0.2, 1) 436ms;
+                z-index: 9999;
+            }
+            .insp-logo-frame {
+                display: -webkit-flex;
+                display: -moz-flex;
+                display: flex;
+                -webkit-flex-direction: column;
+                -moz-flex-direction: column;
+                flex-direction: column;
+                -webkit-justify-content: center;
+                -moz-justify-content: center;
+                justify-content: center;
+                -webkit-animation: fadein 436ms;
+                -moz-animation: fadein 436ms;
+                animation: fadein 436ms;
+                height: 98%;
+            }
+            .insp-logo-frame-img {
+                width: 112px;
+                height: 112px;
+                -webkit-align-self: center;
+                -moz-align-self: center;
+                align-self: center;
+                border-radius: 50%;
+            }
+            .ipl-progress-indicator-head {
+                background-color: #e30613;
+                height: 4px;
+                overflow: hidden;
+                position: relative;
+            }
+            .ipl-progress-indicator .first-indicator,
+            .ipl-progress-indicator .second-indicator {
+                background-color: #ff444f;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                top: 0;
+                position: absolute;
+                -webkit-transform-origin: left center;
+                -moz-transform-origin: left center;
+                transform-origin: left center;
+                -webkit-transform: scaleX(0);
+                -moz-transform: scaleX(0);
+                transform: scaleX(0);
+            }
+            .ipl-progress-indicator .first-indicator {
+                -webkit-animation: first-indicator 2000ms linear infinite;
+                -moz-animation: first-indicator 2000ms linear infinite;
+                animation: first-indicator 2000ms linear infinite;
+            }
+            .ipl-progress-indicator .second-indicator {
+                -webkit-animation: second-indicator 2000ms linear infinite;
+                -moz-animation: second-indicator 2000ms linear infinite;
+                animation: second-indicator 2000ms linear infinite;
+            }
+            .ipl-progress-indicator .insp-logo {
+                animation: App-logo-spin infinite 20s linear;
+                border-radius: 50%;
+                -webkit-align-self: center;
+                -moz-align-self: center;
+                align-self: center;
+            }
+            @keyframes App-logo-spin {
+                from {
+                    transform: rotate(0deg);
+                }
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+            @-webkit-keyframes fadein {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+            @-moz-keyframes fadein {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+            @keyframes fadein {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+            @keyframes first-indicator {
+                0% {
+                    transform: translate(0%) scaleX(0);
+                }
+                25% {
+                    transform: translate(0%) scaleX(0.5);
+                }
+                50% {
+                    transform: translate(25%) scaleX(0.75);
+                }
+                75% {
+                    transform: translate(100%) scaleX(0);
+                }
+                100% {
+                    transform: translate(100%) scaleX(0);
+                }
+            }
+            @keyframes second-indicator {
+                0% {
+                    transform: translate(0%) scaleX(0);
+                }
+                60% {
+                    transform: translate(0%) scaleX(0);
+                }
+                80% {
+                    transform: translate(0%) scaleX(0.6);
+                }
+                100% {
+                    transform: translate(100%) scaleX(0.1);
+                }
+            }</style><title>Horizon 2080</title></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div class="ipl-progress-indicator" id="ipl-progress-indicator"><div class="ipl-progress-indicator-head"><div class="first-indicator"></div><div class="second-indicator"></div></div><div class="insp-logo-frame" style="display: flex; justify-content: center; align-items: center"><img src="/static/img/intro.png"></div></div><div id="root"></div><script src="/static/prod/runtime.024e88240fc300ab16f1.js"></script><script src="/static/prod/npm.core-js.0984e0368b0f0fcfd7c2.js"></script><script src="/static/prod/npm.material-ui.700e6730aebf0eef7918.js"></script><script src="/static/prod/npm.jss.3101357357cf9d79e032.js"></script><script src="/static/prod/npm.axios.4b071d13322e4b2a01d4.js"></script><script src="/static/prod/npm.redux-persist.e0185611023ad4beb6e3.js"></script><script src="/static/prod/npm.react-redux.bfe820a4ee2b42bde9ee.js"></script><script src="/static/prod/npm.dom-helpers.ad2cec3f919de4fdc36a.js"></script><script src="/static/prod/npm.react-event-listener.dc952b429ef64bd79f48.js"></script><script src="/static/prod/npm.lodash-es.6b1490908f0e6c1a1377.js"></script><script src="/static/prod/npm.history.d72d4e0101b611c73084.js"></script><script src="/static/prod/npm.recompose.eb455479c10467c6a472.js"></script><script src="/static/prod/npm.intl-messageformat.8ab1d2ead49a3bb32285.js"></script><script src="/static/prod/npm.intl-relativeformat.7b4edf6dbb983ed29110.js"></script><script src="/static/prod/npm.css-vendor.4e59b283c6c3efd5409c.js"></script><script src="/static/prod/npm.react-router.4620759b3be66b418efb.js"></script><script src="/static/prod/npm.react-transition-group.34b386f2910b7155daea.js"></script><script src="/static/prod/npm.intl-format-cache.8db667067c432a623b4b.js"></script><script src="/static/prod/npm.prop-types.83537158518759291c01.js"></script><script src="/static/prod/npm.react-intl.0189eaeeb6e0017dad96.js"></script><script src="/static/prod/npm.react-router-dom.5c1f197c4a93e67fcc49.js"></script><script src="/static/prod/npm.redux.9ce86eba98816d3988f1.js"></script><script src="/static/prod/npm.babel.c23e9ff1197928b6501e.js"></script><script src="/static/prod/npm.babel-polyfill.23ff25197dd1b49c86ce.js"></script><script src="/static/prod/npm.intl-messageformat-parser.5a03cd6350dda9654458.js"></script><script src="/static/prod/npm.jss-default-unit.c8b091d9fdb214a60036.js"></script><script src="/static/prod/npm.jss-nested.1a8c4984336a48299303.js"></script><script src="/static/prod/npm.path-to-regexp.46236b75b66f91470672.js"></script><script src="/static/prod/npm.react-dom.eeb3a68aca17d77ef781.js"></script><script src="/static/prod/npm.react-is.26ab58f1616a201f491c.js"></script><script src="/static/prod/npm.react.8222b2f1ca4da73dde14.js"></script><script src="/static/prod/npm.schedule.8014644f66ae6374cc7a.js"></script><script src="/static/prod/npm.style-loader.c8f168793d4a271487d4.js"></script><script src="/static/prod/npm.webpack.92ebf87ee7fa9e89c026.js"></script><script src="/static/prod/npm.brcast.4cf1c728d9baab7120ef.js"></script><script src="/static/prod/npm.classnames.9083fb77837045fe40bc.js"></script><script src="/static/prod/npm.css-loader.dc1ab79270e4c41fad27.js"></script><script src="/static/prod/npm.debounce.8c1b5990815c12b3ea7e.js"></script><script src="/static/prod/npm.deepmerge.5c089a1d4ddafabf1f2c.js"></script><script src="/static/prod/npm.fbjs.d7e811648b4c354d9f84.js"></script><script src="/static/prod/npm.hoist-non-react-statics.745a686f91020cab923b.js"></script><script src="/static/prod/npm.hyphenate-style-name.8894d3f0a0f087eee0a8.js"></script><script src="/static/prod/npm.invariant.b86517b5b35c4d0455ef.js"></script><script src="/static/prod/npm.is-buffer.ad6041068c9c3b02facf.js"></script><script src="/static/prod/npm.is-in-browser.e790854053f852032007.js"></script><script src="/static/prod/npm.is-plain-object.74ae870fb33c571430aa.js"></script><script src="/static/prod/npm.isobject.4ae9ba4163d40fdc3ddd.js"></script><script src="/static/prod/npm.jss-camel-case.ea7e481d4c786f452fbe.js"></script><script src="/static/prod/npm.jss-global.32976b526e68673f8ba1.js"></script><script src="/static/prod/npm.jss-props-sort.b5c0e4d978e077ef5ec2.js"></script><script src="/static/prod/npm.jss-vendor-prefixer.d4426e31a330d92ea7f7.js"></script><script src="/static/prod/npm.normalize-scroll-left.bfba1b2ec25a560d7b66.js"></script><script src="/static/prod/npm.object-assign.683401b7f581444fd389.js"></script><script src="/static/prod/npm.popper.js.704a18cc19c68afde3ad.js"></script><script src="/static/prod/npm.process.6bbd4d2d4676bb4d1ef5.js"></script><script src="/static/prod/npm.react-lifecycles-compat.56f2ab41d4ddba2502d3.js"></script><script src="/static/prod/npm.resolve-pathname.f2c9f3d360a2e0138d49.js"></script><script src="/static/prod/npm.tableau-api.52f81d059d377e976502.js"></script><script src="/static/prod/npm.value-equal.47f774aa698f9c973165.js"></script><script src="/static/prod/npm.warning.ba8cf89df0055d82779e.js"></script><script src="/static/prod/main.a191caee50c0be48f99e.js"></script></body></html>
